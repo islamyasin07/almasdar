@@ -4,15 +4,15 @@
 }
 
 .nav-link {
-  @apply text-gray-300 hover:text-cyan transition-all duration-300 font-medium flex items-center;
+  @apply text-gray-300 hover:text-hik-red transition-all duration-300 font-medium flex items-center;
 }
 
 .nav-icon {
-  @apply text-gray-300 hover:text-cyan transition-all duration-300 relative;
+  @apply text-gray-300 hover:text-hik-red transition-all duration-300 relative;
 }
 
 .dropdown-item {
-  @apply block px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-cyan transition-colors duration-200;
+  @apply block px-4 py-3 text-gray-300 hover:bg-slate-custom-700 dark:hover:bg-slate-custom-800 hover:text-hik-red transition-colors duration-200;
   
   i {
     @apply inline-block w-5 text-center;
@@ -20,7 +20,7 @@
 }
 
 .mobile-menu-item {
-  @apply flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-cyan transition-all duration-200;
+  @apply flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-custom-800 dark:hover:bg-slate-custom-900 hover:text-hik-red transition-all duration-200;
 }
 
 // Profile dropdown animation

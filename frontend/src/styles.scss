@@ -14,10 +14,32 @@
 
 /* Custom Variables */
 :root {
-  --brand-base: #0B1220;
-  --brand-cyan: #13B0E6;
-  --brand-amber: #FFC857;
-  --brand-ink: #E5EAF2;
+  /* Hikvision Brand Colors */
+  --hik-red: #E30613;
+  --hik-red-dark: #B91C1C;
+  --hik-red-light: #EF4444;
+  
+  /* Professional Dark Theme (Default) */
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary: #334155;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --border-color: #334155;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+.dark {
+  /* Deeper Dark Mode */
+  --bg-primary: #020617;
+  --bg-secondary: #0F172A;
+  --bg-tertiary: #1E293B;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --border-color: #1E293B;
+  --shadow: rgba(0, 0, 0, 0.5);
 } 
 
 /* Base Styles */
@@ -29,10 +51,11 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0B1220 0%, #1a2332 100%);
-  color: var(--brand-ink);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Scrollbar */
@@ -41,16 +64,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a2332;
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--brand-cyan);
+  background: var(--hik-red);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0ea0d3;
+  background: var(--hik-red-dark);
 }
 
 /* Animations */
@@ -93,7 +116,7 @@ body {
 
 /* Custom Components */
 .btn-gradient {
-  background: linear-gradient(135deg, var(--brand-cyan) 0%, #0ea0d3 100%);
+  background: linear-gradient(135deg, var(--hik-red) 0%, var(--hik-red-dark) 100%);
   border: none;
   color: white;
   transition: all 0.3s ease;
@@ -101,39 +124,57 @@ body {
 
 .btn-gradient:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(19, 176, 230, 0.3);
+  box-shadow: 0 10px 20px rgba(227, 6, 19, 0.3);
 }
 
 .card-hover {
   transition: all 0.3s ease;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
 }
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 30px var(--shadow);
+  border-color: var(--hik-red);
 }
 
 .glass-effect {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Badge Styles */
 .badge-primary {
-  background: var(--brand-cyan);
+  background: var(--hik-red);
   color: white;
 }
 
 .badge-secondary {
-  background: var(--brand-amber);
-  color: var(--brand-base);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.badge-success {
+  background: #10B981;
+  color: white;
+}
+
+.badge-warning {
+  background: #F59E0B;
+  color: white;
 }
 
 /* Loading Spinner */
 .spinner {
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid var(--brand-cyan);
+  border: 3px solid rgba(227, 6, 19, 0.1);
+  border-top: 3px solid var(--hik-red);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -147,14 +188,18 @@ body {
 
 /* Utility Classes */
 .text-gradient {
-  background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-amber) 100%);
+  background: linear-gradient(135deg, var(--hik-red) 0%, var(--hik-red-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .shadow-glow {
-  box-shadow: 0 0 20px rgba(19, 176, 230, 0.5);
+  box-shadow: 0 0 20px rgba(227, 6, 19, 0.5);
+}
+
+.shadow-red {
+  box-shadow: 0 4px 6px rgba(227, 6, 19, 0.1);
 }
 
 .hover-scale {
@@ -163,4 +208,11 @@ body {
 
 .hover-scale:hover {
   transform: scale(1.05);
+}
+
+/* Dark mode transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

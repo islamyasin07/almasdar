@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
+import { ThemeService } from '../../services/theme.service';
 import { Cart } from '../../models/cart.model';
 import { Product } from '../../models/product.model';
 
@@ -26,7 +27,8 @@ export class NavbarComponent implements OnInit {
     public authService: AuthService,
     private apiService: ApiService,
     private router: Router,
-    public cartService: CartService
+    public cartService: CartService,
+    public themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +98,10 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.isMenuOpen = false;
     this.closeProfileDropdown();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   get userInitials(): string {

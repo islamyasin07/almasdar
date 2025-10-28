@@ -1,12 +1,16 @@
-<nav class="navbar-wrapper sticky top-0 z-50 glass-effect border-b border-gray-800">
+<nav class="sticky top-0 z-50 bg-slate-custom-900 dark:bg-slate-custom-950 border-b border-slate-custom-700 dark:border-slate-custom-800 shadow-lg transition-colors backdrop-blur-sm bg-opacity-95">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-20">
       <!-- Logo -->
       <a routerLink="/" class="flex items-center space-x-3 hover-scale">
-        <div class="w-12 h-12 bg-gradient-to-br from-cyan to-amber rounded-lg flex items-center justify-center shadow-glow">
-          <i class="fas fa-shield-alt text-white text-2xl"></i>
-        </div>
-        <span class="text-2xl font-bold text-gradient hidden md:block">Almasdar Security</span>
+        <img 
+          src="/assets/images/hikvision-logo.svg" 
+          alt="Hikvision" 
+          class="h-10 w-auto dark:brightness-110"
+        />
+        <span class="text-xl font-bold text-white hidden md:block">
+          Almasdar Security
+        </span>
       </a>
 
       <!-- Search Bar (Desktop) -->
@@ -16,10 +20,10 @@
             type="text"
             [(ngModel)]="searchQuery"
             placeholder="Search security systems, cameras, alarms..."
-            class="w-full px-6 py-3 rounded-full bg-gray-900 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-cyan transition-all"
+            class="w-full px-6 py-3 rounded-full bg-slate-custom-800 dark:bg-slate-custom-900 border border-slate-custom-700 text-white placeholder-gray-400 focus:outline-none focus:border-hik-red focus:ring-2 focus:ring-hik-red/20 transition-all"
             (keyup.enter)="onSearch()"
           />
-          <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan hover:text-amber transition-colors">
+          <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-hik-red hover:text-hik-red-dark transition-colors">
             <i class="fas fa-search text-xl"></i>
           </button>
         </div>
@@ -27,23 +31,33 @@
 
       <!-- Desktop Menu -->
       <div class="hidden lg:flex items-center space-x-6">
-        <a routerLink="/products" routerLinkActive="text-cyan" class="nav-link">
+        <a routerLink="/products" routerLinkActive="text-hik-red" class="nav-link">
           <i class="fas fa-boxes mr-2"></i>Products
         </a>
-        <a routerLink="/categories" routerLinkActive="text-cyan" class="nav-link">
+        <a routerLink="/categories" routerLinkActive="text-hik-red" class="nav-link">
           <i class="fas fa-th-large mr-2"></i>Categories
         </a>
-        <a *ngIf="authService.isStaff" routerLink="/admin" routerLinkActive="text-cyan" class="nav-link">
+        <a *ngIf="authService.isStaff" routerLink="/admin" routerLinkActive="text-hik-red" class="nav-link">
           <i class="fas fa-tools mr-2"></i>Admin
         </a>
-        <a *ngIf="authService.isAuthenticated && !authService.isStaff" routerLink="/account" routerLinkActive="text-cyan" class="nav-link">
+        <a *ngIf="authService.isAuthenticated && !authService.isStaff" routerLink="/account" routerLinkActive="text-hik-red" class="nav-link">
           <i class="fas fa-user mr-2"></i>Account
         </a>
+        
+        <!-- Dark Mode Toggle -->
+        <button 
+          (click)="toggleTheme()" 
+          class="nav-icon p-2 rounded-lg hover:bg-slate-custom-800 dark:hover:bg-slate-custom-900 transition-colors"
+          title="Toggle deeper dark mode"
+        >
+          <i *ngIf="!themeService.isDark()" class="fas fa-adjust text-xl text-gray-300"></i>
+          <i *ngIf="themeService.isDark()" class="fas fa-moon text-xl text-blue-400"></i>
+        </button>
         
         <!-- Wishlist -->
         <a *ngIf="authService.isAuthenticated" routerLink="/wishlist" class="nav-icon relative">
           <i class="fas fa-heart text-2xl"></i>
-          <span *ngIf="wishlistCount > 0" class="absolute -top-2 -right-2 bg-amber text-dark text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <span *ngIf="wishlistCount > 0" class="absolute -top-2 -right-2 bg-hik-red text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
             {{ wishlistCount }}
           </span>
         </a>
@@ -51,7 +65,7 @@
         <!-- Cart -->
         <a href="#" (click)="$event.preventDefault(); openCart();" class="nav-icon relative">
           <i class="fas fa-shopping-cart text-2xl"></i>
-          <span *ngIf="cartItemCount > 0" class="absolute -top-2 -right-2 bg-cyan text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <span *ngIf="cartItemCount > 0" class="absolute -top-2 -right-2 bg-hik-red text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
             {{ cartItemCount }}
           </span>
         </a>
@@ -62,7 +76,7 @@
             (click)="toggleProfileDropdown()" 
             class="flex items-center space-x-2 nav-link focus:outline-none"
           >
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan to-amber flex items-center justify-center shadow-lg">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-hik-red to-hik-red-dark flex items-center justify-center shadow-lg">
               <span class="text-white font-bold text-sm">{{ userInitials }}</span>
             </div>
             <span class="hidden xl:block">{{ userName }}</span>
@@ -72,13 +86,13 @@
           <!-- Dropdown Menu -->
           <div 
             *ngIf="isProfileDropdownOpen"
-            class="absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-gray-900 border border-gray-700 overflow-hidden z-50 animate-fade-in"
+            class="absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-slate-custom-800 dark:bg-slate-custom-900 border border-slate-custom-700 overflow-hidden z-50 animate-fade-in"
           >
             <!-- User Info Header -->
-            <div class="px-4 py-3 bg-gradient-to-br from-cyan/20 to-amber/20 border-b border-gray-700">
+            <div class="px-4 py-3 bg-gradient-to-br from-hik-red/10 to-hik-red-dark/10 border-b border-slate-custom-700">
               <p class="text-white font-semibold">{{ userName }}</p>
               <p class="text-gray-400 text-sm">{{ authService.currentUserValue?.email }}</p>
-              <span class="inline-block mt-2 px-2 py-1 bg-cyan/20 text-cyan text-xs rounded-full border border-cyan/30">
+              <span class="inline-block mt-2 px-2 py-1 bg-hik-red/10 text-hik-red text-xs rounded-full border border-hik-red/30">
                 {{ authService.currentUserValue?.role }}
               </span>
             </div>
@@ -91,7 +105,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-tachometer-alt mr-3 text-cyan"></i>Dashboard
+                <i class="fas fa-tachometer-alt mr-3 text-hik-red"></i>Dashboard
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -99,7 +113,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-box mr-3 text-cyan"></i>My Orders
+                <i class="fas fa-box mr-3 text-hik-red"></i>My Orders
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -107,7 +121,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-user-edit mr-3 text-cyan"></i>Profile Settings
+                <i class="fas fa-user-edit mr-3 text-hik-red"></i>Profile Settings
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -115,13 +129,13 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-map-marker-alt mr-3 text-cyan"></i>Addresses
+                <i class="fas fa-map-marker-alt mr-3 text-hik-red"></i>Addresses
               </a>
               <a 
                 *ngIf="authService.isStaff" 
                 routerLink="/admin" 
                 (click)="closeProfileDropdown()" 
-                class="dropdown-item text-amber"
+                class="dropdown-item text-hik-red"
               >
                 <i class="fas fa-crown mr-3"></i>Admin Panel
               </a>
@@ -144,7 +158,7 @@
       </div>
 
       <!-- Mobile Menu Button -->
-      <button (click)="toggleMenu()" class="lg:hidden text-white text-2xl hover:text-cyan transition-colors">
+      <button (click)="toggleMenu()" class="lg:hidden text-gray-300 text-2xl hover:text-hik-red transition-colors">
         <i class="fas" [class.fa-bars]="!isMenuOpen" [class.fa-times]="isMenuOpen"></i>
       </button>
     </div>
@@ -156,10 +170,10 @@
           type="text"
           [(ngModel)]="searchQuery"
           placeholder="Search..."
-          class="w-full px-4 py-2 rounded-full bg-gray-900 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-cyan"
+          class="w-full px-4 py-2 rounded-full bg-slate-custom-800 dark:bg-slate-custom-900 border border-slate-custom-700 text-white placeholder-gray-400 focus:outline-none focus:border-hik-red focus:ring-2 focus:ring-hik-red/20"
           (keyup.enter)="onSearch()"
         />
-        <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan">
+        <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-hik-red">
           <i class="fas fa-search"></i>
         </button>
       </div>
@@ -168,7 +182,7 @@
 
   <!-- Mobile Menu -->
   <div 
-    class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-gray-800"
+    class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-slate-custom-700"
     [class.max-h-0]="!isMenuOpen"
     [class.max-h-screen]="isMenuOpen"
   >
@@ -180,37 +194,45 @@
         <i class="fas fa-th-large mr-3"></i>Categories
       </a>
       
-      <div *ngIf="authService.isAuthenticated" class="pt-2 border-t border-gray-700 space-y-3">
+      <!-- Dark Mode Toggle (Mobile) -->
+      <button (click)="toggleTheme()" class="mobile-menu-item w-full text-left">
+        <i *ngIf="!themeService.isDark()" class="fas fa-moon mr-3"></i>
+        <i *ngIf="themeService.isDark()" class="fas fa-sun mr-3 text-yellow-500"></i>
+        <span *ngIf="!themeService.isDark()">Dark Mode</span>
+        <span *ngIf="themeService.isDark()">Light Mode</span>
+      </button>
+      
+      <div *ngIf="authService.isAuthenticated" class="pt-2 border-t border-slate-custom-700 space-y-3">
         <a routerLink="/wishlist" (click)="toggleMenu()" class="mobile-menu-item">
           <i class="fas fa-heart mr-3"></i>Wishlist
-          <span *ngIf="wishlistCount > 0" class="ml-auto badge-secondary px-2 py-1 rounded-full text-xs">
+          <span *ngIf="wishlistCount > 0" class="ml-auto bg-hik-red text-white px-2 py-1 rounded-full text-xs">
             {{ wishlistCount }}
           </span>
         </a>
         <a href="#" (click)="$event.preventDefault(); openCart(); toggleMenu();" class="mobile-menu-item">
           <i class="fas fa-shopping-cart mr-3"></i>Cart
-          <span *ngIf="cartItemCount > 0" class="ml-auto badge-primary px-2 py-1 rounded-full text-xs">
+          <span *ngIf="cartItemCount > 0" class="ml-auto bg-hik-red text-white px-2 py-1 rounded-full text-xs">
             {{ cartItemCount }}
           </span>
         </a>
-        <a routerLink="/dashboard" (click)="toggleMenu()" class="mobile-menu-item">
+        <a routerLink="/account" (click)="toggleMenu()" class="mobile-menu-item">
           <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
         </a>
-        <a routerLink="/orders" (click)="toggleMenu()" class="mobile-menu-item">
+        <a routerLink="/account/orders" (click)="toggleMenu()" class="mobile-menu-item">
           <i class="fas fa-box mr-3"></i>My Orders
         </a>
-        <a routerLink="/profile" (click)="toggleMenu()" class="mobile-menu-item">
+        <a routerLink="/account/profile" (click)="toggleMenu()" class="mobile-menu-item">
           <i class="fas fa-user-cog mr-3"></i>Profile
         </a>
-        <a *ngIf="authService.isAdmin" routerLink="/admin" (click)="toggleMenu()" class="mobile-menu-item text-amber">
+        <a *ngIf="authService.isStaff" routerLink="/admin" (click)="toggleMenu()" class="mobile-menu-item text-hik-red font-semibold">
           <i class="fas fa-crown mr-3"></i>Admin Panel
         </a>
-        <button (click)="logout()" class="mobile-menu-item text-red-400 w-full text-left">
+        <button (click)="logout()" class="mobile-menu-item text-red-600 dark:text-red-400 w-full text-left">
           <i class="fas fa-sign-out-alt mr-3"></i>Logout
         </button>
       </div>
 
-      <div *ngIf="!authService.isAuthenticated" class="pt-2 border-t border-gray-700">
+      <div *ngIf="!authService.isAuthenticated" class="pt-2 border-t border-slate-custom-700">
         <a routerLink="/login" (click)="toggleMenu()" class="btn-gradient block text-center px-6 py-3 rounded-full font-semibold">
           <i class="fas fa-sign-in-alt mr-2"></i>Login
         </a>
