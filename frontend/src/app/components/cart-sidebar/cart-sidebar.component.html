@@ -1,0 +1,52 @@
+<div class="cart-overlay" [class.show]="(cart.isOpen$ | async)"></div>
+
+<aside class="cart-sidebar" [class.open]="(cart.isOpen$ | async)">
+  <div class="cart-header">
+    <h3>
+      <i class="fas fa-shopping-cart"></i>
+      Your Cart
+      <span class="count">({{ cart.itemCount }})</span>
+    </h3>
+    <button class="close-btn" (click)="cart.close()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="cart-body" *ngIf="cart.items.length; else empty">
+    <div class="cart-item" *ngFor="let item of cart.items; trackBy: trackById">
+      <div class="thumb">
+        <img [src]="item.image || 'assets/images/placeholder.jpg'" alt="" />
+      </div>
+      <div class="info">
+        <div class="name">{{ item.name }}</div>
+        <div class="sku" *ngIf="item.sku">SKU: {{ item.sku }}</div>
+        <div class="price">{{ item.price | currency:'USD' }}</div>
+        <div class="qty">
+          <button (click)="decrease(item.product)"><i class="fas fa-minus"></i></button>
+          <input [value]="item.quantity" readonly />
+          <button (click)="increase(item.product)" [disabled]="item.stock && item.quantity >= item.stock"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+      <button class="remove" (click)="cart.removeItem(item.product)"><i class="fas fa-trash"></i></button>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="empty">
+      <i class="fas fa-box-open"></i>
+      <p>Your cart is empty</p>
+    </div>
+  </ng-template>
+
+  <div class="cart-footer">
+    <div class="row">
+      <span>Subtotal</span>
+      <span class="value">{{ cart.subtotal | currency:'USD' }}</span>
+    </div>
+    <button class="btn-primary" [disabled]="!cart.items.length" routerLink="/checkout" (click)="cart.close()">
+      Proceed to Checkout
+      <i class="fas fa-arrow-right"></i>
+    </button>
+    <button class="btn-secondary" [disabled]="!cart.items.length" (click)="cart.clear()">
+      Clear Cart
+    </button>
+  </div>
+</aside>

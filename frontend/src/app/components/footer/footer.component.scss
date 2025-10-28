@@ -1,0 +1,175 @@
+.footer {
+  @apply bg-gradient-to-b from-gray-900 to-black text-gray-300;
+}
+
+.footer-content {
+  @apply border-b border-gray-800;
+}
+
+// Brand Section
+.brand {
+  @apply flex items-center gap-3 text-2xl font-bold mb-4;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  i {
+    @apply text-3xl;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.description {
+  @apply text-gray-400 mb-6 leading-relaxed;
+}
+
+// Social Links
+.social-links {
+  @apply flex gap-4;
+}
+
+.social-icon {
+  @apply w-10 h-10 rounded-full flex items-center justify-center text-white transition-all duration-300;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  }
+
+  i {
+    @apply text-lg;
+  }
+}
+
+// Footer Sections
+.footer-section {
+  .section-title {
+    @apply text-white font-semibold text-lg mb-4;
+  }
+
+  .link-list {
+    @apply space-y-2;
+
+    li {
+      a {
+        @apply text-gray-400 hover:text-white transition-colors duration-300 inline-block;
+        
+        &:hover {
+          @apply pl-2;
+        }
+      }
+    }
+  }
+}
+
+// Newsletter Section
+.newsletter-section {
+  @apply mt-12;
+}
+
+.newsletter-card {
+  @apply p-8 rounded-2xl;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.newsletter-title {
+  @apply text-white text-xl font-bold mb-2 flex items-center;
+}
+
+.newsletter-description {
+  @apply text-gray-400;
+}
+
+.newsletter-form {
+  .input-group {
+    @apply flex flex-col sm:flex-row gap-3;
+  }
+
+  .newsletter-input {
+    @apply flex-1 px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500;
+    @apply focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all;
+  }
+
+  .newsletter-button {
+    @apply px-6 py-3 rounded-lg text-white font-semibold transition-all duration-300 flex items-center justify-center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Bottom Bar
+.footer-bottom {
+  @apply py-6 bg-black/50;
+}
+
+.bottom-content {
+  @apply flex flex-col md:flex-row justify-between items-center gap-4;
+}
+
+.copyright {
+  @apply flex items-center gap-2 text-gray-500 text-sm;
+
+  i {
+    @apply text-xs;
+  }
+}
+
+.payment-methods {
+  @apply flex items-center gap-3 text-gray-500;
+
+  .payment-label {
+    @apply text-sm mr-2;
+  }
+
+  i {
+    @apply text-2xl transition-colors duration-300;
+
+    &.fa-cc-visa:hover {
+      @apply text-blue-600;
+    }
+
+    &.fa-cc-mastercard:hover {
+      @apply text-red-600;
+    }
+
+    &.fa-cc-paypal:hover {
+      @apply text-blue-500;
+    }
+
+    &.fa-cc-amex:hover {
+      @apply text-blue-400;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .newsletter-card {
+    @apply p-6;
+  }
+
+  .newsletter-title {
+    @apply text-lg;
+  }
+
+  .bottom-content {
+    @apply text-center;
+  }
+}

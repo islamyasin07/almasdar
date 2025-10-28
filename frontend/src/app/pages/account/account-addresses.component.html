@@ -1,0 +1,211 @@
+<div class="addresses-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Shipping Addresses</h1>
+      <p class="page-subtitle">Manage your saved addresses for faster checkout</p>
+    </div>
+    <button class="btn-add" (click)="showAddForm()" *ngIf="!showForm">
+      <i class="fas fa-plus"></i> Add New Address
+    </button>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div class="alert alert-success" *ngIf="message">
+    <i class="fas fa-check-circle"></i> {{ message }}
+  </div>
+  <div class="alert alert-error" *ngIf="error">
+    <i class="fas fa-exclamation-circle"></i> {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+    <p>Loading addresses...</p>
+  </div>
+
+  <!-- Address Form -->
+  <div *ngIf="showForm" class="address-form-section">
+    <div class="form-header">
+      <h2>{{ editingAddressId ? 'Edit Address' : 'Add New Address' }}</h2>
+      <button class="btn-close" (click)="cancelForm()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            [class.invalid]="isFieldInvalid('fullName')"
+            placeholder="John Doe"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('fullName')">
+            {{ getFieldError('fullName') }}
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="phone">Phone Number <span class="required">*</span></label>
+          <input
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            [class.invalid]="isFieldInvalid('phone')"
+            placeholder="+1 (555) 000-0000"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('phone')">
+            {{ getFieldError('phone') }}
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="street">Street Address <span class="required">*</span></label>
+          <input
+            id="street"
+            type="text"
+            formControlName="street"
+            [class.invalid]="isFieldInvalid('street')"
+            placeholder="123 Main Street"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('street')">
+            {{ getFieldError('street') }}
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="apartment">Apartment, Suite, etc.</label>
+          <input
+            id="apartment"
+            type="text"
+            formControlName="apartment"
+            placeholder="Apt 4B, Unit 5, Floor 2"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="city">City <span class="required">*</span></label>
+          <input
+            id="city"
+            type="text"
+            formControlName="city"
+            [class.invalid]="isFieldInvalid('city')"
+            placeholder="New York"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('city')">
+            {{ getFieldError('city') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="state">State / Province <span class="required">*</span></label>
+          <input
+            id="state"
+            type="text"
+            formControlName="state"
+            [class.invalid]="isFieldInvalid('state')"
+            placeholder="NY"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('state')">
+            {{ getFieldError('state') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="postalCode">Postal Code <span class="required">*</span></label>
+          <input
+            id="postalCode"
+            type="text"
+            formControlName="postalCode"
+            [class.invalid]="isFieldInvalid('postalCode')"
+            placeholder="10001"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('postalCode')">
+            {{ getFieldError('postalCode') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country <span class="required">*</span></label>
+          <input
+            id="country"
+            type="text"
+            formControlName="country"
+            [class.invalid]="isFieldInvalid('country')"
+            placeholder="United States"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('country')">
+            {{ getFieldError('country') }}
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="isDefault" />
+            <span>Set as default address</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelForm()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSaving || addressForm.invalid">
+          <span *ngIf="!isSaving">
+            <i class="fas fa-save"></i> {{ editingAddressId ? 'Update Address' : 'Save Address' }}
+          </span>
+          <span *ngIf="isSaving">
+            <i class="fas fa-spinner fa-spin"></i> Saving...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Addresses List -->
+  <div *ngIf="!isLoading && !showForm" class="addresses-grid">
+    <div *ngIf="addresses.length === 0" class="empty-state">
+      <i class="fas fa-map-marker-alt"></i>
+      <h3>No addresses saved</h3>
+      <p>Add your first shipping address to get started</p>
+      <button class="btn-primary" (click)="showAddForm()">
+        <i class="fas fa-plus"></i> Add Address
+      </button>
+    </div>
+
+    <div *ngFor="let address of addresses" class="address-card">
+      <div class="address-header">
+        <span class="address-name">{{ address.fullName }}</span>
+        <span class="badge-default" *ngIf="address.isDefault">Default</span>
+      </div>
+
+      <div class="address-content">
+        <p><i class="fas fa-map-marker-alt"></i> {{ address.street }}</p>
+        <p *ngIf="address.apartment" class="address-apt">{{ address.apartment }}</p>
+        <p>{{ address.city }}, {{ address.state }} {{ address.postalCode }}</p>
+        <p>{{ address.country }}</p>
+        <p class="address-phone"><i class="fas fa-phone"></i> {{ address.phone }}</p>
+      </div>
+
+      <div class="address-actions">
+        <button class="btn-action btn-edit" (click)="editAddress(address)">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button 
+          *ngIf="!address.isDefault && address._id" 
+          class="btn-action btn-default" 
+          (click)="setDefaultAddress(address._id!)"
+        >
+          <i class="fas fa-star"></i> Set Default
+        </button>
+        <button class="btn-action btn-delete" *ngIf="address._id" (click)="deleteAddress(address._id!)">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

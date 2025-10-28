@@ -1,0 +1,45 @@
+<div class="wishlist-page">
+  <div class="container mx-auto px-4 py-8">
+    <div class="page-header">
+      <h1 class="page-title">My Wishlist</h1>
+      <p class="page-subtitle" *ngIf="auth.isAuthenticated">Products you’ve saved for later</p>
+      <p class="page-subtitle" *ngIf="!auth.isAuthenticated">Please login to view your wishlist</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"><i class="fas fa-shield-alt fa-spin"></i></div>
+      <p>Loading wishlist...</p>
+    </div>
+
+    <div *ngIf="!isLoading && auth.isAuthenticated && products.length === 0" class="empty-state">
+      <i class="fas fa-heart-broken"></i>
+      <h3>No items in your wishlist</h3>
+      <a routerLink="/products" class="btn-primary">Browse Products</a>
+    </div>
+
+    <div *ngIf="!isLoading && products.length > 0" class="wishlist-grid">
+      <div *ngFor="let p of products" class="wishlist-card">
+        <a [routerLink]="['/products', p._id]" class="thumb">
+          <img [src]="p.images[0] || 'assets/images/placeholder.jpg'" [alt]="p.name" />
+        </a>
+        <div class="info">
+          <a [routerLink]="['/products', p._id]" class="name">{{ p.name }}</a>
+          <div class="meta">
+            <span class="price">${{ p.price.toFixed(2) }}</span>
+            <span class="stock" [class.out]="p.status==='out_of_stock'">{{ p.status==='out_of_stock' ? 'Out of stock' : p.stock + ' in stock' }}</span>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" (click)="addToCart(p)" [disabled]="p.status==='out_of_stock' || p.stock<=0">
+              <i class="fas fa-cart-plus"></i>
+              Add to Cart
+            </button>
+            <button class="btn-secondary" (click)="remove(p._id)">
+              <i class="fas fa-trash"></i>
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

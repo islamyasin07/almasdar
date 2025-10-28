@@ -1,0 +1,45 @@
+.navbar-wrapper {
+  background: rgba(11, 18, 32, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.nav-link {
+  @apply text-gray-300 hover:text-cyan transition-all duration-300 font-medium flex items-center;
+}
+
+.nav-icon {
+  @apply text-gray-300 hover:text-cyan transition-all duration-300 relative;
+}
+
+.dropdown-item {
+  @apply block px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-cyan transition-colors duration-200;
+  
+  i {
+    @apply inline-block w-5 text-center;
+  }
+}
+
+.mobile-menu-item {
+  @apply flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-cyan transition-all duration-200;
+}
+
+// Profile dropdown animation
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Rotate chevron
+.rotate-180 {
+  transform: rotate(180deg);
+}

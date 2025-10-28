@@ -1,0 +1,224 @@
+<div class="orders-page">
+  <div class="page-header">
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-subtitle">Track and manage your order history</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <label>Status</label>
+      <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" class="filter-select">
+        <option value="all">All Orders</option>
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Date Range</label>
+      <select [(ngModel)]="dateFilter" (change)="onDateFilterChange()" class="filter-select">
+        <option value="all">All Time</option>
+        <option value="last30days">Last 30 Days</option>
+        <option value="last90days">Last 90 Days</option>
+        <option value="thisYear">This Year</option>
+      </select>
+    </div>
+
+    <div class="filter-group search-group">
+      <label>Search</label>
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (input)="onSearchChange()" 
+        placeholder="Order ID, status, tracking..." 
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+    <p>Loading orders...</p>
+  </div>
+
+  <!-- Orders Table -->
+  <div *ngIf="!isLoading && filteredOrders.length > 0" class="orders-table-container">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td><strong>#{{ order._id.slice(-8) }}</strong></td>
+          <td>{{ order.createdAt | date: 'MMM d, y' }}</td>
+          <td>{{ getTotalItems(order) }} items</td>
+          <td>${{ order.total.toFixed(2) }}</td>
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(order.status)">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="'payment-' + order.paymentStatus">
+              {{ order.paymentStatus }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-view" (click)="viewOrderDetails(order)">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button 
+        class="page-btn" 
+        [disabled]="currentPage === 1" 
+        (click)="goToPage(currentPage - 1)"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <button 
+        *ngFor="let page of paginationPages" 
+        class="page-btn" 
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+
+      <button 
+        class="page-btn" 
+        [disabled]="currentPage === totalPages" 
+        (click)="goToPage(currentPage + 1)"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredOrders.length === 0" class="empty-state">
+    <i class="fas fa-shopping-bag"></i>
+    <h3>No orders found</h3>
+    <p>{{ searchQuery || statusFilter !== 'all' || dateFilter !== 'all' ? 'Try adjusting your filters' : 'You haven\'t placed any orders yet' }}</p>
+    <a *ngIf="!searchQuery && statusFilter === 'all' && dateFilter === 'all'" routerLink="/products" class="btn-primary">
+      Start Shopping
+    </a>
+  </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal-overlay" *ngIf="selectedOrder" (click)="closeOrderDetails()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Order Details</h2>
+      <button class="close-btn" (click)="closeOrderDetails()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Order Info -->
+      <div class="order-info-section">
+        <div class="info-row">
+          <span class="info-label">Order ID:</span>
+          <span class="info-value">#{{ selectedOrder._id.slice(-8) }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Date:</span>
+          <span class="info-value">{{ selectedOrder.createdAt | date: 'MMMM d, y, h:mm a' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Status:</span>
+          <span class="badge" [ngClass]="getStatusClass(selectedOrder.status)">
+            {{ selectedOrder.status }}
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Payment:</span>
+          <span class="badge" [ngClass]="'payment-' + selectedOrder.paymentStatus">
+            {{ selectedOrder.paymentStatus }}
+          </span>
+        </div>
+        <div class="info-row" *ngIf="selectedOrder.trackingNumber">
+          <span class="info-label">Tracking:</span>
+          <span class="info-value">{{ selectedOrder.trackingNumber }}</span>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="order-items-section">
+        <h3>Items</h3>
+        <div class="order-item" *ngFor="let item of selectedOrder.items">
+          <div class="item-info">
+            <strong>{{ item.name }}</strong>
+            <span class="item-sku">SKU: {{ item.sku }}</span>
+          </div>
+          <div class="item-quantity">Qty: {{ item.quantity }}</div>
+          <div class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</div>
+        </div>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="shipping-section">
+        <h3>Shipping Address</h3>
+        <div class="address-card">
+          <p><strong>{{ selectedOrder.shippingAddress.fullName }}</strong></p>
+          <p>{{ selectedOrder.shippingAddress.street }}</p>
+          <p *ngIf="selectedOrder.shippingAddress.apartment">{{ selectedOrder.shippingAddress.apartment }}</p>
+          <p>
+            {{ selectedOrder.shippingAddress.city }}, 
+            {{ selectedOrder.shippingAddress.state }} 
+            {{ selectedOrder.shippingAddress.postalCode }}
+          </p>
+          <p>{{ selectedOrder.shippingAddress.country }}</p>
+          <p *ngIf="selectedOrder.shippingAddress.phone">Phone: {{ selectedOrder.shippingAddress.phone }}</p>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary-section">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>${{ selectedOrder.subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span>${{ selectedOrder.shippingCost.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax:</span>
+          <span>${{ selectedOrder.tax.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row total">
+          <span><strong>Total:</strong></span>
+          <span><strong>${{ selectedOrder.total.toFixed(2) }}</strong></span>
+        </div>
+      </div>
+
+      <div class="order-notes" *ngIf="selectedOrder.notes">
+        <h3>Notes</h3>
+        <p>{{ selectedOrder.notes }}</p>
+      </div>
+    </div>
+  </div>
+</div>

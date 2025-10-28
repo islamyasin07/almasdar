@@ -1,0 +1,340 @@
+# ============================================
+# ALMASDAR SECURITY - PROFESSIONAL .GITIGNORE
+# ============================================
+
+# ==========================================
+# NODE.JS & NPM
+# ==========================================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# Package manager lock files (optional - uncomment if you don't want to track them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ==========================================
+# ANGULAR
+# ==========================================
+# Build outputs
+/frontend/dist/
+/frontend/tmp/
+/frontend/out-tsc/
+/frontend/.angular/
+/frontend/.angular-cache/
+
+# Browser build artifacts
+/frontend/bazel-out
+
+# Angular profiling files
+/frontend/chrome-profiler-events*.json
+
+# ==========================================
+# NODE.JS BACKEND
+# ==========================================
+# Build outputs
+/backend/dist/
+/backend/build/
+/backend/out/
+/backend/.tsbuildinfo
+
+# ==========================================
+# ENVIRONMENT & SECRETS
+# ==========================================
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+*.env
+
+# API keys and secrets
+secrets.json
+.secrets/
+
+# ==========================================
+# LOGS
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ==========================================
+# OPERATING SYSTEM FILES
+# ==========================================
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ==========================================
+# IDEs & EDITORS
+# ==========================================
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
+# JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+sftp-config-alt*.json
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+*~
+tags
+[._]*.un~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ==========================================
+# DATABASES
+# ==========================================
+# MongoDB
+*.mongodb
+mongo-data/
+mongodb-data/
+data/db/
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# PostgreSQL
+*.pgsql
+
+# MySQL
+*.sql.gz
+
+# ==========================================
+# DOCKER
+# ==========================================
+# Docker volumes and data
+docker-compose.override.yml
+.dockerignore
+docker-data/
+volumes/
+
+# ==========================================
+# TESTING
+# ==========================================
+# Test coverage
+coverage/
+*.lcov
+.nyc_output/
+lib-cov/
+
+# Jest
+jest_*.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ==========================================
+# BUILD ARTIFACTS
+# ==========================================
+# Compiled output
+*.js.map
+*.d.ts.map
+*.metadata.json
+*.ngfactory.js
+*.ngsummary.json
+*.shim.ngstyle.js
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Build directories
+build/
+dist/
+.output/
+.nuxt/
+.next/
+.cache/
+
+# ==========================================
+# UPLOADS & USER CONTENT
+# ==========================================
+# Uploaded files (adjust paths as needed)
+uploads/
+public/uploads/
+backend/uploads/
+frontend/uploads/
+*.uploaded.*
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# ==========================================
+# MISC
+# ==========================================
+# Dependency directories
+jspm_packages/
+web_modules/
+bower_components/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional SASS cache
+.sass-cache/
+
+# Storybook
+storybook-static/
+
+# Serverless directories
+.serverless/
+.fusebox/
+.dynamodb/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ==========================================
+# SECURITY & CERTIFICATES
+# ==========================================
+# SSL certificates
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# SSH keys
+id_rsa
+id_dsa
+*.pub
+
+# ==========================================
+# PROJECT SPECIFIC
+# ==========================================
+# Add any project-specific patterns here
+# Example:
+# /my-custom-folder/
+# *.custom-extension

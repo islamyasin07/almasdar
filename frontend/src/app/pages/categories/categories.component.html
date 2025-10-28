@@ -1,0 +1,90 @@
+<div class="categories-page">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">Product Categories</h1>
+        <p class="page-subtitle">
+          Explore our comprehensive range of security solutions
+        </p>
+        <div class="stats">
+          <div class="stat-item">
+            <i class="fas fa-layer-group"></i>
+            <span>{{ categories.length }} Categories</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-box"></i>
+            <span>{{ getTotalProducts() }} Products</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner">
+        <i class="fas fa-shield-alt fa-spin"></i>
+      </div>
+      <p>Loading categories...</p>
+    </div>
+
+    <!-- Categories Grid -->
+    <div *ngIf="!isLoading" class="categories-grid">
+      <div
+        *ngFor="let category of categories"
+        class="category-card"
+        (click)="navigateToCategory(category)"
+      >
+        <div class="category-image">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            (error)="$any($event.target).src='assets/images/placeholder.jpg'"
+            loading="lazy"
+          />
+          <div class="category-overlay">
+            <i class="fas {{ category.icon }} category-icon"></i>
+          </div>
+          <div class="product-count-badge">
+            <i class="fas fa-box"></i>
+            {{ category.productCount }} Products
+          </div>
+        </div>
+
+        <div class="category-content">
+          <h3 class="category-name">
+            <i class="fas {{ category.icon }}"></i>
+            {{ category.name }}
+          </h3>
+          <p class="category-description">{{ category.description }}</p>
+          
+          <div class="category-footer">
+            <button class="explore-button">
+              <span>Explore Products</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <div class="cta-content">
+        <i class="fas fa-headset"></i>
+        <h2>Need Help Choosing?</h2>
+        <p>Our security experts are here to help you find the perfect solution for your needs</p>
+        <div class="cta-buttons">
+          <button class="btn-primary">
+            <i class="fas fa-phone"></i>
+            Contact Us
+          </button>
+          <button class="btn-secondary">
+            <i class="fas fa-file-alt"></i>
+            Request Quote
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

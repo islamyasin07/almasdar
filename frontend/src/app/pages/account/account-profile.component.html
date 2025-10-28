@@ -1,0 +1,179 @@
+<div class="profile-page">
+  <div class="page-header">
+    <h1 class="page-title">Profile Settings</h1>
+    <p class="page-subtitle">Manage your account information and security settings</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+    <p>Loading profile...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="profile-content">
+    <!-- Profile Information -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h2><i class="fas fa-user"></i> Personal Information</h2>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              [class.invalid]="isFieldInvalid(profileForm, 'firstName')"
+              placeholder="Enter first name"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'firstName')">
+              {{ getFieldError(profileForm, 'firstName') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name <span class="required">*</span></label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              [class.invalid]="isFieldInvalid(profileForm, 'lastName')"
+              placeholder="Enter last name"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'lastName')">
+              {{ getFieldError(profileForm, 'lastName') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email <span class="required">*</span></label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              [class.invalid]="isFieldInvalid(profileForm, 'email')"
+              placeholder="your@email.com"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'email')">
+              {{ getFieldError(profileForm, 'email') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="+1 (555) 000-0000"
+            />
+          </div>
+
+          <div class="form-group full-width">
+            <label for="company">Company (Optional)</label>
+            <input
+              id="company"
+              type="text"
+              formControlName="company"
+              placeholder="Company name"
+            />
+          </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div class="alert alert-success" *ngIf="profileMessage">
+          <i class="fas fa-check-circle"></i> {{ profileMessage }}
+        </div>
+        <div class="alert alert-error" *ngIf="profileError">
+          <i class="fas fa-exclamation-circle"></i> {{ profileError }}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="isSavingProfile || profileForm.invalid">
+            <span *ngIf="!isSavingProfile">
+              <i class="fas fa-save"></i> Save Changes
+            </span>
+            <span *ngIf="isSavingProfile">
+              <i class="fas fa-spinner fa-spin"></i> Saving...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Change Password -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h2><i class="fas fa-lock"></i> Change Password</h2>
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="password-form">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="currentPassword">Current Password <span class="required">*</span></label>
+            <input
+              id="currentPassword"
+              type="password"
+              formControlName="currentPassword"
+              [class.invalid]="isFieldInvalid(passwordForm, 'currentPassword')"
+              placeholder="Enter current password"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'currentPassword')">
+              {{ getFieldError(passwordForm, 'currentPassword') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">New Password <span class="required">*</span></label>
+            <input
+              id="newPassword"
+              type="password"
+              formControlName="newPassword"
+              [class.invalid]="isFieldInvalid(passwordForm, 'newPassword')"
+              placeholder="Enter new password"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'newPassword')">
+              {{ getFieldError(passwordForm, 'newPassword') }}
+            </span>
+            <span class="helper-text">Minimum 6 characters</span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password <span class="required">*</span></label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              [class.invalid]="isFieldInvalid(passwordForm, 'confirmPassword')"
+              placeholder="Confirm new password"
+            />
+            <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'confirmPassword')">
+              {{ getFieldError(passwordForm, 'confirmPassword') }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div class="alert alert-success" *ngIf="passwordMessage">
+          <i class="fas fa-check-circle"></i> {{ passwordMessage }}
+        </div>
+        <div class="alert alert-error" *ngIf="passwordError">
+          <i class="fas fa-exclamation-circle"></i> {{ passwordError }}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="isSavingPassword || passwordForm.invalid">
+            <span *ngIf="!isSavingPassword">
+              <i class="fas fa-key"></i> Change Password
+            </span>
+            <span *ngIf="isSavingPassword">
+              <i class="fas fa-spinner fa-spin"></i> Changing...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

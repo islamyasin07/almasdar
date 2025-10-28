@@ -1,0 +1,112 @@
+<footer class="footer">
+  <!-- Main Footer Content -->
+  <div class="footer-content">
+    <div class="container mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        
+        <!-- Brand Section -->
+        <div class="lg:col-span-2">
+          <div class="brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>AlMasdar Security</span>
+          </div>
+          <p class="description">
+            Your trusted partner in advanced security solutions. Protecting what matters most with cutting-edge technology and reliable service.
+          </p>
+          
+          <!-- Social Links -->
+          <div class="social-links">
+            <a *ngFor="let social of socialLinks" 
+               [href]="social.url" 
+               [title]="social.label"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="social-icon">
+              <i [class]="social.icon"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Company Links -->
+        <div class="footer-section">
+          <h3 class="section-title">Company</h3>
+          <ul class="link-list">
+            <li *ngFor="let link of footerLinks.company">
+              <a [routerLink]="link.route">{{ link.label }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Support Links -->
+        <div class="footer-section">
+          <h3 class="section-title">Support</h3>
+          <ul class="link-list">
+            <li *ngFor="let link of footerLinks.support">
+              <a [routerLink]="link.route">{{ link.label }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Legal Links -->
+        <div class="footer-section">
+          <h3 class="section-title">Legal</h3>
+          <ul class="link-list">
+            <li *ngFor="let link of footerLinks.legal">
+              <a [routerLink]="link.route">{{ link.label }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Newsletter Section -->
+      <div class="newsletter-section">
+        <div class="newsletter-card">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div>
+              <h3 class="newsletter-title">
+                <i class="fas fa-envelope mr-2"></i>
+                Subscribe to Our Newsletter
+              </h3>
+              <p class="newsletter-description">
+                Get the latest updates on security products and exclusive offers.
+              </p>
+            </div>
+            <div class="newsletter-form">
+              <div class="input-group">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address"
+                  class="newsletter-input"
+                />
+                <button type="button" class="newsletter-button">
+                  <span>Subscribe</span>
+                  <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="container mx-auto px-4">
+      <div class="bottom-content">
+        <div class="copyright">
+          <i class="fas fa-copyright"></i>
+          <span>{{ currentYear }} AlMasdar Security. All rights reserved.</span>
+        </div>
+        
+        <div class="payment-methods">
+          <span class="payment-label">We Accept:</span>
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fab fa-cc-amex"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,24 @@
+<div class="account-layout container mx-auto px-4 py-8">
+  <div class="grid lg:grid-cols-4 gap-6">
+    <aside class="lg:col-span-1 card">
+      <nav class="menu">
+        <a routerLink="/account" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="fas fa-home"></i> Overview
+        </a>
+        <a routerLink="/account/orders" routerLinkActive="active">
+          <i class="fas fa-box"></i> Orders
+        </a>
+        <a routerLink="/account/addresses" routerLinkActive="active">
+          <i class="fas fa-map-marker-alt"></i> Addresses
+        </a>
+        <a routerLink="/account/profile" routerLinkActive="active">
+          <i class="fas fa-user-cog"></i> Profile
+        </a>
+      </nav>
+    </aside>
+    <section class="lg:col-span-3">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+  
+</div>

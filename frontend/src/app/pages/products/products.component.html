@@ -1,0 +1,254 @@
+<div class="products-page">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Security Products</h1>
+      <p class="page-subtitle">Professional-grade security systems and equipment</p>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-filter-bar">
+      <div class="search-section">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
+            placeholder="Search products..."
+            class="search-input"
+          />
+        </div>
+        <button (click)="onSearch()" class="search-button">
+          <i class="fas fa-search"></i>
+          <span>Search</span>
+        </button>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="toggleFilters()" class="filter-toggle-button">
+          <i class="fas fa-filter"></i>
+          <span>Filters</span>
+        </button>
+        
+        <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
+          <option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar" [class.show]="showFilters">
+        <div class="sidebar-header">
+          <h3>Filters</h3>
+          <button (click)="clearFilters()" class="clear-button">
+            <i class="fas fa-times"></i>
+            Clear All
+          </button>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Category</h4>
+          <div class="filter-options">
+            <label *ngFor="let cat of categories" class="filter-option">
+              <input
+                type="radio"
+                name="category"
+                [value]="cat.value"
+                [(ngModel)]="selectedCategory"
+                (change)="onCategoryChange()"
+              />
+              <span class="radio-custom"></span>
+              <span class="option-label">{{ cat.label }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Price Range</h4>
+          <div class="price-inputs">
+            <input
+              type="number"
+              [(ngModel)]="priceRange[0]"
+              (change)="onPriceRangeChange()"
+              placeholder="Min"
+              class="price-input"
+            />
+            <span class="price-separator">-</span>
+            <input
+              type="number"
+              [(ngModel)]="priceRange[1]"
+              (change)="onPriceRangeChange()"
+              placeholder="Max"
+              class="price-input"
+            />
+          </div>
+          <div class="price-labels">
+            <span>${{ priceRange[0] }}</span>
+            <span>${{ priceRange[1] }}</span>
+          </div>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <h4 class="filter-title">Availability</h4>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input
+                type="radio"
+                name="status"
+                value=""
+                [(ngModel)]="selectedStatus"
+                (change)="onCategoryChange()"
+              />
+              <span class="radio-custom"></span>
+              <span class="option-label">All Products</span>
+            </label>
+            <label class="filter-option">
+              <input
+                type="radio"
+                name="status"
+                value="active"
+                [(ngModel)]="selectedStatus"
+                (change)="onCategoryChange()"
+              />
+              <span class="radio-custom"></span>
+              <span class="option-label">In Stock</span>
+            </label>
+            <label class="filter-option">
+              <input
+                type="radio"
+                name="status"
+                value="out_of_stock"
+                [(ngModel)]="selectedStatus"
+                (change)="onCategoryChange()"
+              />
+              <span class="radio-custom"></span>
+              <span class="option-label">Out of Stock</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products Grid -->
+      <div class="products-section">
+        <!-- Results Info -->
+        <div class="results-info">
+          <span class="results-count">{{ totalProducts }} Products Found</span>
+          <span class="results-page">Page {{ currentPage }} of {{ totalPages }}</span>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-container">
+          <div class="loading-spinner">
+            <i class="fas fa-shield-alt fa-spin"></i>
+          </div>
+          <p>Loading products...</p>
+        </div>
+
+        <!-- Products Grid -->
+        <div *ngIf="!isLoading && products.length > 0" class="products-grid">
+          <div *ngFor="let product of products" class="product-card">
+            <a [routerLink]="['/products', product._id]" class="product-link">
+              <!-- Product Image -->
+              <div class="product-image">
+                <img
+                  [src]="product.images[0] || 'assets/images/placeholder.jpg'"
+                  [alt]="product.name"
+                  loading="lazy"
+                />
+                <div class="product-badge" *ngIf="product.stock < 10 && product.status === 'active'">
+                  Low Stock
+                </div>
+                <div class="product-badge out-of-stock" *ngIf="product.status === 'out_of_stock'">
+                  Out of Stock
+                </div>
+                <div class="product-overlay">
+                  <button type="button" class="quick-view-button">
+                    <i class="fas fa-eye"></i>
+                    Quick View
+                  </button>
+                </div>
+              </div>
+
+              <!-- Product Info -->
+              <div class="product-info">
+                <div class="product-category">{{ product.category }}</div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-description">{{ product.description | slice:0:80 }}...</p>
+                
+                <!-- Product Meta -->
+                <div class="product-meta">
+                  <div class="product-brand" *ngIf="product.brand">
+                    <i class="fas fa-tag"></i>
+                    {{ product.brand }}
+                  </div>
+                  <div class="product-stock">
+                    <i class="fas fa-box"></i>
+                    {{ product.stock }} in stock
+                  </div>
+                </div>
+
+                <!-- Product Footer -->
+                <div class="product-footer">
+                  <div class="product-price">${{ product.price.toFixed(2) }}</div>
+                  <button type="button" class="add-to-cart-button" (click)="$event.preventDefault(); $event.stopPropagation(); addToCart(product)" [disabled]="product.status === 'out_of_stock' || product.stock <= 0">
+                    <i class="fas fa-shopping-cart"></i>
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && products.length === 0" class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>No Products Found</h3>
+          <p>Try adjusting your filters or search terms</p>
+          <button (click)="clearFilters()" class="btn-primary">
+            Clear Filters
+          </button>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="!isLoading && products.length > 0 && totalPages > 1" class="pagination">
+          <button
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="pagination-button"
+          >
+            <i class="fas fa-chevron-left"></i>
+            Previous
+          </button>
+
+          <div class="pagination-pages">
+            <button
+              *ngFor="let page of pages"
+              (click)="goToPage(page)"
+              [class.active]="page === currentPage"
+              class="pagination-page"
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <button
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="pagination-button"
+          >
+            Next
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

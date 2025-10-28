@@ -1,0 +1,5 @@
+.card{background:#0b0f14;border:1px solid #1f2937;border-radius:.75rem;padding:1rem}
+.menu{display:flex;flex-direction:column;gap:.5rem}
+.menu a{display:flex;align-items:center;gap:.5rem;color:#e5e7eb;padding:.5rem .75rem;border-radius:.5rem;border:1px solid transparent}
+.menu a:hover{background:#0f172a;border-color:#1f2937}
+.menu a.active{background:linear-gradient(135deg,#22d3ee,#f59e0b);color:#0b0f14}

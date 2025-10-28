@@ -1,0 +1,256 @@
+.profile-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+// Loading
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  color: #9ca3af;
+
+  .spinner {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #22d3ee;
+  }
+}
+
+// Profile Content
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-section {
+  background: #0b0f14;
+  border: 1px solid #1f2937;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.section-header {
+  background: #1a1f2e;
+  padding: 1.5rem;
+  border-bottom: 1px solid #1f2937;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    i {
+      color: #22d3ee;
+    }
+  }
+}
+
+// Forms
+.profile-form,
+.password-form {
+  padding: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    color: #9ca3af;
+    font-weight: 500;
+    font-size: 0.875rem;
+
+    .required {
+      color: #ef4444;
+      margin-left: 0.25rem;
+    }
+  }
+
+  input {
+    background: #1a1f2e;
+    border: 1px solid #1f2937;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: #e5e7eb;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #22d3ee;
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+    }
+
+    &::placeholder {
+      color: #6b7280;
+    }
+
+    &.invalid {
+      border-color: #ef4444;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+
+  .error-message {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: -0.25rem;
+  }
+
+  .helper-text {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: -0.25rem;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+// Alerts
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+
+  i {
+    font-size: 1.25rem;
+  }
+
+  &.alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  &.alert-error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+}
+
+// Form Actions
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #1f2937;
+}
+
+.btn-primary {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  color: #0b0f14;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #67e8f9 0%, #22d3ee 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  i.fa-spin {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .section-header {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1.125rem;
+    }
+  }
+
+  .profile-form,
+  .password-form {
+    padding: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

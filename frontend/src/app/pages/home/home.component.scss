@@ -1,0 +1,369 @@
+// Hero Section
+.hero-section {
+  @apply relative min-h-[90vh] flex items-center justify-center overflow-hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+}
+
+.hero-overlay {
+  @apply absolute inset-0;
+  background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+}
+
+.hero-content {
+  @apply text-center py-20;
+}
+
+.hero-title {
+  @apply text-5xl md:text-7xl font-bold mb-6 flex flex-col gap-2;
+
+  .title-line {
+    @apply text-white;
+  }
+
+  .title-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.hero-description {
+  @apply text-gray-300 text-lg md:text-xl max-w-3xl mx-auto mb-12 leading-relaxed;
+}
+
+.hero-actions {
+  @apply flex flex-wrap gap-4 justify-center mb-16;
+}
+
+.btn-primary {
+  @apply px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+  }
+}
+
+.btn-secondary {
+  @apply px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: translateY(-3px);
+  }
+}
+
+.hero-stats {
+  @apply flex flex-wrap justify-center gap-8 md:gap-16;
+}
+
+.stat-item {
+  @apply flex items-center gap-4 text-white;
+
+  i {
+    @apply text-4xl;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-number {
+    @apply text-3xl font-bold;
+  }
+
+  .stat-label {
+    @apply text-gray-400 text-sm;
+  }
+}
+
+// Categories Section
+.categories-section {
+  @apply py-20;
+}
+
+.section-header {
+  @apply text-center mb-12;
+}
+
+.section-title {
+  @apply text-4xl md:text-5xl font-bold text-white mb-4;
+}
+
+.section-description {
+  @apply text-gray-400 text-lg;
+}
+
+.categories-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.category-card {
+  @apply p-8 rounded-2xl transition-all duration-300 relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+  }
+
+  &::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  }
+
+  &:hover::before {
+    @apply opacity-100;
+  }
+}
+
+.category-icon {
+  @apply text-5xl mb-4;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.category-name {
+  @apply text-white text-xl font-bold mb-2;
+}
+
+.category-description {
+  @apply text-gray-400 mb-4;
+}
+
+.category-arrow {
+  @apply text-purple-500 transition-transform duration-300;
+
+  .category-card:hover & {
+    transform: translateX(5px);
+  }
+}
+
+// Features Section
+.features-section {
+  @apply py-20;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.features-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.feature-card {
+  @apply text-center;
+}
+
+.feature-icon {
+  @apply text-5xl mb-4 inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feature-title {
+  @apply text-white text-xl font-bold mb-2;
+}
+
+.feature-description {
+  @apply text-gray-400;
+}
+
+// Featured Products Section
+.featured-section {
+  @apply py-20;
+}
+
+.loading-container {
+  @apply flex flex-col items-center justify-center py-20;
+}
+
+.loading-spinner {
+  @apply text-6xl mb-4;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  i {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.products-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.product-card {
+  @apply rounded-2xl overflow-hidden transition-all duration-300;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.5);
+  }
+}
+
+.product-link {
+  @apply block;
+}
+
+.product-image {
+  @apply relative aspect-square overflow-hidden bg-gray-800;
+
+  img {
+    @apply w-full h-full object-cover transition-transform duration-300;
+  }
+
+  .product-card:hover & img {
+    transform: scale(1.1);
+  }
+
+  .product-badge {
+    @apply absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold text-white;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+}
+
+.product-info {
+  @apply p-6;
+}
+
+.product-category {
+  @apply text-purple-400 text-sm font-semibold uppercase mb-2;
+}
+
+.product-name {
+  @apply text-white text-lg font-bold mb-2;
+}
+
+.product-description {
+  @apply text-gray-400 text-sm mb-4;
+}
+
+.product-footer {
+  @apply flex items-center justify-between;
+}
+
+.product-price {
+  @apply text-2xl font-bold text-white;
+}
+
+.btn-add-cart {
+  @apply w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all duration-300;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+  }
+}
+
+.btn-view-all {
+  @apply inline-flex items-center px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+  }
+}
+
+// CTA Section
+.cta-section {
+  @apply py-20;
+}
+
+.cta-card {
+  @apply p-12 rounded-3xl relative overflow-hidden;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.cta-content {
+  @apply relative z-10 max-w-2xl;
+}
+
+.cta-title {
+  @apply text-4xl font-bold text-white mb-4;
+}
+
+.cta-description {
+  @apply text-gray-300 text-lg mb-8;
+}
+
+.cta-actions {
+  @apply flex flex-wrap gap-4;
+}
+
+.btn-cta-primary {
+  @apply px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+  }
+}
+
+.btn-cta-secondary {
+  @apply px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.cta-illustration {
+  @apply absolute right-12 bottom-0 text-[200px] opacity-10;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Animations
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .hero-title {
+    @apply text-4xl;
+  }
+
+  .section-title {
+    @apply text-3xl;
+  }
+
+  .cta-illustration {
+    @apply hidden;
+  }
+}

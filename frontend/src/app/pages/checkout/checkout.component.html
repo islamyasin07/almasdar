@@ -1,0 +1,87 @@
+<div class="checkout-page">
+  <div class="container mx-auto px-4 py-8">
+    <div class="page-header">
+      <h1 class="page-title">Checkout</h1>
+      <p class="page-subtitle">Secure checkout in three simple steps</p>
+    </div>
+
+    <div class="steps">
+      <div class="step" [class.active]="step===1">1. Shipping</div>
+      <div class="step" [class.active]="step===2">2. Payment</div>
+      <div class="step" [class.active]="step===3">3. Review</div>
+    </div>
+
+    <div class="content">
+      <!-- Left: Forms -->
+      <div class="left">
+        <!-- Step 1: Shipping -->
+        <form *ngIf="step===1" class="card" (submit)="$event.preventDefault(); next()">
+          <h3>Shipping Information</h3>
+          <div class="grid">
+            <label>Full Name<input [(ngModel)]="shipping.fullName" name="fullName" required /></label>
+            <label>Email<input [(ngModel)]="shipping.email" name="email" type="email" required /></label>
+            <label>Phone<input [(ngModel)]="shipping.phone" name="phone" required /></label>
+            <label>Address 1<input [(ngModel)]="shipping.address1" name="address1" required /></label>
+            <label>Address 2<input [(ngModel)]="shipping.address2" name="address2" /></label>
+            <label>City<input [(ngModel)]="shipping.city" name="city" required /></label>
+            <label>State<input [(ngModel)]="shipping.state" name="state" required /></label>
+            <label>ZIP<input [(ngModel)]="shipping.zip" name="zip" required /></label>
+            <label>Country<input [(ngModel)]="shipping.country" name="country" required /></label>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" type="submit">Continue to Payment</button>
+          </div>
+        </form>
+
+        <!-- Step 2: Payment -->
+        <form *ngIf="step===2" class="card" (submit)="$event.preventDefault(); next()">
+          <h3>Payment</h3>
+          <div class="methods">
+            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="card" /> Credit/Debit Card</label>
+            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="cod" /> Cash on Delivery</label>
+          </div>
+
+          <div *ngIf="payment.method==='card'" class="grid">
+            <label>Card Number<input [(ngModel)]="payment.cardNumber" name="cardNumber" /></label>
+            <label>Name on Card<input [(ngModel)]="payment.cardName" name="cardName" /></label>
+            <label>Expiry<input [(ngModel)]="payment.exp" name="exp" placeholder="MM/YY" /></label>
+            <label>CVC<input [(ngModel)]="payment.cvc" name="cvc" /></label>
+          </div>
+          <div class="actions">
+            <button class="btn-secondary" type="button" (click)="back()">Back</button>
+            <button class="btn-primary" type="submit">Review Order</button>
+          </div>
+        </form>
+
+        <!-- Step 3: Review -->
+        <div *ngIf="step===3" class="card">
+          <h3>Review Your Order</h3>
+          <ul class="review-items">
+            <li *ngFor="let i of cart.items">
+              <span>{{ i.name }} x{{ i.quantity }}</span>
+              <span>${{ (i.price * i.quantity).toFixed(2) }}</span>
+            </li>
+          </ul>
+          <div class="totals">
+            <div><span>Subtotal</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
+            <div><span>Shipping</span><span>$0.00</span></div>
+            <div class="grand"><span>Total</span><span>${{ cart.total.toFixed(2) }}</span></div>
+          </div>
+          <div class="actions">
+            <button class="btn-secondary" type="button" (click)="back()">Back</button>
+            <button class="btn-primary" type="button" (click)="placeOrder()">Place Order</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Summary -->
+      <aside class="right card">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Items</span><span>{{ cart.itemCount }}</span></div>
+        <div class="summary-row"><span>Subtotal</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
+        <div class="summary-row"><span>Shipping</span><span>$0.00</span></div>
+        <div class="summary-row total"><span>Total</span><span>${{ cart.total.toFixed(2) }}</span></div>
+      </aside>
+    </div>
+  </div>
+</div>

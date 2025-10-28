@@ -1,0 +1,129 @@
+<div class="dashboard-page">
+  <div class="welcome-section" *ngIf="user">
+    <h1 class="page-title">Welcome back, {{ user.profile?.firstName || 'User' }}!</h1>
+    <p class="page-subtitle">From here you can review recent orders, manage addresses, and update your profile.</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+    <p>Loading dashboard...</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="!isLoading">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.totalOrders }}</div>
+        <div class="stat-label">Total Orders</div>
+        <a routerLink="/account/orders" class="stat-link">View all →</a>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon pending">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.pendingOrders }}</div>
+        <div class="stat-label">Pending Orders</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon wishlist">
+        <i class="fas fa-heart"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.wishlistItems }}</div>
+        <div class="stat-label">Wishlist Items</div>
+        <a routerLink="/wishlist" class="stat-link">View wishlist →</a>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon addresses">
+        <i class="fas fa-map-marker-alt"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.addresses }}</div>
+        <div class="stat-label">Saved Addresses</div>
+        <a routerLink="/account/addresses" class="stat-link">Manage →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="recent-orders" *ngIf="!isLoading && recentOrders.length > 0">
+    <div class="section-header">
+      <h2>Recent Orders</h2>
+      <a routerLink="/account/orders" class="view-all-link">View All Orders</a>
+    </div>
+
+    <div class="orders-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of recentOrders">
+            <td><strong>#{{ order._id.slice(-6) }}</strong></td>
+            <td>{{ order.createdAt | date: 'MMM d, y' }}</td>
+            <td>{{ order.items.length }} items</td>
+            <td>${{ order.total.toFixed(2) }}</td>
+            <td>
+              <span class="badge" [ngClass]="getStatusClass(order.status)">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/account/orders']" class="btn-sm btn-primary">View</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && recentOrders.length === 0">
+    <i class="fas fa-shopping-cart"></i>
+    <h3>No orders yet</h3>
+    <p>Start shopping to see your orders here</p>
+    <a routerLink="/products" class="btn-primary">Browse Products</a>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions" *ngIf="!isLoading">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+      <a routerLink="/account/profile" class="action-card">
+        <i class="fas fa-user-edit"></i>
+        <span>Edit Profile</span>
+      </a>
+      <a routerLink="/account/addresses" class="action-card">
+        <i class="fas fa-plus"></i>
+        <span>Add Address</span>
+      </a>
+      <a routerLink="/products" class="action-card">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Shop Now</span>
+      </a>
+      <a routerLink="/wishlist" class="action-card">
+        <i class="fas fa-heart"></i>
+        <span>My Wishlist</span>
+      </a>
+    </div>
+  </div>
+</div>
+

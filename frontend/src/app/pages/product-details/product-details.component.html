@@ -1,0 +1,244 @@
+<div class="product-details-page" *ngIf="!isLoading && product">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a routerLink="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <a routerLink="/products">Products</a>
+      <i class="fas fa-chevron-right"></i>
+      <a [routerLink]="['/products']" [queryParams]="{category: product.category}">{{ product.category }}</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>{{ product.name }}</span>
+    </nav>
+
+    <!-- Product Main Section -->
+    <div class="product-main">
+      <!-- Image Gallery -->
+      <div class="product-gallery">
+        <div class="main-image">
+          <img [src]="selectedImage" [alt]="product.name" />
+          <div class="stock-badge" [class.out-of-stock]="product.status === 'out_of_stock'">
+            <i class="fas" [class.fa-check-circle]="product.status === 'active'" [class.fa-times-circle]="product.status === 'out_of_stock'"></i>
+            {{ product.status === 'active' ? 'In Stock' : 'Out of Stock' }}
+          </div>
+        </div>
+        <div class="thumbnail-list">
+          <div *ngFor="let image of product.images" 
+               class="thumbnail" 
+               [class.active]="image === selectedImage"
+               (click)="selectImage(image)">
+            <img [src]="image" [alt]="product.name" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-header">
+          <div class="brand-sku">
+            <span class="brand" *ngIf="product.brand">
+              <i class="fas fa-tag"></i> {{ product.brand }}
+            </span>
+            <span class="sku">SKU: {{ product.sku }}</span>
+          </div>
+          <h1 class="product-title">{{ product.name }}</h1>
+          
+          <!-- Rating -->
+          <div class="product-rating">
+            <div class="stars">
+              <i *ngFor="let star of getStars(getAverageRating())" 
+                 class="fas fa-star" 
+                 [class.filled]="star === 1"></i>
+            </div>
+            <span class="rating-text">{{ getAverageRating().toFixed(1) }} ({{ reviews.length }} reviews)</span>
+          </div>
+        </div>
+
+        <div class="price-section">
+          <div class="price">${{ product.price.toFixed(2) }}</div>
+          <div class="stock-info">
+            <i class="fas fa-box"></i>
+            <span>{{ product.stock }} units available</span>
+          </div>
+        </div>
+
+        <p class="product-description">{{ product.description }}</p>
+
+        <!-- Key Features -->
+        <div class="key-features">
+          <h3><i class="fas fa-star"></i> Key Features</h3>
+          <ul>
+            <li *ngFor="let feature of product.features.slice(0, 4)">
+              <i class="fas fa-check-circle"></i>
+              {{ feature }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Quantity & Actions -->
+        <div class="product-actions">
+          <div class="quantity-selector">
+            <button (click)="changeQuantity(-1)" [disabled]="quantity <= 1">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" [(ngModel)]="quantity" [min]="1" [max]="product.stock" readonly />
+            <button (click)="changeQuantity(1)" [disabled]="quantity >= product.stock">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <button class="btn-add-cart" (click)="addToCart()" [disabled]="product.status !== 'active'">
+            <i class="fas fa-shopping-cart"></i>
+            Add to Cart
+          </button>
+
+          <button class="btn-wishlist" (click)="addToWishlist()">
+            <i class="fas fa-heart"></i>
+          </button>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="additional-info">
+          <div class="info-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>{{ product.warranty }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-truck"></i>
+            <span>Free Shipping on Orders Over $500</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-headset"></i>
+            <span>24/7 Customer Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Tabs -->
+    <div class="product-tabs">
+      <div class="tab-headers">
+        <button [class.active]="selectedTab === 'description'" (click)="selectTab('description')">
+          <i class="fas fa-file-alt"></i>
+          Description
+        </button>
+        <button [class.active]="selectedTab === 'specifications'" (click)="selectTab('specifications')">
+          <i class="fas fa-list"></i>
+          Specifications
+        </button>
+        <button [class.active]="selectedTab === 'reviews'" (click)="selectTab('reviews')">
+          <i class="fas fa-star"></i>
+          Reviews ({{ reviews.length }})
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Description Tab -->
+        <div *ngIf="selectedTab === 'description'" class="tab-pane">
+          <h2>Product Description</h2>
+          <p>{{ product.description }}</p>
+          
+          <h3>Features</h3>
+          <ul class="features-list">
+            <li *ngFor="let feature of product.features">
+              <i class="fas fa-check-circle"></i>
+              {{ feature }}
+            </li>
+          </ul>
+
+          <div *ngIf="product.installationGuide" class="installation-guide">
+            <h3><i class="fas fa-tools"></i> Installation</h3>
+            <p>{{ product.installationGuide }}</p>
+          </div>
+        </div>
+
+        <!-- Specifications Tab -->
+        <div *ngIf="selectedTab === 'specifications'" class="tab-pane">
+          <h2>Technical Specifications</h2>
+          <div class="specifications-grid">
+            <div *ngFor="let spec of product.specifications | keyvalue" class="spec-item">
+              <span class="spec-label">{{ spec.key }}</span>
+              <span class="spec-value">{{ spec.value }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="product.technicalDetails" class="technical-details">
+            <h3>Additional Technical Details</h3>
+            <div class="specifications-grid">
+              <div *ngFor="let detail of product.technicalDetails | keyvalue" class="spec-item">
+                <span class="spec-label">{{ detail.key }}</span>
+                <span class="spec-value">{{ detail.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div *ngIf="selectedTab === 'reviews'" class="tab-pane">
+          <div class="reviews-header">
+            <h2>Customer Reviews</h2>
+            <button class="btn-write-review" (click)="showReviewForm = !showReviewForm">
+              <i class="fas fa-pen"></i>
+              Write a Review
+            </button>
+          </div>
+
+          <!-- Review Form -->
+          <div *ngIf="showReviewForm" class="review-form">
+            <h3>Write Your Review</h3>
+            <div class="rating-input">
+              <label>Rating:</label>
+              <div class="stars-input">
+                <i *ngFor="let i of [1,2,3,4,5]" 
+                   class="fas fa-star" 
+                   [class.filled]="i <= newReview.rating"
+                   (click)="newReview.rating = i"></i>
+              </div>
+            </div>
+            <textarea [(ngModel)]="newReview.comment" 
+                      placeholder="Share your experience with this product..."
+                      rows="4"></textarea>
+            <div class="form-actions">
+              <button class="btn-submit" (click)="submitReview()">Submit Review</button>
+              <button class="btn-cancel" (click)="showReviewForm = false">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Reviews List -->
+          <div class="reviews-list">
+            <div *ngFor="let review of reviews" class="review-item">
+              <div class="review-header">
+                <div class="reviewer-info">
+                  <div class="avatar">{{ review.user.firstName.charAt(0) }}{{ review.user.lastName.charAt(0) }}</div>
+                  <div>
+                    <div class="reviewer-name">{{ review.user.firstName }} {{ review.user.lastName }}</div>
+                    <div class="review-date">{{ formatDate(review.createdAt) }}</div>
+                  </div>
+                </div>
+                <div class="stars">
+                  <i *ngFor="let star of getStars(review.rating)" 
+                     class="fas fa-star" 
+                     [class.filled]="star === 1"></i>
+                </div>
+              </div>
+              <p class="review-comment">{{ review.comment }}</p>
+            </div>
+
+            <div *ngIf="reviews.length === 0" class="no-reviews">
+              <i class="fas fa-comment-slash"></i>
+              <p>No reviews yet. Be the first to review this product!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="isLoading" class="loading-container">
+  <div class="loading-spinner">
+    <i class="fas fa-shield-alt fa-spin"></i>
+  </div>
+  <p>Loading product details...</p>
+</div>

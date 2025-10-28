@@ -1,0 +1,8 @@
+.app-container {
+  @apply min-h-screen flex flex-col;
+  background: linear-gradient(to bottom, #0f172a, #1e1b4b);
+}
+
+.main-content {
+  @apply flex-1;
+}

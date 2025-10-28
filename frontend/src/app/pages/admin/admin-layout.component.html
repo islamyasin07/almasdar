@@ -1,0 +1,46 @@
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fas fa-shield-alt"></i>
+      <span>Admin Panel</span>
+    </div>
+    <nav>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-chart-line"></i>
+        Overview
+      </a>
+      <a routerLink="/admin/products" routerLinkActive="active">
+        <i class="fas fa-box"></i>
+        Products
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active">
+        <i class="fas fa-shopping-bag"></i>
+        Orders
+      </a>
+      <a routerLink="/admin/users" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        Users
+      </a>
+      <a routerLink="/admin/categories" routerLinkActive="active">
+        <i class="fas fa-th-large"></i>
+        Categories
+      </a>
+      <a routerLink="/admin/coupons" routerLinkActive="active">
+        <i class="fas fa-ticket-alt"></i>
+        Coupons
+      </a>
+      <a routerLink="/admin/reviews" routerLinkActive="active">
+        <i class="fas fa-star"></i>
+        Reviews
+      </a>
+      <a routerLink="/admin/settings" routerLinkActive="active">
+        <i class="fas fa-cog"></i>
+        Settings
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
