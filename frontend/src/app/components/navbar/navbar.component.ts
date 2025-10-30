@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
 import { ThemeService } from '../../services/theme.service';
+import { LanguageService } from '../../services/language.service';
 import { Cart } from '../../models/cart.model';
 import { Product } from '../../models/product.model';
 
@@ -28,7 +29,8 @@ export class NavbarComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     public cartService: CartService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    public langService: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +104,10 @@ export class NavbarComponent implements OnInit {
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  toggleLanguage(): void {
+    this.langService.toggleLanguage();
   }
 
   get userInitials(): string {

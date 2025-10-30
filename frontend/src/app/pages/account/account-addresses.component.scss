@@ -2,7 +2,25 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  position: relative;
+  background: linear-gradient(180deg, #070a12 0%, #0b0f14 60%, #0b0f14 100%);
+  overflow: hidden;
 }
+
+.addresses-page::before,
+.addresses-page::after {
+  content: '';
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.16), rgba(168, 85, 247, 0.08), transparent 60%);
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.addresses-page::before { top: -180px; left: -140px; }
+.addresses-page::after { bottom: -220px; right: -140px; }
 
 .page-header {
   display: flex;
@@ -91,11 +109,13 @@
 
 // Address Form
 .address-form-section {
-  background: #0b0f14;
-  border: 1px solid #1f2937;
+  background: rgba(11, 15, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 1rem;
   overflow: hidden;
   margin-bottom: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
 }
 
 .form-header {
@@ -284,15 +304,17 @@ form {
 }
 
 .address-card {
-  background: #0b0f14;
-  border: 1px solid #1f2937;
+  background: rgba(11, 15, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 1rem;
   padding: 1.5rem;
   transition: all 0.2s;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
 
   &:hover {
     border-color: #22d3ee;
-    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.15);
+    box-shadow: 0 6px 18px rgba(34, 211, 238, 0.25);
   }
 }
 

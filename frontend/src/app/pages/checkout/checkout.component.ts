@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-checkout',
@@ -24,7 +25,7 @@ export class CheckoutComponent {
     cardNumber: '', cardName: '', exp: '', cvc: ''
   };
 
-  constructor(public cart: CartService) {}
+  constructor(public cart: CartService, public lang: LanguageService) {}
 
   next(): void {
     if (this.step === 1) this.step = 2;

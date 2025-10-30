@@ -1,40 +1,40 @@
 <div class="orders-page">
   <div class="page-header">
-    <h1 class="page-title">My Orders</h1>
-    <p class="page-subtitle">Track and manage your order history</p>
+    <h1 class="page-title">{{ lang.t('accountOrders.title') }}</h1>
+    <p class="page-subtitle">{{ lang.t('accountOrders.subtitle') }}</p>
   </div>
 
   <!-- Filters -->
   <div class="filters-section">
     <div class="filter-group">
-      <label>Status</label>
+      <label>{{ lang.t('accountOrders.status') }}</label>
       <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" class="filter-select">
-        <option value="all">All Orders</option>
-        <option value="pending">Pending</option>
-        <option value="confirmed">Confirmed</option>
-        <option value="shipped">Shipped</option>
-        <option value="delivered">Delivered</option>
-        <option value="cancelled">Cancelled</option>
+        <option value="all">{{ lang.t('accountOrders.allOrders') }}</option>
+        <option value="pending">{{ lang.t('accountOrders.pending') }}</option>
+        <option value="confirmed">{{ lang.t('accountOrders.confirmed') }}</option>
+        <option value="shipped">{{ lang.t('accountOrders.shipped') }}</option>
+        <option value="delivered">{{ lang.t('accountOrders.delivered') }}</option>
+        <option value="cancelled">{{ lang.t('accountOrders.cancelled') }}</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <label>Date Range</label>
+      <label>{{ lang.t('accountOrders.dateRange') }}</label>
       <select [(ngModel)]="dateFilter" (change)="onDateFilterChange()" class="filter-select">
-        <option value="all">All Time</option>
-        <option value="last30days">Last 30 Days</option>
-        <option value="last90days">Last 90 Days</option>
-        <option value="thisYear">This Year</option>
+        <option value="all">{{ lang.t('accountOrders.allTime') }}</option>
+        <option value="last30days">{{ lang.t('accountOrders.last30Days') }}</option>
+        <option value="last90days">{{ lang.t('accountOrders.last90Days') }}</option>
+        <option value="thisYear">{{ lang.t('accountOrders.thisYear') }}</option>
       </select>
     </div>
 
     <div class="filter-group search-group">
-      <label>Search</label>
+      <label>{{ lang.t('accountOrders.search') }}</label>
       <input 
         type="text" 
         [(ngModel)]="searchQuery" 
         (input)="onSearchChange()" 
-        placeholder="Order ID, status, tracking..." 
+        [placeholder]="lang.t('accountOrders.searchPlaceholder')" 
         class="search-input"
       />
     </div>
@@ -43,7 +43,7 @@
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-container">
     <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
-    <p>Loading orders...</p>
+    <p>{{ lang.t('accountOrders.loading') }}</p>
   </div>
 
   <!-- Orders Table -->
@@ -51,20 +51,20 @@
     <table class="orders-table">
       <thead>
         <tr>
-          <th>Order ID</th>
-          <th>Date</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th>Payment</th>
-          <th>Actions</th>
+          <th>{{ lang.t('accountOrders.orderId') }}</th>
+          <th>{{ lang.t('accountOrders.date') }}</th>
+          <th>{{ lang.t('accountOrders.items') }}</th>
+          <th>{{ lang.t('accountOrders.total') }}</th>
+          <th>{{ lang.t('accountOrders.statusLabel') }}</th>
+          <th>{{ lang.t('accountOrders.payment') }}</th>
+          <th>{{ lang.t('accountOrders.actions') }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let order of filteredOrders">
           <td><strong>#{{ order._id.slice(-8) }}</strong></td>
-          <td>{{ order.createdAt | date: 'MMM d, y' }}</td>
-          <td>{{ getTotalItems(order) }} items</td>
+          <td>{{ order.createdAt | date: (lang.isArabic() ? 'd MMM، y' : 'MMM d, y') }}</td>
+          <td>{{ getTotalItems(order) }} {{ lang.t('accountOrders.items') }}</td>
           <td>${{ order.total.toFixed(2) }}</td>
           <td>
             <span class="badge" [ngClass]="getStatusClass(order.status)">
@@ -78,7 +78,7 @@
           </td>
           <td>
             <button class="btn-view" (click)="viewOrderDetails(order)">
-              <i class="fas fa-eye"></i> View
+              <i class="fas fa-eye"></i> {{ lang.t('accountOrders.view') }}
             </button>
           </td>
         </tr>
@@ -117,10 +117,10 @@
   <!-- Empty State -->
   <div *ngIf="!isLoading && filteredOrders.length === 0" class="empty-state">
     <i class="fas fa-shopping-bag"></i>
-    <h3>No orders found</h3>
-    <p>{{ searchQuery || statusFilter !== 'all' || dateFilter !== 'all' ? 'Try adjusting your filters' : 'You haven\'t placed any orders yet' }}</p>
+    <h3>{{ lang.t('accountOrders.noOrdersFound') }}</h3>
+    <p>{{ (searchQuery || statusFilter !== 'all' || dateFilter !== 'all') ? lang.t('accountOrders.tryAdjustFilters') : lang.t('accountOrders.noOrdersYet') }}</p>
     <a *ngIf="!searchQuery && statusFilter === 'all' && dateFilter === 'all'" routerLink="/products" class="btn-primary">
-      Start Shopping
+      {{ lang.t('accountOrders.startShopping') }}
     </a>
   </div>
 </div>
@@ -129,7 +129,7 @@
 <div class="modal-overlay" *ngIf="selectedOrder" (click)="closeOrderDetails()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Order Details</h2>
+      <h2>{{ lang.t('accountOrders.details') }}</h2>
       <button class="close-btn" (click)="closeOrderDetails()">
         <i class="fas fa-times"></i>
       </button>
@@ -139,47 +139,47 @@
       <!-- Order Info -->
       <div class="order-info-section">
         <div class="info-row">
-          <span class="info-label">Order ID:</span>
+          <span class="info-label">{{ lang.t('accountOrders.orderId') }}:</span>
           <span class="info-value">#{{ selectedOrder._id.slice(-8) }}</span>
         </div>
         <div class="info-row">
-          <span class="info-label">Date:</span>
-          <span class="info-value">{{ selectedOrder.createdAt | date: 'MMMM d, y, h:mm a' }}</span>
+          <span class="info-label">{{ lang.t('accountOrders.date') }}:</span>
+          <span class="info-value">{{ selectedOrder.createdAt | date: (lang.isArabic() ? 'd MMM، y, h:mm a' : 'MMMM d, y, h:mm a') }}</span>
         </div>
         <div class="info-row">
-          <span class="info-label">Status:</span>
+          <span class="info-label">{{ lang.t('accountOrders.statusLabel') }}:</span>
           <span class="badge" [ngClass]="getStatusClass(selectedOrder.status)">
             {{ selectedOrder.status }}
           </span>
         </div>
         <div class="info-row">
-          <span class="info-label">Payment:</span>
+          <span class="info-label">{{ lang.t('accountOrders.payment') }}:</span>
           <span class="badge" [ngClass]="'payment-' + selectedOrder.paymentStatus">
             {{ selectedOrder.paymentStatus }}
           </span>
         </div>
         <div class="info-row" *ngIf="selectedOrder.trackingNumber">
-          <span class="info-label">Tracking:</span>
+          <span class="info-label">{{ lang.t('accountOrders.tracking') }}:</span>
           <span class="info-value">{{ selectedOrder.trackingNumber }}</span>
         </div>
       </div>
 
       <!-- Items -->
       <div class="order-items-section">
-        <h3>Items</h3>
+        <h3>{{ lang.t('accountOrders.itemsHeader') }}</h3>
         <div class="order-item" *ngFor="let item of selectedOrder.items">
           <div class="item-info">
             <strong>{{ item.name }}</strong>
             <span class="item-sku">SKU: {{ item.sku }}</span>
           </div>
-          <div class="item-quantity">Qty: {{ item.quantity }}</div>
+          <div class="item-quantity">{{ lang.t('accountOrders.qty') }}: {{ item.quantity }}</div>
           <div class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</div>
         </div>
       </div>
 
       <!-- Shipping Address -->
       <div class="shipping-section">
-        <h3>Shipping Address</h3>
+        <h3>{{ lang.t('accountOrders.shippingAddress') }}</h3>
         <div class="address-card">
           <p><strong>{{ selectedOrder.shippingAddress.fullName }}</strong></p>
           <p>{{ selectedOrder.shippingAddress.street }}</p>
@@ -196,27 +196,27 @@
 
       <!-- Order Summary -->
       <div class="order-summary-section">
-        <h3>Order Summary</h3>
+        <h3>{{ lang.t('accountOrders.orderSummary') }}</h3>
         <div class="summary-row">
-          <span>Subtotal:</span>
+          <span>{{ lang.t('accountOrders.subtotal') }}:</span>
           <span>${{ selectedOrder.subtotal.toFixed(2) }}</span>
         </div>
         <div class="summary-row">
-          <span>Shipping:</span>
+          <span>{{ lang.t('accountOrders.shipping') }}:</span>
           <span>${{ selectedOrder.shippingCost.toFixed(2) }}</span>
         </div>
         <div class="summary-row">
-          <span>Tax:</span>
+          <span>{{ lang.t('accountOrders.tax') }}:</span>
           <span>${{ selectedOrder.tax.toFixed(2) }}</span>
         </div>
         <div class="summary-row total">
-          <span><strong>Total:</strong></span>
+          <span><strong>{{ lang.t('accountOrders.totalLabel') }}:</strong></span>
           <span><strong>${{ selectedOrder.total.toFixed(2) }}</strong></span>
         </div>
       </div>
 
       <div class="order-notes" *ngIf="selectedOrder.notes">
-        <h3>Notes</h3>
+        <h3>{{ lang.t('accountOrders.notes') }}</h3>
         <p>{{ selectedOrder.notes }}</p>
       </div>
     </div>

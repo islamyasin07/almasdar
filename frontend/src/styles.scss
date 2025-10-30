@@ -58,6 +58,22 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+// Arabic font
+[dir="rtl"] body,
+.font-arabic {
+  font-family: 'Cairo', 'Tajawal', system-ui, sans-serif;
+}
+
+// RTL adjustments
+[dir="rtl"] {
+  .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+  .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+  .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+  .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+  .ml-auto { margin-left: 0; margin-right: auto; }
+  .mr-auto { margin-right: 0; margin-left: auto; }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

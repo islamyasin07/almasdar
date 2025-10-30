@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.model';
+import { LanguageService } from '../../services/language.service';
 
 interface Review {
   _id: string;
@@ -48,7 +49,8 @@ export class ProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
-    private cart: CartService
+    private cart: CartService,
+    public lang: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -206,7 +208,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('en-US', {
+    return new Date(date).toLocaleDateString(this.lang.isArabic() ? 'ar-EG' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'

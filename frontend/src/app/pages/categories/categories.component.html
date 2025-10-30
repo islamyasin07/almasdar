@@ -1,20 +1,28 @@
 <div class="categories-page">
+  <!-- Floating Shapes -->
+  <div class="floating-shape">🔒</div>
+  <div class="floating-shape">📹</div>
+  <div class="floating-shape">🛡️</div>
+  <!-- Floating Background Text -->
+  <div class="floating-text">{{ langService.isRTL() ? 'المصدر' : 'AlMasdar' }}</div>
+  <div class="floating-text">{{ langService.isRTL() ? 'المصدر' : 'AlMasdar' }}</div>
+  
   <div class="container mx-auto px-4 py-8">
     <!-- Page Header -->
     <div class="page-header">
       <div class="header-content">
-        <h1 class="page-title">Product Categories</h1>
+        <h1 class="page-title">{{ langService.t('categoriesPage.title') }}</h1>
         <p class="page-subtitle">
-          Explore our comprehensive range of security solutions
+          {{ langService.t('categoriesPage.subtitle') }}
         </p>
         <div class="stats">
           <div class="stat-item">
             <i class="fas fa-layer-group"></i>
-            <span>{{ categories.length }} Categories</span>
+            <span>{{ categories.length }} {{ langService.t('categoriesPage.categoriesLabel') }}</span>
           </div>
           <div class="stat-item">
             <i class="fas fa-box"></i>
-            <span>{{ getTotalProducts() }} Products</span>
+            <span>{{ getTotalProducts() }} {{ langService.t('categoriesPage.productsLabel') }}</span>
           </div>
         </div>
       </div>
@@ -25,7 +33,7 @@
       <div class="loading-spinner">
         <i class="fas fa-shield-alt fa-spin"></i>
       </div>
-      <p>Loading categories...</p>
+      <p>{{ langService.t('categoriesPage.loadingCategories') }}...</p>
     </div>
 
     <!-- Categories Grid -->
@@ -35,11 +43,14 @@
         class="category-card"
         (click)="navigateToCategory(category)"
       >
+        <span class="aurora" aria-hidden="true"></span>
+        <span class="shine" aria-hidden="true"></span>
         <div class="category-image">
+          <div class="icon-badge"><i class="fas {{ category.icon }}"></i></div>
           <img
             [src]="category.image"
             [alt]="category.name"
-            (error)="$any($event.target).src='assets/images/placeholder.jpg'"
+            (error)="onImgError($event)"
             loading="lazy"
           />
           <div class="category-overlay">
@@ -47,7 +58,7 @@
           </div>
           <div class="product-count-badge">
             <i class="fas fa-box"></i>
-            {{ category.productCount }} Products
+            {{ category.productCount }} {{ langService.t('categoriesPage.productsLabel') }}
           </div>
         </div>
 
@@ -60,8 +71,8 @@
           
           <div class="category-footer">
             <button class="explore-button">
-              <span>Explore Products</span>
-              <i class="fas fa-arrow-right"></i>
+              <span>{{ langService.t('categoriesPage.exploreProducts') }}</span>
+              <i [class]="langService.isRTL() ? 'fas fa-arrow-left' : 'fas fa-arrow-right'"></i>
             </button>
           </div>
         </div>
@@ -72,16 +83,16 @@
     <div class="cta-section">
       <div class="cta-content">
         <i class="fas fa-headset"></i>
-        <h2>Need Help Choosing?</h2>
-        <p>Our security experts are here to help you find the perfect solution for your needs</p>
+        <h2>{{ langService.t('categoriesPage.needHelp') }}</h2>
+        <p>{{ langService.t('categoriesPage.helpDescription') }}</p>
         <div class="cta-buttons">
           <button class="btn-primary">
             <i class="fas fa-phone"></i>
-            Contact Us
+            {{ langService.t('categoriesPage.contactUs') }}
           </button>
           <button class="btn-secondary">
             <i class="fas fa-file-alt"></i>
-            Request Quote
+            {{ langService.t('categoriesPage.requestQuote') }}
           </button>
         </div>
       </div>

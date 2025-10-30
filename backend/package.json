@@ -11,6 +11,7 @@
     "start": "node dist/server.js",
     "seed": "node --loader ts-node/esm src/scripts/seed.ts",
     "seed:user": "node --loader ts-node/esm src/scripts/seed-user.ts",
+    "create-admin": "node --loader ts-node/esm src/scripts/create-admin.ts",
     "test": "jest --runInBand",
     "lint": "eslint \"src/**/*.{ts,js}\"",
     "format": "prettier --check .",
@@ -28,6 +29,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

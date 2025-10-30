@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { LanguageService } from '../../services/language.service';
 import { Address } from '../../models/user.model';
 
 @Component({
@@ -23,7 +24,8 @@ export class AccountAddressesComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    public lang: LanguageService
   ) {
     this.initForm();
   }
@@ -196,7 +198,7 @@ export class AccountAddressesComponent implements OnInit {
   getFieldError(field: string): string {
     const control = this.addressForm.get(field);
     if (control?.errors) {
-      if (control.errors['required']) return `${field} is required`;
+      if (control.errors['required']) return this.lang.t('common.required');
     }
     return '';
   }

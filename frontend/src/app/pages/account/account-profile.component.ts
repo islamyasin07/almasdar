@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-account-profile',
@@ -25,7 +26,8 @@ export class AccountProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private authService: AuthService
+    private authService: AuthService,
+    public lang: LanguageService
   ) {
     this.initForms();
   }
@@ -182,10 +184,10 @@ export class AccountProfileComponent implements OnInit {
   getFieldError(form: FormGroup, field: string): string {
     const control = form.get(field);
     if (control?.errors) {
-      if (control.errors['required']) return `${field} is required`;
-      if (control.errors['email']) return 'Invalid email format';
-      if (control.errors['minlength']) return `Minimum ${control.errors['minlength'].requiredLength} characters required`;
-      if (control.errors['passwordMismatch']) return 'Passwords do not match';
+      if (control.errors['required']) return this.lang.t('common.required');
+      if (control.errors['email']) return this.lang.t('accountProfile.invalidEmail');
+      if (control.errors['minlength']) return `${this.lang.t('accountProfile.minLength')} ${control.errors['minlength'].requiredLength}`;
+      if (control.errors['passwordMismatch']) return this.lang.t('accountProfile.passwordsMismatch');
     }
     return '';
   }

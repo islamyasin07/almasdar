@@ -47,7 +47,13 @@ export const routes: Routes = [
     data: { roles: ['admin', 'staff'] },
     children: [
       { path: '', component: AdminOverviewComponent },
-      // other child routes (products, orders, users, etc.) to be added next
+      // Admin management screens
+      { path: 'users', loadComponent: () => import('./admin/admin-users.component').then(m => m.AdminUsersComponent) },
+      { path: 'categories', loadComponent: () => import('./admin/admin-categories.component').then(m => m.AdminCategoriesComponent) },
+      { path: 'banners', loadComponent: () => import('./admin/admin-banners.component').then(m => m.AdminBannersComponent) },
+      // Sales management
+      { path: 'sales', loadComponent: () => import('./admin/admin-sales-history.component').then(m => m.AdminSalesHistoryComponent) },
+      { path: 'sales/new', loadComponent: () => import('./admin/admin-sales.component').then(m => m.AdminSalesComponent) },
     ]
   },
   { path: '**', redirectTo: '' }

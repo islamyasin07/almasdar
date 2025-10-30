@@ -2,9 +2,9 @@
   <div class="container mx-auto px-4 py-8">
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
-      <a routerLink="/">Home</a>
+  <a routerLink="/">{{ lang.t('productDetails.breadcrumbHome') }}</a>
       <i class="fas fa-chevron-right"></i>
-      <a routerLink="/products">Products</a>
+      <a routerLink="/products">{{ lang.t('productDetails.products') }}</a>
       <i class="fas fa-chevron-right"></i>
       <a [routerLink]="['/products']" [queryParams]="{category: product.category}">{{ product.category }}</a>
       <i class="fas fa-chevron-right"></i>
@@ -19,7 +19,7 @@
           <img [src]="selectedImage" [alt]="product.name" />
           <div class="stock-badge" [class.out-of-stock]="product.status === 'out_of_stock'">
             <i class="fas" [class.fa-check-circle]="product.status === 'active'" [class.fa-times-circle]="product.status === 'out_of_stock'"></i>
-            {{ product.status === 'active' ? 'In Stock' : 'Out of Stock' }}
+            {{ product.status === 'active' ? lang.t('productDetails.inStock') : lang.t('productDetails.outOfStock') }}
           </div>
         </div>
         <div class="thumbnail-list">
@@ -50,7 +50,7 @@
                  class="fas fa-star" 
                  [class.filled]="star === 1"></i>
             </div>
-            <span class="rating-text">{{ getAverageRating().toFixed(1) }} ({{ reviews.length }} reviews)</span>
+            <span class="rating-text">{{ getAverageRating().toFixed(1) }} ({{ reviews.length }} {{ lang.t('productDetails.reviews') }})</span>
           </div>
         </div>
 
@@ -58,7 +58,7 @@
           <div class="price">${{ product.price.toFixed(2) }}</div>
           <div class="stock-info">
             <i class="fas fa-box"></i>
-            <span>{{ product.stock }} units available</span>
+            <span>{{ product.stock }} {{ lang.t('productDetails.unitsAvailable') }}</span>
           </div>
         </div>
 
@@ -66,7 +66,7 @@
 
         <!-- Key Features -->
         <div class="key-features">
-          <h3><i class="fas fa-star"></i> Key Features</h3>
+          <h3><i class="fas fa-star"></i> {{ lang.t('productDetails.keyFeatures') }}</h3>
           <ul>
             <li *ngFor="let feature of product.features.slice(0, 4)">
               <i class="fas fa-check-circle"></i>
@@ -89,7 +89,7 @@
 
           <button class="btn-add-cart" (click)="addToCart()" [disabled]="product.status !== 'active'">
             <i class="fas fa-shopping-cart"></i>
-            Add to Cart
+            {{ lang.t('productDetails.addToCart') }}
           </button>
 
           <button class="btn-wishlist" (click)="addToWishlist()">
@@ -105,11 +105,11 @@
           </div>
           <div class="info-item">
             <i class="fas fa-truck"></i>
-            <span>Free Shipping on Orders Over $500</span>
+            <span>{{ lang.t('productDetails.freeShippingNote') }}</span>
           </div>
           <div class="info-item">
             <i class="fas fa-headset"></i>
-            <span>24/7 Customer Support</span>
+            <span>{{ lang.t('productDetails.support24') }}</span>
           </div>
         </div>
       </div>
@@ -120,25 +120,25 @@
       <div class="tab-headers">
         <button [class.active]="selectedTab === 'description'" (click)="selectTab('description')">
           <i class="fas fa-file-alt"></i>
-          Description
+          {{ lang.t('productDetails.description') }}
         </button>
         <button [class.active]="selectedTab === 'specifications'" (click)="selectTab('specifications')">
           <i class="fas fa-list"></i>
-          Specifications
+          {{ lang.t('productDetails.specifications') }}
         </button>
         <button [class.active]="selectedTab === 'reviews'" (click)="selectTab('reviews')">
           <i class="fas fa-star"></i>
-          Reviews ({{ reviews.length }})
+          {{ lang.t('productDetails.reviews') }} ({{ reviews.length }})
         </button>
       </div>
 
       <div class="tab-content">
         <!-- Description Tab -->
         <div *ngIf="selectedTab === 'description'" class="tab-pane">
-          <h2>Product Description</h2>
+          <h2>{{ lang.t('productDetails.productDescription') }}</h2>
           <p>{{ product.description }}</p>
           
-          <h3>Features</h3>
+          <h3>{{ lang.t('productDetails.features') }}</h3>
           <ul class="features-list">
             <li *ngFor="let feature of product.features">
               <i class="fas fa-check-circle"></i>
@@ -147,14 +147,14 @@
           </ul>
 
           <div *ngIf="product.installationGuide" class="installation-guide">
-            <h3><i class="fas fa-tools"></i> Installation</h3>
+            <h3><i class="fas fa-tools"></i> {{ lang.t('productDetails.installation') }}</h3>
             <p>{{ product.installationGuide }}</p>
           </div>
         </div>
 
         <!-- Specifications Tab -->
         <div *ngIf="selectedTab === 'specifications'" class="tab-pane">
-          <h2>Technical Specifications</h2>
+          <h2>{{ lang.t('productDetails.technicalSpecifications') }}</h2>
           <div class="specifications-grid">
             <div *ngFor="let spec of product.specifications | keyvalue" class="spec-item">
               <span class="spec-label">{{ spec.key }}</span>
@@ -163,7 +163,7 @@
           </div>
 
           <div *ngIf="product.technicalDetails" class="technical-details">
-            <h3>Additional Technical Details</h3>
+            <h3>{{ lang.t('productDetails.additionalTechnicalDetails') }}</h3>
             <div class="specifications-grid">
               <div *ngFor="let detail of product.technicalDetails | keyvalue" class="spec-item">
                 <span class="spec-label">{{ detail.key }}</span>
@@ -176,18 +176,18 @@
         <!-- Reviews Tab -->
         <div *ngIf="selectedTab === 'reviews'" class="tab-pane">
           <div class="reviews-header">
-            <h2>Customer Reviews</h2>
+            <h2>{{ lang.t('productDetails.customerReviews') }}</h2>
             <button class="btn-write-review" (click)="showReviewForm = !showReviewForm">
               <i class="fas fa-pen"></i>
-              Write a Review
+              {{ lang.t('productDetails.writeReview') }}
             </button>
           </div>
 
           <!-- Review Form -->
           <div *ngIf="showReviewForm" class="review-form">
-            <h3>Write Your Review</h3>
+            <h3>{{ lang.t('productDetails.writeYourReview') }}</h3>
             <div class="rating-input">
-              <label>Rating:</label>
+              <label>{{ lang.t('productDetails.rating') }}</label>
               <div class="stars-input">
                 <i *ngFor="let i of [1,2,3,4,5]" 
                    class="fas fa-star" 
@@ -196,11 +196,11 @@
               </div>
             </div>
             <textarea [(ngModel)]="newReview.comment" 
-                      placeholder="Share your experience with this product..."
+                      [placeholder]="lang.t('productDetails.reviewPlaceholder')"
                       rows="4"></textarea>
             <div class="form-actions">
-              <button class="btn-submit" (click)="submitReview()">Submit Review</button>
-              <button class="btn-cancel" (click)="showReviewForm = false">Cancel</button>
+              <button class="btn-submit" (click)="submitReview()">{{ lang.t('productDetails.submitReview') }}</button>
+              <button class="btn-cancel" (click)="showReviewForm = false">{{ lang.t('productDetails.cancel') }}</button>
             </div>
           </div>
 
@@ -226,7 +226,7 @@
 
             <div *ngIf="reviews.length === 0" class="no-reviews">
               <i class="fas fa-comment-slash"></i>
-              <p>No reviews yet. Be the first to review this product!</p>
+              <p>{{ lang.t('productDetails.noReviewsYet') }}</p>
             </div>
           </div>
         </div>
@@ -240,5 +240,5 @@
   <div class="loading-spinner">
     <i class="fas fa-shield-alt fa-spin"></i>
   </div>
-  <p>Loading product details...</p>
+  <p>{{ lang.t('productDetails.loading') }}</p>
 </div>

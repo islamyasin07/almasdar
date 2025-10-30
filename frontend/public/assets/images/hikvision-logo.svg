@@ -9,8 +9,8 @@
   <path d="M 22 20 L 22 40 M 22 30 L 30 30 M 30 20 L 30 40" 
         stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
   
-  <!-- HIKVISION text -->
-  <text x="50" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="currentColor">
+  <!-- HIKVISION text in white -->
+  <text x="50" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">
     HIKVISION
   </text>
 </svg>

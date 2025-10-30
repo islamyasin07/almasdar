@@ -11,7 +11,7 @@
             <span>AlMasdar Security</span>
           </div>
           <p class="description">
-            Your trusted partner in advanced security solutions. Protecting what matters most with cutting-edge technology and reliable service.
+            {{ langService.t('footer.brandDescription') }}
           </p>
           
           <!-- Social Links -->
@@ -29,30 +29,30 @@
 
         <!-- Company Links -->
         <div class="footer-section">
-          <h3 class="section-title">Company</h3>
+          <h3 class="section-title">{{ langService.t('footer.company') }}</h3>
           <ul class="link-list">
             <li *ngFor="let link of footerLinks.company">
-              <a [routerLink]="link.route">{{ link.label }}</a>
+              <a [routerLink]="link.route">{{ langService.t(link.labelKey) }}</a>
             </li>
           </ul>
         </div>
 
         <!-- Support Links -->
         <div class="footer-section">
-          <h3 class="section-title">Support</h3>
+          <h3 class="section-title">{{ langService.t('footer.support') }}</h3>
           <ul class="link-list">
             <li *ngFor="let link of footerLinks.support">
-              <a [routerLink]="link.route">{{ link.label }}</a>
+              <a [routerLink]="link.route">{{ langService.t(link.labelKey) }}</a>
             </li>
           </ul>
         </div>
 
         <!-- Legal Links -->
         <div class="footer-section">
-          <h3 class="section-title">Legal</h3>
+          <h3 class="section-title">{{ langService.t('footer.legal') }}</h3>
           <ul class="link-list">
             <li *ngFor="let link of footerLinks.legal">
-              <a [routerLink]="link.route">{{ link.label }}</a>
+              <a [routerLink]="link.route">{{ langService.t(link.labelKey) }}</a>
             </li>
           </ul>
         </div>
@@ -64,23 +64,23 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div>
               <h3 class="newsletter-title">
-                <i class="fas fa-envelope mr-2"></i>
-                Subscribe to Our Newsletter
+                <i [ngClass]="langService.isRTL() ? 'fas fa-envelope ml-2' : 'fas fa-envelope mr-2'"></i>
+                {{ langService.t('footer.newsletter') }}
               </h3>
               <p class="newsletter-description">
-                Get the latest updates on security products and exclusive offers.
+                {{ langService.t('footer.newsletterDesc') }}
               </p>
             </div>
             <div class="newsletter-form">
               <div class="input-group">
                 <input 
                   type="email" 
-                  placeholder="Enter your email address"
+                  [placeholder]="langService.t('footer.emailPlaceholder')"
                   class="newsletter-input"
                 />
                 <button type="button" class="newsletter-button">
-                  <span>Subscribe</span>
-                  <i class="fas fa-arrow-right ml-2"></i>
+                  <span>{{ langService.t('footer.subscribe') }}</span>
+                  <i [class]="langService.isRTL() ? 'fas fa-arrow-left ml-2' : 'fas fa-arrow-right ml-2'"></i>
                 </button>
               </div>
             </div>
@@ -96,11 +96,11 @@
       <div class="bottom-content">
         <div class="copyright">
           <i class="fas fa-copyright"></i>
-          <span>{{ currentYear }} AlMasdar Security. All rights reserved.</span>
+          <span>{{ currentYear }} AlMasdar Security. {{ langService.t('footer.allRightsReserved') }}</span>
         </div>
         
         <div class="payment-methods">
-          <span class="payment-label">We Accept:</span>
+          <span class="payment-label">{{ langService.t('footer.weAccept') }}</span>
           <i class="fab fa-cc-visa"></i>
           <i class="fab fa-cc-mastercard"></i>
           <i class="fab fa-cc-paypal"></i>

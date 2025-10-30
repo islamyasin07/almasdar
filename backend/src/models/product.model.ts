@@ -3,6 +3,7 @@ import { ProductStatus } from './types.js';
 
 export interface IProduct {
   name: string;
+  serialNumber?: string;
   description: string;
   price: number;
   category: string;
@@ -31,6 +32,13 @@ const productSchema = new mongoose.Schema<IProduct>({
     type: String, 
     required: true,
     trim: true
+  },
+  serialNumber: {
+    type: String,
+    trim: true,
+    sparse: true,
+    unique: true,
+    index: true
   },
   description: { 
     type: String, 
@@ -91,7 +99,8 @@ productSchema.index({ category: 1, status: 1 });
 productSchema.index({ 
   name: 'text', 
   description: 'text',
-  brand: 'text'
+  brand: 'text',
+  serialNumber: 'text'
 });
 
 // Method to check if product is in stock
@@ -109,4 +118,6 @@ productSchema.methods.updateStock = async function(quantity: number): Promise<vo
 };
 
 const Product = mongoose.model<IProduct, IProductModel>('Product', productSchema);
+
+export { Product };
 export default Product;

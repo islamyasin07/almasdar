@@ -4,6 +4,8 @@ import Order from '../models/order.model.js';
 import Product from '../models/product.model.js';
 import User from '../models/user.model.js';
 import Review from '../models/review.model.js';
+import { z } from 'zod';
+import { validate } from '../middleware/validate.js';
 
 const router = Router();
 
@@ -266,3 +268,86 @@ router.get('/reviews/analytics', async (req, res) => {
 });
 
 export default router;
+// Users management
+router.get('/users', async (req, res) => {
+  try {
+    const { role, active, q, page = 1, limit = 20, sort = '-createdAt' } = req.query;
+
+    const filter: any = {};
+    if (role) filter.role = role;
+    if (active === 'true') filter.isActive = true;
+    if (active === 'false') filter.isActive = false;
+    if (q) {
+      filter.$or = [
+        { email: { $regex: String(q), $options: 'i' } },
+        { 'profile.firstName': { $regex: String(q), $options: 'i' } },
+        { 'profile.lastName': { $regex: String(q), $options: 'i' } }
+      ];
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const sortString = typeof sort === 'string' ? sort : '-createdAt';
+
+    const [users, total] = await Promise.all([
+      User.find(filter)
+        .select('-password -passwordResetToken -passwordResetExpires')
+        .sort(sortString)
+        .skip(skip)
+        .limit(Number(limit)),
+      User.countDocuments(filter)
+    ]);
+
+    res.json({ users, page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / Number(limit)) });
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Failed to fetch users' });
+  }
+});
+
+router.get('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password -passwordResetToken -passwordResetExpires');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Failed to fetch user' });
+  }
+});
+
+const updateRoleSchema = z.object({ body: z.object({ role: z.enum(['admin','staff','customer']) }) });
+router.put('/users/:id/role', validate(updateRoleSchema), async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.role = role;
+    await user.save();
+    res.json({ message: 'Role updated', user: { id: user._id, email: user.email, role: user.role } });
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Failed to update role' });
+  }
+});
+
+const updateStatusSchema = z.object({ body: z.object({ isActive: z.boolean() }) });
+router.put('/users/:id/status', validate(updateStatusSchema), async (req, res) => {
+  try {
+    const { isActive } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { isActive }, { new: true }).select('-password -passwordResetToken -passwordResetExpires');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Status updated', user });
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Failed to update status' });
+  }
+});
+
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Prevent deleting self
+    if (req.user?._id === id) return res.status(400).json({ message: 'Cannot delete current user' });
+    const user = await User.findByIdAndDelete(id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'User deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error instanceof Error ? error.message : 'Failed to delete user' });
+  }
+});

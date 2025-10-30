@@ -3,16 +3,16 @@
     <aside class="lg:col-span-1 card">
       <nav class="menu">
         <a routerLink="/account" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <i class="fas fa-home"></i> Overview
+          <i class="fas fa-home"></i> {{ lang.t('accountDash.overview') }}
         </a>
         <a routerLink="/account/orders" routerLinkActive="active">
-          <i class="fas fa-box"></i> Orders
+          <i class="fas fa-box"></i> {{ lang.t('accountDash.orders') }}
         </a>
         <a routerLink="/account/addresses" routerLinkActive="active">
-          <i class="fas fa-map-marker-alt"></i> Addresses
+          <i class="fas fa-map-marker-alt"></i> {{ lang.t('accountDash.addresses') }}
         </a>
         <a routerLink="/account/profile" routerLinkActive="active">
-          <i class="fas fa-user-cog"></i> Profile
+          <i class="fas fa-user-cog"></i> {{ lang.t('accountDash.profile') }}
         </a>
       </nav>
     </aside>

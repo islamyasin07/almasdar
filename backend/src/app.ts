@@ -14,6 +14,11 @@ import userRoutes from './routes/user.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import couponRoutes from './routes/coupon.routes.js';
+import categoryRoutes from './routes/category.routes.js';
+import bannerRoutes from './routes/banner.routes.js';
+import customerRoutes from './routes/customer.routes.js';
+import saleRoutes from './routes/sale.routes.js';
+import databaseRoutes from './routes/database.routes.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 import { apiLimiter, authLimiter, productLimiter } from './middleware/rateLimit.middleware.js';
 
@@ -47,6 +52,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/banners', bannerRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/sales', saleRoutes);
+app.use('/api/database', databaseRoutes);
 
 
 app.use(notFound);

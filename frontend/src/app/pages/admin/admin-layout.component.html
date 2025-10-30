@@ -1,46 +1,73 @@
-<div class="admin-layout">
-  <aside class="sidebar">
-    <div class="brand">
-      <i class="fas fa-shield-alt"></i>
-      <span>Admin Panel</span>
+<div class="admin-layout" [class.rtl]="lang.isRTL()">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" [class.collapsed]="sidebarCollapsed">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="fas fa-shield-halved"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.dashboardTitle') }}</span>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="fas" [class.fa-bars]="sidebarCollapsed" [class.fa-times]="!sidebarCollapsed"></i>
+      </button>
     </div>
-    <nav>
-      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
+    <nav class="sidebar-nav">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
         <i class="fas fa-chart-line"></i>
-        Overview
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.overview') }}</span>
       </a>
-      <a routerLink="/admin/products" routerLinkActive="active">
-        <i class="fas fa-box"></i>
-        Products
-      </a>
-      <a routerLink="/admin/orders" routerLinkActive="active">
-        <i class="fas fa-shopping-bag"></i>
-        Orders
-      </a>
-      <a routerLink="/admin/users" routerLinkActive="active">
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
         <i class="fas fa-users"></i>
-        Users
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.users') }}</span>
       </a>
-      <a routerLink="/admin/categories" routerLinkActive="active">
-        <i class="fas fa-th-large"></i>
-        Categories
+      <a routerLink="/admin/products" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-box"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.products') }}</span>
       </a>
-      <a routerLink="/admin/coupons" routerLinkActive="active">
-        <i class="fas fa-ticket-alt"></i>
-        Coupons
+      <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-folder-tree"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.categories') }}</span>
       </a>
-      <a routerLink="/admin/reviews" routerLinkActive="active">
-        <i class="fas fa-star"></i>
-        Reviews
+      <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.orders') }}</span>
       </a>
-      <a routerLink="/admin/settings" routerLinkActive="active">
-        <i class="fas fa-cog"></i>
-        Settings
+      <a routerLink="/admin/sales" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-receipt"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.salesLedger') }}</span>
+      </a>
+      <a routerLink="/admin/banners" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-image"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('admin.banners') }}</span>
       </a>
     </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="/" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('nav.products') }}</span>
+      </a>
+      <button (click)="logout()" class="nav-item logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span *ngIf="!sidebarCollapsed">{{ lang.t('nav.logout') }}</span>
+      </button>
+    </div>
   </aside>
 
-  <main class="content">
-    <router-outlet></router-outlet>
+  <!-- Main Content -->
+  <main class="admin-main" [class.expanded]="sidebarCollapsed">
+    <div class="admin-topbar">
+      <h1>{{ lang.t('admin.dashboardTitle') }}</h1>
+      <div class="topbar-actions">
+        <button (click)="lang.toggleLanguage()" class="lang-toggle">
+          <i class="fas fa-language"></i>
+          {{ lang.currentLanguage() === 'ar' ? 'EN' : 'AR' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <router-outlet></router-outlet>
+    </div>
   </main>
 </div>

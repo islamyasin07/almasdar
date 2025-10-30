@@ -1,9 +1,52 @@
 <div class="products-page">
+  <!-- Floating Shapes -->
+  <div class="floating-shape">🔒</div>
+  <div class="floating-shape">📹</div>
+  <div class="floating-shape">🛡️</div>
+
+  <!-- Hero Carousel Section -->
+  <div class="hero-carousel">
+    <div class="carousel-track" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+      <div class="carousel-slide" *ngFor="let slide of featuredSlides; let i = index">
+        <div class="slide-image-wrapper">
+          <img [src]="slide.image" [alt]="slide.title" class="slide-image">
+          <div class="slide-overlay"></div>
+        </div>
+        <div class="slide-content">
+          <h2 class="slide-title">{{ langService.isRTL() ? slide.titleAr : slide.title }}</h2>
+          <p class="slide-description">{{ langService.isRTL() ? slide.descriptionAr : slide.description }}</p>
+          <button class="slide-cta" (click)="navigateToCategory(slide.category)">
+            <span>{{ langService.t('products.explore') }}</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Carousel Controls -->
+    <button class="carousel-control prev" (click)="previousSlide()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="carousel-control next" (click)="nextSlide()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+      <button 
+        *ngFor="let slide of featuredSlides; let i = index" 
+        class="indicator"
+        [class.active]="i === currentSlide"
+        (click)="goToSlide(i)">
+      </button>
+    </div>
+  </div>
+
   <div class="container mx-auto px-4 py-8">
     <!-- Page Header -->
     <div class="page-header">
-      <h1 class="page-title">Security Products</h1>
-      <p class="page-subtitle">Professional-grade security systems and equipment</p>
+      <h1 class="page-title">{{ langService.t('products.title') }}</h1>
+      <p class="page-subtitle">{{ langService.t('products.subtitle') }}</p>
     </div>
 
     <!-- Search & Filter Bar -->
@@ -15,20 +58,20 @@
             type="text"
             [(ngModel)]="searchQuery"
             (keyup.enter)="onSearch()"
-            placeholder="Search products..."
+            [placeholder]="langService.t('products.searchPlaceholder')"
             class="search-input"
           />
         </div>
         <button (click)="onSearch()" class="search-button">
           <i class="fas fa-search"></i>
-          <span>Search</span>
+          <span>{{ langService.t('common.search') }}</span>
         </button>
       </div>
 
       <div class="filter-actions">
         <button (click)="toggleFilters()" class="filter-toggle-button">
           <i class="fas fa-filter"></i>
-          <span>Filters</span>
+          <span>{{ langService.t('products.filters') }}</span>
         </button>
         
         <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
@@ -43,16 +86,16 @@
       <!-- Sidebar Filters -->
       <aside class="filters-sidebar" [class.show]="showFilters">
         <div class="sidebar-header">
-          <h3>Filters</h3>
+          <h3>{{ langService.t('products.filters') }}</h3>
           <button (click)="clearFilters()" class="clear-button">
             <i class="fas fa-times"></i>
-            Clear All
+            {{ langService.t('products.clearAll') }}
           </button>
         </div>
 
         <!-- Category Filter -->
         <div class="filter-group">
-          <h4 class="filter-title">Category</h4>
+          <h4 class="filter-title">{{ langService.t('products.category') }}</h4>
           <div class="filter-options">
             <label *ngFor="let cat of categories" class="filter-option">
               <input
@@ -70,13 +113,13 @@
 
         <!-- Price Range Filter -->
         <div class="filter-group">
-          <h4 class="filter-title">Price Range</h4>
+          <h4 class="filter-title">{{ langService.t('products.priceRange') }}</h4>
           <div class="price-inputs">
             <input
               type="number"
               [(ngModel)]="priceRange[0]"
               (change)="onPriceRangeChange()"
-              placeholder="Min"
+              [placeholder]="langService.t('products.min')"
               class="price-input"
             />
             <span class="price-separator">-</span>
@@ -84,7 +127,7 @@
               type="number"
               [(ngModel)]="priceRange[1]"
               (change)="onPriceRangeChange()"
-              placeholder="Max"
+              [placeholder]="langService.t('products.max')"
               class="price-input"
             />
           </div>
@@ -96,7 +139,7 @@
 
         <!-- Status Filter -->
         <div class="filter-group">
-          <h4 class="filter-title">Availability</h4>
+          <h4 class="filter-title">{{ langService.t('products.availability') }}</h4>
           <div class="filter-options">
             <label class="filter-option">
               <input
@@ -107,7 +150,7 @@
                 (change)="onCategoryChange()"
               />
               <span class="radio-custom"></span>
-              <span class="option-label">All Products</span>
+              <span class="option-label">{{ langService.t('products.allProducts') }}</span>
             </label>
             <label class="filter-option">
               <input
@@ -118,7 +161,7 @@
                 (change)="onCategoryChange()"
               />
               <span class="radio-custom"></span>
-              <span class="option-label">In Stock</span>
+              <span class="option-label">{{ langService.t('products.inStock') }}</span>
             </label>
             <label class="filter-option">
               <input
@@ -129,7 +172,7 @@
                 (change)="onCategoryChange()"
               />
               <span class="radio-custom"></span>
-              <span class="option-label">Out of Stock</span>
+              <span class="option-label">{{ langService.t('products.outOfStock') }}</span>
             </label>
           </div>
         </div>
@@ -139,8 +182,8 @@
       <div class="products-section">
         <!-- Results Info -->
         <div class="results-info">
-          <span class="results-count">{{ totalProducts }} Products Found</span>
-          <span class="results-page">Page {{ currentPage }} of {{ totalPages }}</span>
+          <span class="results-count">{{ totalProducts }} {{ langService.t('products.productsFound') }}</span>
+          <span class="results-page">{{ langService.t('products.page') }} {{ currentPage }} {{ langService.t('products.of') }} {{ totalPages }}</span>
         </div>
 
         <!-- Loading State -->
@@ -148,7 +191,7 @@
           <div class="loading-spinner">
             <i class="fas fa-shield-alt fa-spin"></i>
           </div>
-          <p>Loading products...</p>
+          <p>{{ langService.t('common.loading') }}...</p>
         </div>
 
         <!-- Products Grid -->
@@ -163,15 +206,15 @@
                   loading="lazy"
                 />
                 <div class="product-badge" *ngIf="product.stock < 10 && product.status === 'active'">
-                  Low Stock
+                  {{ langService.t('products.lowStock') }}
                 </div>
                 <div class="product-badge out-of-stock" *ngIf="product.status === 'out_of_stock'">
-                  Out of Stock
+                  {{ langService.t('products.outOfStock') }}
                 </div>
                 <div class="product-overlay">
                   <button type="button" class="quick-view-button">
                     <i class="fas fa-eye"></i>
-                    Quick View
+                    {{ langService.t('products.quickView') }}
                   </button>
                 </div>
               </div>
@@ -190,7 +233,7 @@
                   </div>
                   <div class="product-stock">
                     <i class="fas fa-box"></i>
-                    {{ product.stock }} in stock
+                    {{ product.stock }} {{ langService.t('products.inStockLabel') }}
                   </div>
                 </div>
 
@@ -199,7 +242,7 @@
                   <div class="product-price">${{ product.price.toFixed(2) }}</div>
                   <button type="button" class="add-to-cart-button" (click)="$event.preventDefault(); $event.stopPropagation(); addToCart(product)" [disabled]="product.status === 'out_of_stock' || product.stock <= 0">
                     <i class="fas fa-shopping-cart"></i>
-                    Add to Cart
+                    {{ langService.t('products.addToCart') }}
                   </button>
                 </div>
               </div>
@@ -210,10 +253,10 @@
         <!-- Empty State -->
         <div *ngIf="!isLoading && products.length === 0" class="empty-state">
           <i class="fas fa-box-open"></i>
-          <h3>No Products Found</h3>
-          <p>Try adjusting your filters or search terms</p>
+          <h3>{{ langService.t('products.noProductsFound') }}</h3>
+          <p>{{ langService.t('products.tryAdjusting') }}</p>
           <button (click)="clearFilters()" class="btn-primary">
-            Clear Filters
+            {{ langService.t('products.clearFilters') }}
           </button>
         </div>
 
@@ -224,8 +267,8 @@
             [disabled]="currentPage === 1"
             class="pagination-button"
           >
-            <i class="fas fa-chevron-left"></i>
-            Previous
+            <i [class]="langService.isRTL() ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+            {{ langService.t('common.previous') }}
           </button>
 
           <div class="pagination-pages">
@@ -244,8 +287,8 @@
             [disabled]="currentPage === totalPages"
             class="pagination-button"
           >
-            Next
-            <i class="fas fa-chevron-right"></i>
+            {{ langService.t('common.next') }}
+            <i [class]="langService.isRTL() ? 'fas fa-chevron-left' : 'fas fa-chevron-right'"></i>
           </button>
         </div>
       </div>

@@ -1,14 +1,14 @@
 <div class="checkout-page">
   <div class="container mx-auto px-4 py-8">
     <div class="page-header">
-      <h1 class="page-title">Checkout</h1>
-      <p class="page-subtitle">Secure checkout in three simple steps</p>
+      <h1 class="page-title">{{ lang.t('checkout.title') }}</h1>
+      <p class="page-subtitle">{{ lang.t('checkout.subtitle') }}</p>
     </div>
 
     <div class="steps">
-      <div class="step" [class.active]="step===1">1. Shipping</div>
-      <div class="step" [class.active]="step===2">2. Payment</div>
-      <div class="step" [class.active]="step===3">3. Review</div>
+      <div class="step" [class.active]="step===1">{{ '1. ' + lang.t('checkout.shipping') }}</div>
+      <div class="step" [class.active]="step===2">{{ '2. ' + lang.t('checkout.payment') }}</div>
+      <div class="step" [class.active]="step===3">{{ '3. ' + lang.t('checkout.review') }}</div>
     </div>
 
     <div class="content">
@@ -16,46 +16,46 @@
       <div class="left">
         <!-- Step 1: Shipping -->
         <form *ngIf="step===1" class="card" (submit)="$event.preventDefault(); next()">
-          <h3>Shipping Information</h3>
+          <h3>{{ lang.t('checkout.shippingInfo') }}</h3>
           <div class="grid">
-            <label>Full Name<input [(ngModel)]="shipping.fullName" name="fullName" required /></label>
-            <label>Email<input [(ngModel)]="shipping.email" name="email" type="email" required /></label>
-            <label>Phone<input [(ngModel)]="shipping.phone" name="phone" required /></label>
-            <label>Address 1<input [(ngModel)]="shipping.address1" name="address1" required /></label>
-            <label>Address 2<input [(ngModel)]="shipping.address2" name="address2" /></label>
-            <label>City<input [(ngModel)]="shipping.city" name="city" required /></label>
-            <label>State<input [(ngModel)]="shipping.state" name="state" required /></label>
-            <label>ZIP<input [(ngModel)]="shipping.zip" name="zip" required /></label>
-            <label>Country<input [(ngModel)]="shipping.country" name="country" required /></label>
+            <label>{{ lang.t('checkout.fullName') }}<input [(ngModel)]="shipping.fullName" name="fullName" required [placeholder]="lang.t('checkout.fullNamePlaceholder')" /></label>
+            <label>{{ lang.t('checkout.email') }}<input [(ngModel)]="shipping.email" name="email" type="email" required [placeholder]="lang.t('checkout.emailPlaceholder')" /></label>
+            <label>{{ lang.t('checkout.phone') }}<input [(ngModel)]="shipping.phone" name="phone" required [placeholder]="lang.t('checkout.phonePlaceholder')" /></label>
+            <label>{{ lang.t('checkout.address1') }}<input [(ngModel)]="shipping.address1" name="address1" required [placeholder]="lang.t('checkout.address1Placeholder')" /></label>
+            <label>{{ lang.t('checkout.address2') }}<input [(ngModel)]="shipping.address2" name="address2" [placeholder]="lang.t('checkout.address2Placeholder')" /></label>
+            <label>{{ lang.t('checkout.city') }}<input [(ngModel)]="shipping.city" name="city" required [placeholder]="lang.t('checkout.cityPlaceholder')" /></label>
+            <label>{{ lang.t('checkout.state') }}<input [(ngModel)]="shipping.state" name="state" required [placeholder]="lang.t('checkout.statePlaceholder')" /></label>
+            <label>{{ lang.t('checkout.zip') }}<input [(ngModel)]="shipping.zip" name="zip" required [placeholder]="lang.t('checkout.zipPlaceholder')" /></label>
+            <label>{{ lang.t('checkout.country') }}<input [(ngModel)]="shipping.country" name="country" required [placeholder]="lang.t('checkout.countryPlaceholder')" /></label>
           </div>
           <div class="actions">
-            <button class="btn-primary" type="submit">Continue to Payment</button>
+            <button class="btn-primary" type="submit">{{ lang.t('checkout.continueToPayment') }}</button>
           </div>
         </form>
 
         <!-- Step 2: Payment -->
         <form *ngIf="step===2" class="card" (submit)="$event.preventDefault(); next()">
-          <h3>Payment</h3>
+          <h3>{{ lang.t('checkout.payment') }}</h3>
           <div class="methods">
-            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="card" /> Credit/Debit Card</label>
-            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="cod" /> Cash on Delivery</label>
+            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="card" /> {{ lang.t('checkout.cardMethod') }}</label>
+            <label><input type="radio" name="method" [(ngModel)]="payment.method" value="cod" /> {{ lang.t('checkout.codMethod') }}</label>
           </div>
 
           <div *ngIf="payment.method==='card'" class="grid">
-            <label>Card Number<input [(ngModel)]="payment.cardNumber" name="cardNumber" /></label>
-            <label>Name on Card<input [(ngModel)]="payment.cardName" name="cardName" /></label>
-            <label>Expiry<input [(ngModel)]="payment.exp" name="exp" placeholder="MM/YY" /></label>
-            <label>CVC<input [(ngModel)]="payment.cvc" name="cvc" /></label>
+            <label>{{ lang.t('checkout.cardNumber') }}<input [(ngModel)]="payment.cardNumber" name="cardNumber" [placeholder]="lang.t('checkout.cardNumberPlaceholder')" /></label>
+            <label>{{ lang.t('checkout.cardName') }}<input [(ngModel)]="payment.cardName" name="cardName" [placeholder]="lang.t('checkout.cardNamePlaceholder')" /></label>
+            <label>{{ lang.t('checkout.expiry') }}<input [(ngModel)]="payment.exp" name="exp" [placeholder]="lang.t('checkout.expiryPlaceholder')" /></label>
+            <label>{{ lang.t('checkout.cvc') }}<input [(ngModel)]="payment.cvc" name="cvc" [placeholder]="lang.t('checkout.cvcPlaceholder')" /></label>
           </div>
           <div class="actions">
-            <button class="btn-secondary" type="button" (click)="back()">Back</button>
-            <button class="btn-primary" type="submit">Review Order</button>
+            <button class="btn-secondary" type="button" (click)="back()">{{ lang.t('checkout.back') }}</button>
+            <button class="btn-primary" type="submit">{{ lang.t('checkout.reviewOrder') }}</button>
           </div>
         </form>
 
         <!-- Step 3: Review -->
         <div *ngIf="step===3" class="card">
-          <h3>Review Your Order</h3>
+          <h3>{{ lang.t('checkout.reviewYourOrder') }}</h3>
           <ul class="review-items">
             <li *ngFor="let i of cart.items">
               <span>{{ i.name }} x{{ i.quantity }}</span>
@@ -63,24 +63,24 @@
             </li>
           </ul>
           <div class="totals">
-            <div><span>Subtotal</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
-            <div><span>Shipping</span><span>$0.00</span></div>
-            <div class="grand"><span>Total</span><span>${{ cart.total.toFixed(2) }}</span></div>
+            <div><span>{{ lang.t('checkout.subtotal') }}</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
+            <div><span>{{ lang.t('checkout.shipping') }}</span><span>$0.00</span></div>
+            <div class="grand"><span>{{ lang.t('checkout.total') }}</span><span>${{ cart.total.toFixed(2) }}</span></div>
           </div>
           <div class="actions">
-            <button class="btn-secondary" type="button" (click)="back()">Back</button>
-            <button class="btn-primary" type="button" (click)="placeOrder()">Place Order</button>
+            <button class="btn-secondary" type="button" (click)="back()">{{ lang.t('checkout.back') }}</button>
+            <button class="btn-primary" type="button" (click)="placeOrder()">{{ lang.t('checkout.placeOrder') }}</button>
           </div>
         </div>
       </div>
 
       <!-- Right: Summary -->
       <aside class="right card">
-        <h3>Order Summary</h3>
-        <div class="summary-row"><span>Items</span><span>{{ cart.itemCount }}</span></div>
-        <div class="summary-row"><span>Subtotal</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
-        <div class="summary-row"><span>Shipping</span><span>$0.00</span></div>
-        <div class="summary-row total"><span>Total</span><span>${{ cart.total.toFixed(2) }}</span></div>
+        <h3>{{ lang.t('checkout.orderSummary') }}</h3>
+        <div class="summary-row"><span>{{ lang.t('checkout.items') }}</span><span>{{ cart.itemCount }}</span></div>
+        <div class="summary-row"><span>{{ lang.t('checkout.subtotal') }}</span><span>${{ cart.subtotal.toFixed(2) }}</span></div>
+        <div class="summary-row"><span>{{ lang.t('checkout.shipping') }}</span><span>$0.00</span></div>
+        <div class="summary-row total"><span>{{ lang.t('checkout.total') }}</span><span>${{ cart.total.toFixed(2) }}</span></div>
       </aside>
     </div>
   </div>

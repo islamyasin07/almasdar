@@ -1,4 +1,15 @@
 <div class="register-page">
+  <!-- Flying Butterflies -->
+  <div class="butterfly">🦋</div>
+  <div class="butterfly">🦋</div>
+  <div class="butterfly">🦋</div>
+  <div class="butterfly">🦋</div>
+  
+  <!-- Floating Background Text -->
+  <div class="floating-text">{{ langService.isRTL() ? 'المصدر' : 'AlMasdar' }}</div>
+  <div class="floating-text">{{ langService.isRTL() ? 'المصدر' : 'AlMasdar' }}</div>
+  <div class="floating-text">{{ langService.isRTL() ? 'المصدر' : 'AlMasdar' }}</div>
+  
   <div class="register-container">
     <!-- Left Side - Branding -->
     <div class="register-brand">
@@ -6,8 +17,8 @@
         <div class="brand-logo">
           <i class="fas fa-shield-alt"></i>
         </div>
-        <h1 class="brand-title">Join AlMasdar Security</h1>
-        <p class="brand-subtitle">Create your account and start securing what matters most</p>
+        <h1 class="brand-title">{{ langService.t('register.createAccount') }}</h1>
+        <p class="brand-subtitle">{{ langService.t('register.createAccountSubtitle') }}</p>
         
         <div class="brand-benefits">
           <div class="benefit-item">
@@ -15,8 +26,8 @@
               <i class="fas fa-star"></i>
             </div>
             <div class="benefit-text">
-              <h3>Premium Products</h3>
-              <p>Access to professional-grade security systems</p>
+              <h3>{{ langService.t('home.feature3Title') }}</h3>
+              <p>{{ langService.t('home.feature3Desc') }}</p>
             </div>
           </div>
           <div class="benefit-item">
@@ -24,8 +35,8 @@
               <i class="fas fa-headset"></i>
             </div>
             <div class="benefit-text">
-              <h3>Expert Support</h3>
-              <p>24/7 customer support and technical assistance</p>
+              <h3>{{ langService.t('home.feature2Title') }}</h3>
+              <p>{{ langService.t('home.feature2Desc') }}</p>
             </div>
           </div>
           <div class="benefit-item">
@@ -33,8 +44,8 @@
               <i class="fas fa-truck"></i>
             </div>
             <div class="benefit-text">
-              <h3>Fast Delivery</h3>
-              <p>Quick shipping and professional installation</p>
+              <h3>{{ langService.t('home.feature4Title') }}</h3>
+              <p>{{ langService.t('home.feature4Desc') }}</p>
             </div>
           </div>
         </div>
@@ -45,8 +56,8 @@
     <div class="register-form-container">
       <div class="register-form-wrapper">
         <div class="form-header">
-          <h2 class="form-title">Create Account</h2>
-          <p class="form-subtitle">Fill in your details to get started</p>
+          <h2 class="form-title">{{ langService.t('register.createAccount') }}</h2>
+          <p class="form-subtitle">{{ langService.t('register.joinThousands') }}</p>
         </div>
 
         <!-- Error Message -->
@@ -61,8 +72,8 @@
           <div class="form-row">
             <div class="form-group">
               <label for="firstName" class="form-label">
-                <i class="fas fa-user"></i>
-                First Name
+                <i [ngClass]="langService.isRTL() ? 'fas fa-user ml-2' : 'fas fa-user mr-2'"></i>
+                {{ langService.t('register.firstName') }}
               </label>
               <input
                 id="firstName"
@@ -70,18 +81,18 @@
                 formControlName="firstName"
                 class="form-input"
                 [class.error]="firstName?.invalid && firstName?.touched"
-                placeholder="John"
+                [placeholder]="langService.t('register.firstNamePlaceholder')"
               />
               <div *ngIf="firstName?.invalid && firstName?.touched" class="error-message">
-                <span *ngIf="firstName?.errors?.['required']">First name is required</span>
-                <span *ngIf="firstName?.errors?.['minlength']">At least 2 characters</span>
+                <span *ngIf="firstName?.errors?.['required']">{{ langService.t('register.firstNameRequired') }}</span>
+                <span *ngIf="firstName?.errors?.['minlength']">{{ langService.t('register.nameMinLength') }}</span>
               </div>
             </div>
 
             <div class="form-group">
               <label for="lastName" class="form-label">
-                <i class="fas fa-user"></i>
-                Last Name
+                <i [ngClass]="langService.isRTL() ? 'fas fa-user ml-2' : 'fas fa-user mr-2'"></i>
+                {{ langService.t('register.lastName') }}
               </label>
               <input
                 id="lastName"
@@ -89,11 +100,11 @@
                 formControlName="lastName"
                 class="form-input"
                 [class.error]="lastName?.invalid && lastName?.touched"
-                placeholder="Doe"
+                [placeholder]="langService.t('register.lastNamePlaceholder')"
               />
               <div *ngIf="lastName?.invalid && lastName?.touched" class="error-message">
-                <span *ngIf="lastName?.errors?.['required']">Last name is required</span>
-                <span *ngIf="lastName?.errors?.['minlength']">At least 2 characters</span>
+                <span *ngIf="lastName?.errors?.['required']">{{ langService.t('register.lastNameRequired') }}</span>
+                <span *ngIf="lastName?.errors?.['minlength']">{{ langService.t('register.nameMinLength') }}</span>
               </div>
             </div>
           </div>
@@ -101,8 +112,8 @@
           <!-- Email Field -->
           <div class="form-group">
             <label for="email" class="form-label">
-              <i class="fas fa-envelope"></i>
-              Email Address
+              <i [ngClass]="langService.isRTL() ? 'fas fa-envelope ml-2' : 'fas fa-envelope mr-2'"></i>
+              {{ langService.t('login.email') }}
             </label>
             <input
               id="email"
@@ -110,11 +121,11 @@
               formControlName="email"
               class="form-input"
               [class.error]="email?.invalid && email?.touched"
-              placeholder="john.doe@example.com"
+              [placeholder]="langService.t('login.emailPlaceholder')"
             />
             <div *ngIf="email?.invalid && email?.touched" class="error-message">
-              <span *ngIf="email?.errors?.['required']">Email is required</span>
-              <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+              <span *ngIf="email?.errors?.['required']">{{ langService.t('login.emailRequired') }}</span>
+              <span *ngIf="email?.errors?.['email']">{{ langService.t('login.emailInvalid') }}</span>
             </div>
           </div>
 
@@ -122,8 +133,8 @@
           <div class="form-row">
             <div class="form-group">
               <label for="phone" class="form-label">
-                <i class="fas fa-phone"></i>
-                Phone Number <span class="optional">(Optional)</span>
+                <i [ngClass]="langService.isRTL() ? 'fas fa-phone ml-2' : 'fas fa-phone mr-2'"></i>
+                {{ langService.t('register.phoneNumber') }} <span class="optional">({{ langService.t('common.optional') }})</span>
               </label>
               <input
                 id="phone"
@@ -131,24 +142,24 @@
                 formControlName="phone"
                 class="form-input"
                 [class.error]="phone?.invalid && phone?.touched"
-                placeholder="1234567890"
+                [placeholder]="langService.t('register.phonePlaceholder')"
               />
               <div *ngIf="phone?.invalid && phone?.touched" class="error-message">
-                <span *ngIf="phone?.errors?.['pattern']">Invalid phone number</span>
+                <span *ngIf="phone?.errors?.['pattern']">{{ langService.t('register.phoneInvalid') }}</span>
               </div>
             </div>
 
             <div class="form-group">
               <label for="company" class="form-label">
-                <i class="fas fa-building"></i>
-                Company <span class="optional">(Optional)</span>
+                <i [ngClass]="langService.isRTL() ? 'fas fa-building ml-2' : 'fas fa-building mr-2'"></i>
+                {{ langService.t('register.company') }} <span class="optional">({{ langService.t('common.optional') }})</span>
               </label>
               <input
                 id="company"
                 type="text"
                 formControlName="company"
                 class="form-input"
-                placeholder="Your Company"
+                [placeholder]="langService.t('register.companyPlaceholder')"
               />
             </div>
           </div>
@@ -157,8 +168,8 @@
           <div class="form-row">
             <div class="form-group">
               <label for="password" class="form-label">
-                <i class="fas fa-lock"></i>
-                Password
+                <i [ngClass]="langService.isRTL() ? 'fas fa-lock ml-2' : 'fas fa-lock mr-2'"></i>
+                {{ langService.t('login.password') }}
               </label>
               <div class="password-input-wrapper">
                 <input
@@ -167,7 +178,7 @@
                   formControlName="password"
                   class="form-input"
                   [class.error]="password?.invalid && password?.touched"
-                  placeholder="••••••••"
+                  [placeholder]="langService.t('login.passwordPlaceholder')"
                 />
                 <button
                   type="button"
@@ -178,15 +189,15 @@
                 </button>
               </div>
               <div *ngIf="password?.invalid && password?.touched" class="error-message">
-                <span *ngIf="password?.errors?.['required']">Password is required</span>
-                <span *ngIf="password?.errors?.['minlength']">At least 6 characters</span>
+                <span *ngIf="password?.errors?.['required']">{{ langService.t('login.passwordRequired') }}</span>
+                <span *ngIf="password?.errors?.['minlength']">{{ langService.t('login.passwordMinLength') }}</span>
               </div>
             </div>
 
             <div class="form-group">
               <label for="confirmPassword" class="form-label">
-                <i class="fas fa-lock"></i>
-                Confirm Password
+                <i [ngClass]="langService.isRTL() ? 'fas fa-lock ml-2' : 'fas fa-lock mr-2'"></i>
+                {{ langService.t('register.confirmPassword') }}
               </label>
               <div class="password-input-wrapper">
                 <input
@@ -195,7 +206,7 @@
                   formControlName="confirmPassword"
                   class="form-input"
                   [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
-                  placeholder="••••••••"
+                  [placeholder]="langService.t('register.confirmPasswordPlaceholder')"
                 />
                 <button
                   type="button"
@@ -206,8 +217,8 @@
                 </button>
               </div>
               <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="error-message">
-                <span *ngIf="confirmPassword?.errors?.['required']">Please confirm password</span>
-                <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">Passwords don't match</span>
+                <span *ngIf="confirmPassword?.errors?.['required']">{{ langService.t('register.confirmPasswordRequired') }}</span>
+                <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">{{ langService.t('register.passwordMismatch') }}</span>
               </div>
             </div>
           </div>
@@ -218,14 +229,14 @@
               <input type="checkbox" formControlName="agreeToTerms" />
               <span class="checkbox-custom"></span>
               <span class="checkbox-text">
-                I agree to the 
-                <a routerLink="/terms" target="_blank">Terms & Conditions</a> 
-                and 
-                <a routerLink="/privacy" target="_blank">Privacy Policy</a>
+                {{ langService.t('register.agreeToTerms') }}
+                <a routerLink="/terms" target="_blank">{{ langService.t('register.termsConditions') }}</a> 
+                {{ langService.t('common.and') }}
+                <a routerLink="/privacy" target="_blank">{{ langService.t('register.privacyPolicy') }}</a>
               </span>
             </label>
             <div *ngIf="agreeToTerms?.invalid && agreeToTerms?.touched" class="error-message">
-              <span>You must agree to the terms and conditions</span>
+              <span>{{ langService.t('register.termsRequired') }}</span>
             </div>
           </div>
 
@@ -235,35 +246,35 @@
             class="submit-button"
             [disabled]="isLoading"
           >
-            <span *ngIf="!isLoading">Create Account</span>
+            <span *ngIf="!isLoading">{{ langService.t('register.createAccount') }}</span>
             <span *ngIf="isLoading" class="loading-spinner">
               <i class="fas fa-spinner fa-spin"></i>
-              Creating account...
+              {{ langService.t('register.creatingAccount') }}
             </span>
           </button>
 
           <!-- Divider -->
           <div class="divider">
-            <span>or sign up with</span>
+            <span>{{ langService.t('login.or') }}</span>
           </div>
 
           <!-- Social Sign Up -->
           <div class="social-signup">
-            <button type="button" class="social-button google">
+            <button type="button" class="social-button google" [attr.aria-label]="langService.t('login.continueWithGoogle')">
               <i class="fab fa-google"></i>
             </button>
-            <button type="button" class="social-button facebook">
+            <button type="button" class="social-button facebook" [attr.aria-label]="langService.t('login.continueWithFacebook')">
               <i class="fab fa-facebook"></i>
             </button>
-            <button type="button" class="social-button apple">
+            <button type="button" class="social-button apple" [attr.aria-label]="langService.t('login.continueWithApple')">
               <i class="fab fa-apple"></i>
             </button>
           </div>
 
           <!-- Login Link -->
           <div class="login-link">
-            <span>Already have an account?</span>
-            <a routerLink="/login">Sign In</a>
+            <span>{{ langService.t('register.alreadyHaveAccount') }}</span>
+            <a routerLink="/login">{{ langService.t('login.signIn') }}</a>
           </div>
         </form>
       </div>

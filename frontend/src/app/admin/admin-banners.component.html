@@ -1,0 +1,71 @@
+<div class="admin-card">
+  <div class="admin-toolbar">
+    <select [(ngModel)]="position">
+      <option value="">All positions</option>
+      <option value="hero">Hero</option>
+      <option value="homepage">Homepage</option>
+      <option value="category">Category</option>
+      <option value="product">Product</option>
+      <option value="sidebar">Sidebar</option>
+      <option value="footer">Footer</option>
+    </select>
+    <select [(ngModel)]="active">
+      <option value="">Any status</option>
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+    </select>
+    <button (click)="load()">Filter</button>
+    <button (click)="edit()">New Banner</button>
+  </div>
+
+  <div *ngIf="loading()" class="loading">Loading...</div>
+
+  <table class="admin-table" *ngIf="!loading()">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Position</th>
+        <th>Active</th>
+        <th>Sort</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of banners()">
+        <td>{{b.title}}</td>
+        <td>{{b.position}}</td>
+        <td>{{b.isActive ? 'Yes' : 'No'}}</td>
+        <td>{{b.sortOrder}}</td>
+        <td>
+          <button (click)="edit(b)">Edit</button>
+          <button class="danger" (click)="remove(b)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" *ngIf="editing !== undefined">
+    <div class="modal-content">
+      <h3>{{ editing ? 'Edit Banner' : 'New Banner' }}</h3>
+      <label>Title <input [(ngModel)]="form.title" /></label>
+      <label>Image URL <input [(ngModel)]="form.imageUrl" /></label>
+      <label>Link URL <input [(ngModel)]="form.linkUrl" /></label>
+      <label>Position
+        <select [(ngModel)]="form.position">
+          <option value="hero">Hero</option>
+          <option value="homepage">Homepage</option>
+          <option value="category">Category</option>
+          <option value="product">Product</option>
+          <option value="sidebar">Sidebar</option>
+          <option value="footer">Footer</option>
+        </select>
+      </label>
+      <label>Sort Order <input type="number" [(ngModel)]="form.sortOrder" /></label>
+      <label><input type="checkbox" [(ngModel)]="form.isActive" /> Active</label>
+      <div class="actions">
+        <button (click)="save()">Save</button>
+        <button (click)="editing = null">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

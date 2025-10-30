@@ -1,32 +1,32 @@
 <div class="profile-page">
   <div class="page-header">
-    <h1 class="page-title">Profile Settings</h1>
-    <p class="page-subtitle">Manage your account information and security settings</p>
+    <h1 class="page-title">{{ lang.t('accountProfile.title') }}</h1>
+    <p class="page-subtitle">{{ lang.t('accountProfile.subtitle') }}</p>
   </div>
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-container">
     <div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
-    <p>Loading profile...</p>
+    <p>{{ lang.t('accountProfile.loading') }}</p>
   </div>
 
   <div *ngIf="!isLoading" class="profile-content">
     <!-- Profile Information -->
     <div class="profile-section">
       <div class="section-header">
-        <h2><i class="fas fa-user"></i> Personal Information</h2>
+  <h2><i class="fas fa-user"></i> {{ lang.t('accountProfile.personalInfo') }}</h2>
       </div>
 
       <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
         <div class="form-grid">
           <div class="form-group">
-            <label for="firstName">First Name <span class="required">*</span></label>
+            <label for="firstName">{{ lang.t('accountProfile.firstName') }} <span class="required">*</span></label>
             <input
               id="firstName"
               type="text"
               formControlName="firstName"
               [class.invalid]="isFieldInvalid(profileForm, 'firstName')"
-              placeholder="Enter first name"
+              [placeholder]="lang.t('accountProfile.firstNamePlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'firstName')">
               {{ getFieldError(profileForm, 'firstName') }}
@@ -34,13 +34,13 @@
           </div>
 
           <div class="form-group">
-            <label for="lastName">Last Name <span class="required">*</span></label>
+            <label for="lastName">{{ lang.t('accountProfile.lastName') }} <span class="required">*</span></label>
             <input
               id="lastName"
               type="text"
               formControlName="lastName"
               [class.invalid]="isFieldInvalid(profileForm, 'lastName')"
-              placeholder="Enter last name"
+              [placeholder]="lang.t('accountProfile.lastNamePlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'lastName')">
               {{ getFieldError(profileForm, 'lastName') }}
@@ -48,13 +48,13 @@
           </div>
 
           <div class="form-group">
-            <label for="email">Email <span class="required">*</span></label>
+            <label for="email">{{ lang.t('accountProfile.email') }} <span class="required">*</span></label>
             <input
               id="email"
               type="email"
               formControlName="email"
               [class.invalid]="isFieldInvalid(profileForm, 'email')"
-              placeholder="your@email.com"
+              [placeholder]="lang.t('accountProfile.emailPlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(profileForm, 'email')">
               {{ getFieldError(profileForm, 'email') }}
@@ -62,22 +62,22 @@
           </div>
 
           <div class="form-group">
-            <label for="phone">Phone Number</label>
+            <label for="phone">{{ lang.t('accountProfile.phone') }}</label>
             <input
               id="phone"
               type="tel"
               formControlName="phone"
-              placeholder="+1 (555) 000-0000"
+              [placeholder]="lang.t('accountProfile.phonePlaceholder')"
             />
           </div>
 
           <div class="form-group full-width">
-            <label for="company">Company (Optional)</label>
+            <label for="company">{{ lang.t('accountProfile.companyOptional') }}</label>
             <input
               id="company"
               type="text"
               formControlName="company"
-              placeholder="Company name"
+              [placeholder]="lang.t('accountProfile.companyPlaceholder')"
             />
           </div>
         </div>
@@ -93,10 +93,10 @@
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="isSavingProfile || profileForm.invalid">
             <span *ngIf="!isSavingProfile">
-              <i class="fas fa-save"></i> Save Changes
+              <i class="fas fa-save"></i> {{ lang.t('accountProfile.saveChanges') }}
             </span>
             <span *ngIf="isSavingProfile">
-              <i class="fas fa-spinner fa-spin"></i> Saving...
+              <i class="fas fa-spinner fa-spin"></i> {{ lang.t('accountProfile.updating') }}
             </span>
           </button>
         </div>
@@ -106,19 +106,19 @@
     <!-- Change Password -->
     <div class="profile-section">
       <div class="section-header">
-        <h2><i class="fas fa-lock"></i> Change Password</h2>
+  <h2><i class="fas fa-lock"></i> {{ lang.t('accountProfile.changePassword') }}</h2>
       </div>
 
       <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="password-form">
         <div class="form-grid">
           <div class="form-group full-width">
-            <label for="currentPassword">Current Password <span class="required">*</span></label>
+            <label for="currentPassword">{{ lang.t('accountProfile.currentPassword') }} <span class="required">*</span></label>
             <input
               id="currentPassword"
               type="password"
               formControlName="currentPassword"
               [class.invalid]="isFieldInvalid(passwordForm, 'currentPassword')"
-              placeholder="Enter current password"
+              [placeholder]="lang.t('accountProfile.currentPasswordPlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'currentPassword')">
               {{ getFieldError(passwordForm, 'currentPassword') }}
@@ -126,28 +126,28 @@
           </div>
 
           <div class="form-group">
-            <label for="newPassword">New Password <span class="required">*</span></label>
+            <label for="newPassword">{{ lang.t('accountProfile.newPassword') }} <span class="required">*</span></label>
             <input
               id="newPassword"
               type="password"
               formControlName="newPassword"
               [class.invalid]="isFieldInvalid(passwordForm, 'newPassword')"
-              placeholder="Enter new password"
+              [placeholder]="lang.t('accountProfile.newPasswordPlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'newPassword')">
               {{ getFieldError(passwordForm, 'newPassword') }}
             </span>
-            <span class="helper-text">Minimum 6 characters</span>
+            <span class="helper-text">{{ lang.t('accountProfile.passwordMin') }}</span>
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">Confirm New Password <span class="required">*</span></label>
+            <label for="confirmPassword">{{ lang.t('accountProfile.confirmPassword') }} <span class="required">*</span></label>
             <input
               id="confirmPassword"
               type="password"
               formControlName="confirmPassword"
               [class.invalid]="isFieldInvalid(passwordForm, 'confirmPassword')"
-              placeholder="Confirm new password"
+              [placeholder]="lang.t('accountProfile.confirmPasswordPlaceholder')"
             />
             <span class="error-message" *ngIf="isFieldInvalid(passwordForm, 'confirmPassword')">
               {{ getFieldError(passwordForm, 'confirmPassword') }}
@@ -166,10 +166,10 @@
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="isSavingPassword || passwordForm.invalid">
             <span *ngIf="!isSavingPassword">
-              <i class="fas fa-key"></i> Change Password
+              <i class="fas fa-key"></i> {{ lang.t('accountProfile.changePassword') }}
             </span>
             <span *ngIf="isSavingPassword">
-              <i class="fas fa-spinner fa-spin"></i> Changing...
+              <i class="fas fa-spinner fa-spin"></i> {{ lang.t('accountProfile.updating') }}
             </span>
           </button>
         </div>

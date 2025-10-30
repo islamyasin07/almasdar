@@ -61,6 +61,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        arabic: ['Cairo', 'Tajawal', 'sans-serif'], // Arabic fonts
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

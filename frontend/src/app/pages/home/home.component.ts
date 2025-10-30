@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Product } from '../../models/product.model';
 import { PLATFORM_ID } from '@angular/core';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-home',
@@ -50,27 +51,31 @@ export class HomeComponent implements OnInit {
   features = [
     {
       icon: 'fas fa-shield-check',
-      title: '24/7 Security',
-      description: 'Round-the-clock protection for your property'
+      titleKey: 'home.feature1Title',
+      descKey: 'home.feature1Desc'
     },
     {
       icon: 'fas fa-headset',
-      title: 'Expert Support',
-      description: 'Professional installation and maintenance'
+      titleKey: 'home.feature2Title',
+      descKey: 'home.feature2Desc'
     },
     {
       icon: 'fas fa-award',
-      title: 'Premium Quality',
-      description: 'Industry-leading security products'
+      titleKey: 'home.feature3Title',
+      descKey: 'home.feature3Desc'
     },
     {
       icon: 'fas fa-shipping-fast',
-      title: 'Fast Delivery',
-      description: 'Quick and secure shipping nationwide'
+      titleKey: 'home.feature4Title',
+      descKey: 'home.feature4Desc'
     }
   ];
 
-  constructor(private apiService: ApiService, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    private apiService: ApiService, 
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public langService: LanguageService
+  ) {}
 
   ngOnInit(): void {
     // Avoid SSR fetch errors when backend is not running

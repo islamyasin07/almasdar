@@ -1,26 +1,212 @@
 .register-page {
   @apply min-h-screen flex items-center justify-center py-12 px-4;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+  
+  // Animated background particles
+  &::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: particleMove 20s linear infinite;
+  }
+
+  // Floating glow orbs
+  &::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent 70%);
+    border-radius: 50%;
+    animation: floatGlow 15s ease-in-out infinite;
+    filter: blur(60px);
+  }
+}
+
+@keyframes particleMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50px, -50px); }
+}
+
+@keyframes floatGlow {
+  0%, 100% { 
+    transform: translate(-200px, -200px) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translate(200px, 200px) scale(1.5);
+    opacity: 0.6;
+  }
 }
 
 .register-container {
   @apply max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  position: relative;
+  z-index: 10;
+  box-shadow: 
+    0 0 60px rgba(59, 130, 246, 0.3),
+    inset 0 0 60px rgba(59, 130, 246, 0.05);
+  
+  // Glass reflection effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+}
+
+// Flying Butterflies Animation
+.register-page {
+  // Floating Background Text
+  .floating-text {
+    position: absolute;
+    font-size: 8rem;
+    font-weight: 900;
+    opacity: 0.03;
+    color: #3b82f6;
+    z-index: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    
+    &:nth-child(5) {
+      top: 15%;
+      left: -10%;
+      animation: floatTextAround 25s ease-in-out infinite;
+    }
+    
+    &:nth-child(6) {
+      top: 60%;
+      right: -10%;
+      animation: floatTextAround 30s ease-in-out infinite 5s;
+      font-size: 10rem;
+    }
+    
+    &:nth-child(7) {
+      top: 40%;
+      left: 10%;
+      animation: floatTextAround 35s ease-in-out infinite 10s;
+      font-size: 7rem;
+      opacity: 0.05;
+    }
+  }
+  
+  .butterfly {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.7;
+    animation: flyButterfly 20s ease-in-out infinite;
+    z-index: 5;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+    
+    &:nth-child(1) {
+      left: 10%;
+      top: 20%;
+      animation-delay: 0s;
+      animation-duration: 18s;
+    }
+    
+    &:nth-child(2) {
+      left: 80%;
+      top: 60%;
+      animation-delay: 5s;
+      animation-duration: 22s;
+    }
+    
+    &:nth-child(3) {
+      left: 50%;
+      top: 10%;
+      animation-delay: 10s;
+      animation-duration: 25s;
+    }
+    
+    &:nth-child(4) {
+      left: 20%;
+      top: 70%;
+      animation-delay: 15s;
+      animation-duration: 20s;
+    }
+  }
+}
+
+@keyframes flyButterfly {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translate(100px, -150px) rotate(45deg) scale(1.2);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(200px, 0) rotate(0deg) scale(0.8);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(100px, 150px) rotate(-45deg) scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes floatTextAround {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(50px, -100px) rotate(5deg);
+  }
+  50% {
+    transform: translate(-30px, 80px) rotate(-3deg);
+  }
+  75% {
+    transform: translate(70px, 50px) rotate(7deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
 
 // Left Side - Branding
 .register-brand {
   @apply hidden lg:flex items-center justify-center p-12;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
   position: relative;
   overflow: hidden;
 
   &::before {
     content: '';
     @apply absolute inset-0;
-    background: radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.2) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
   }
 }
 
@@ -30,19 +216,51 @@
 
 .brand-logo {
   @apply text-8xl text-center mb-6;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: pulse 2s ease-in-out infinite;
+  animation: logoGlow 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.8));
+    transform: scale(1.05);
+  }
 }
 
 .brand-title {
   @apply text-4xl font-bold text-white mb-2 text-center;
+  animation: floatText 4s ease-in-out infinite;
+  text-shadow: 
+    0 0 20px rgba(59, 130, 246, 0.5),
+    0 0 40px rgba(59, 130, 246, 0.3);
 }
 
 .brand-subtitle {
   @apply text-lg text-gray-300 mb-12 text-center max-w-md mx-auto;
+  animation: floatText 4s ease-in-out infinite 0.5s;
+}
+
+@keyframes floatText {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(0) translateX(-5px);
+  }
+  75% {
+    transform: translateY(10px) translateX(5px);
+  }
 }
 
 .brand-benefits {
@@ -55,8 +273,21 @@
 
 .benefit-icon {
   @apply w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-  color: #667eea;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
+  color: #3b82f6;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
+  }
 }
 
 .benefit-text {
@@ -72,6 +303,8 @@
 // Right Side - Form
 .register-form-container {
   @apply p-8 md:p-12;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
 }
 
 .register-form-wrapper {
@@ -84,6 +317,7 @@
 
 .form-title {
   @apply text-3xl font-bold text-white mb-2;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .form-subtitle {
@@ -93,9 +327,10 @@
 // Error Alert
 .error-alert {
   @apply flex items-center gap-3 p-4 mb-6 rounded-lg;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ff6b6b;
+  backdrop-filter: blur(10px);
 
   i {
     @apply text-xl;
@@ -119,7 +354,7 @@
   @apply flex items-center gap-2 text-gray-300 font-medium text-sm;
 
   i {
-    @apply text-purple-400;
+    color: #3b82f6;
   }
 
   .optional {
@@ -129,8 +364,9 @@
 
 .form-input {
   @apply w-full px-4 py-3 rounded-lg text-white transition-all text-sm;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(5px);
 
   &::placeholder {
     @apply text-gray-500;
@@ -138,12 +374,16 @@
 
   &:focus {
     @apply outline-none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #3b82f6;
+    box-shadow: 
+      0 0 0 3px rgba(59, 130, 246, 0.2),
+      0 0 20px rgba(59, 130, 246, 0.3);
+    background: rgba(15, 23, 42, 0.95);
   }
 
   &.error {
     border-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
   }
 }
 
@@ -153,10 +393,15 @@
 
 .password-toggle {
   @apply absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors;
+  
+  &:hover {
+    color: #3b82f6;
+  }
 }
 
 .error-message {
-  @apply text-red-400 text-xs;
+  @apply text-xs;
+  color: #ff6b6b;
 }
 
 // Checkbox
@@ -167,8 +412,9 @@
     @apply hidden;
 
     &:checked + .checkbox-custom {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-color: #667eea;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 
       &::after {
         @apply opacity-100;
@@ -178,7 +424,8 @@
 }
 
 .checkbox-custom {
-  @apply w-5 h-5 rounded border-2 border-gray-600 flex items-center justify-center transition-all flex-shrink-0;
+  @apply w-5 h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0;
+  border-color: rgba(59, 130, 246, 0.3);
   position: relative;
   margin-top: 2px;
 
@@ -192,18 +439,29 @@
   @apply text-gray-300 text-sm;
 
   a {
-    @apply text-purple-400 hover:text-purple-300 transition-colors;
+    @apply transition-colors;
+    color: #3b82f6;
+    
+    &:hover {
+      color: #60a5fa;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
   }
 }
 
 // Submit Button
 .submit-button {
   @apply w-full py-3 rounded-lg text-white font-semibold text-lg transition-all;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.5);
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 
+      0 10px 30px rgba(59, 130, 246, 0.5),
+      0 0 40px rgba(59, 130, 246, 0.3);
+    filter: brightness(1.1);
   }
 
   &:disabled {
@@ -222,7 +480,8 @@
   &::before,
   &::after {
     content: '';
-    @apply absolute top-1/2 w-5/12 h-px bg-gray-700;
+    @apply absolute top-1/2 w-5/12 h-px;
+    background: rgba(59, 130, 246, 0.2);
   }
 
   &::before {
@@ -245,11 +504,14 @@
 
 .social-button {
   @apply w-14 h-14 rounded-lg flex items-center justify-center text-2xl transition-all;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(5px);
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: #3b82f6;
     transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   }
 
   &.google {
@@ -257,6 +519,7 @@
 
     &:hover {
       @apply shadow-lg;
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
     }
   }
 
@@ -266,6 +529,7 @@
 
     &:hover {
       background: #1665d8;
+      box-shadow: 0 10px 25px rgba(24, 119, 242, 0.3);
     }
   }
 
@@ -273,7 +537,8 @@
     @apply bg-black text-white;
 
     &:hover {
-      @apply bg-gray-900;
+      background: #1a1a1a;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
   }
 }
@@ -283,7 +548,13 @@
   @apply text-center mt-6 text-gray-400;
 
   a {
-    @apply ml-2 text-purple-400 hover:text-purple-300 font-semibold transition-colors;
+    @apply ml-2 font-semibold transition-colors;
+    color: #3b82f6;
+    
+    &:hover {
+      color: #60a5fa;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
   }
 }
 

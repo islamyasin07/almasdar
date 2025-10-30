@@ -1,0 +1,333 @@
+<div class="admin-sales-history">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h2>{{ lang.t('admin.salesHistory') }}</h2>
+      <p>{{ lang.t('admin.salesHistoryDesc') }}</p>
+    </div>
+    <button class="btn-new-sale" (click)="goToNewSale()">
+      <i class="fas fa-plus"></i>
+      {{ lang.t('admin.newSale') }}
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card total">
+      <div class="icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="details">
+        <span class="label">{{ lang.t('admin.totalSales') }}</span>
+        <span class="value">{{ totalSales() | number:'1.2-2' }} JOD</span>
+      </div>
+    </div>
+
+    <div class="summary-card paid">
+      <div class="icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="details">
+        <span class="label">{{ lang.t('admin.totalPaid') }}</span>
+        <span class="value">{{ totalPaid() | number:'1.2-2' }} JOD</span>
+      </div>
+    </div>
+
+    <div class="summary-card remaining">
+      <div class="icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="details">
+        <span class="label">{{ lang.t('admin.totalRemaining') }}</span>
+        <span class="value">{{ totalRemaining() | number:'1.2-2' }} JOD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        [placeholder]="lang.t('admin.searchSales')"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </div>
+
+    <div class="status-filters">
+      <button 
+        class="filter-btn" 
+        [class.active]="statusFilter() === 'all'"
+        (click)="statusFilter.set('all')"
+      >
+        <i class="fas fa-list"></i>
+        {{ lang.t('admin.all') }}
+      </button>
+      <button 
+        class="filter-btn paid" 
+        [class.active]="statusFilter() === 'paid'"
+        (click)="statusFilter.set('paid')"
+      >
+        <i class="fas fa-check-circle"></i>
+        {{ lang.t('admin.paidStatus') }}
+      </button>
+      <button 
+        class="filter-btn partial" 
+        [class.active]="statusFilter() === 'partial'"
+        (click)="statusFilter.set('partial')"
+      >
+        <i class="fas fa-clock"></i>
+        {{ lang.t('admin.partialStatus') }}
+      </button>
+      <button 
+        class="filter-btn pending" 
+        [class.active]="statusFilter() === 'pending'"
+        (click)="statusFilter.set('pending')"
+      >
+        <i class="fas fa-exclamation-circle"></i>
+        {{ lang.t('admin.pendingStatus') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Sales List -->
+  <div class="sales-list" *ngIf="!isLoading() && filteredSales().length > 0">
+    <div 
+      class="sale-card" 
+      *ngFor="let sale of filteredSales()"
+      (click)="viewSaleDetails(sale)"
+    >
+      <div class="sale-header">
+        <div class="customer-info">
+          <i class="fas fa-user"></i>
+          <div>
+            <h4>{{ sale.customer.name }}</h4>
+            <p>{{ sale.customer.phone }}</p>
+          </div>
+        </div>
+        <div class="status-badge" [class]="getStatusColor(sale.status)">
+          <i class="fas" [class]="getStatusIcon(sale.status)"></i>
+          {{ lang.t('admin.' + sale.status + 'Status') }}
+        </div>
+      </div>
+
+      <div class="sale-body">
+        <div class="items-preview">
+          <i class="fas fa-box"></i>
+          <span>{{ sale.items.length }} {{ lang.t('admin.items') }}</span>
+        </div>
+        <div class="date-info">
+          <i class="fas fa-calendar"></i>
+          <span>{{ formatDate(sale.createdAt) }}</span>
+        </div>
+      </div>
+
+      <div class="sale-footer">
+        <div class="amount-info">
+          <div class="amount-row">
+            <span class="label">{{ lang.t('admin.totalAmount') }}:</span>
+            <span class="value">{{ sale.totalAmount | number:'1.2-2' }} JOD</span>
+          </div>
+          <div class="amount-row paid">
+            <span class="label">{{ lang.t('admin.paidAmount') }}:</span>
+            <span class="value">{{ sale.paidAmount | number:'1.2-2' }} JOD</span>
+          </div>
+          <div class="amount-row remaining" *ngIf="sale.remainingAmount > 0">
+            <span class="label">{{ lang.t('admin.remainingAmount') }}:</span>
+            <span class="value">{{ sale.remainingAmount | number:'1.2-2' }} JOD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="!isLoading() && filteredSales().length === 0">
+    <i class="fas fa-inbox"></i>
+    <p>{{ lang.t('admin.noSalesFound') }}</p>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading()">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>{{ lang.t('admin.loadingSales') }}</p>
+  </div>
+</div>
+
+<!-- Sale Details Modal -->
+<div class="modal-overlay" *ngIf="selectedSale()" (click)="closeSaleDetails()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ lang.t('admin.saleDetails') }}</h3>
+      <button class="btn-close" (click)="closeSaleDetails()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedSale() as sale">
+      <!-- Customer Info -->
+      <div class="detail-section">
+        <h4>
+          <i class="fas fa-user"></i>
+          {{ lang.t('admin.customerInfo') }}
+        </h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">{{ lang.t('admin.customerName') }}:</span>
+            <span class="value">{{ sale.customer.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ lang.t('admin.phone') }}:</span>
+            <span class="value">{{ sale.customer.phone }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ lang.t('admin.date') }}:</span>
+            <span class="value">{{ formatDateTime(sale.createdAt) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ lang.t('admin.status') }}:</span>
+            <span class="status-badge" [class]="getStatusColor(sale.status)">
+              {{ lang.t('admin.' + sale.status + 'Status') }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="detail-section">
+        <h4>
+          <i class="fas fa-box"></i>
+          {{ lang.t('admin.items') }}
+        </h4>
+        <div class="items-table">
+          <div class="item-row" *ngFor="let item of sale.items; let i = index" [class.returned]="item.isReturned">
+            <div class="item-serial">
+              <span class="serial-badge">{{ item.serialNumber }}</span>
+            </div>
+            <div class="item-details">
+              <h5>{{ item.productName }}</h5>
+              <p *ngIf="item.isReturned" class="return-reason">
+                <i class="fas fa-undo"></i>
+                {{ lang.t('admin.returned') }}: {{ item.returnReason }}
+              </p>
+            </div>
+            <div class="item-price">
+              <span class="quantity">x{{ item.quantity }}</span>
+              <span class="price">{{ item.price | number:'1.2-2' }} JOD</span>
+            </div>
+            <button 
+              class="btn-return-item" 
+              *ngIf="!item.isReturned"
+              (click)="returnItem(sale._id, i)"
+            >
+              <i class="fas fa-undo"></i>
+              {{ lang.t('admin.returnItem') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div class="detail-section">
+        <h4>
+          <i class="fas fa-money-bill-wave"></i>
+          {{ lang.t('admin.payments') }}
+        </h4>
+
+        <div class="payments-table" *ngIf="sale.payments.length > 0">
+          <div class="payment-row" *ngFor="let payment of sale.payments">
+            <div class="payment-date">
+              <i class="fas fa-calendar"></i>
+              {{ formatDateTime(payment.date) }}
+            </div>
+            <div class="payment-method">
+              <i class="fas fa-credit-card"></i>
+              {{ lang.t('admin.' + payment.method) }}
+            </div>
+            <div class="payment-amount">
+              {{ payment.amount | number:'1.2-2' }} JOD
+            </div>
+          </div>
+        </div>
+
+        <div class="no-payments" *ngIf="sale.payments.length === 0">
+          <i class="fas fa-info-circle"></i>
+          <p>{{ lang.t('admin.noPaymentsYet') }}</p>
+        </div>
+
+        <!-- Add Payment Section -->
+        <div class="add-payment-section" *ngIf="sale.remainingAmount > 0">
+          <button 
+            class="btn-add-payment" 
+            *ngIf="!isAddingPayment()"
+            (click)="startAddPayment()"
+          >
+            <i class="fas fa-plus"></i>
+            {{ lang.t('admin.addPayment') }}
+          </button>
+
+          <div class="payment-form" *ngIf="isAddingPayment()">
+            <div class="form-row">
+              <div class="form-group">
+                <label>{{ lang.t('admin.amount') }}</label>
+                <input 
+                  type="number" 
+                  [(ngModel)]="paymentAmount"
+                  (ngModelChange)="paymentAmount.set($event)"
+                  [max]="sale.remainingAmount"
+                />
+              </div>
+              <div class="form-group">
+                <label>{{ lang.t('admin.paymentMethod') }}</label>
+                <select 
+                  [(ngModel)]="paymentMethod"
+                  (ngModelChange)="paymentMethod.set($event)"
+                >
+                  <option value="cash">{{ lang.t('admin.cash') }}</option>
+                  <option value="card">{{ lang.t('admin.card') }}</option>
+                  <option value="bank">{{ lang.t('admin.bankTransfer') }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-cancel" (click)="cancelAddPayment()">
+                {{ lang.t('admin.cancel') }}
+              </button>
+              <button class="btn-confirm" (click)="addPayment()">
+                <i class="fas fa-check"></i>
+                {{ lang.t('admin.confirm') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="detail-section summary">
+        <div class="summary-row">
+          <span class="label">{{ lang.t('admin.totalAmount') }}</span>
+          <span class="value">{{ sale.totalAmount | number:'1.2-2' }} JOD</span>
+        </div>
+        <div class="summary-row paid">
+          <span class="label">{{ lang.t('admin.paidAmount') }}</span>
+          <span class="value">{{ sale.paidAmount | number:'1.2-2' }} JOD</span>
+        </div>
+        <div class="summary-row remaining" *ngIf="sale.remainingAmount > 0">
+          <span class="label">{{ lang.t('admin.remainingAmount') }}</span>
+          <span class="value">{{ sale.remainingAmount | number:'1.2-2' }} JOD</span>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="detail-section notes" *ngIf="sale.notes">
+        <h4>
+          <i class="fas fa-sticky-note"></i>
+          {{ lang.t('admin.notes') }}
+        </h4>
+        <p>{{ sale.notes }}</p>
+      </div>
+    </div>
+  </div>
+</div>

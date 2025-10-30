@@ -10,11 +10,12 @@ return val;
 
 
 export const env = {
-nodeEnv: process.env.NODE_ENV ?? 'development',
-port: parseInt(process.env.PORT ?? '8080', 10),
-mongoUri: required('MONGO_URI'),
-corsOrigin: required('CORS_ORIGIN'),
-jwtAccessSecret: required('JWT_ACCESS_SECRET'),
-jwtRefreshSecret: required('JWT_REFRESH_SECRET'),
-uploadDir: process.env.UPLOAD_DIR ?? 'uploads'
+	nodeEnv: process.env.NODE_ENV ?? 'development',
+	port: parseInt(process.env.PORT ?? '8080', 10),
+	mongoUri: required('MONGO_URI'),
+	corsOrigin: required('CORS_ORIGIN'),
+	jwtAccessSecret: required('JWT_ACCESS_SECRET'),
+	jwtRefreshSecret: required('JWT_REFRESH_SECRET'),
+	jwtSecret: process.env.JWT_SECRET || process.env.JWT_ACCESS_SECRET || 'changeme',
+	uploadDir: process.env.UPLOAD_DIR ?? 'uploads'
 };

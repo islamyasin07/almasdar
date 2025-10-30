@@ -1,26 +1,123 @@
-<div class="grid cols-3">
-  <div class="card">
-    <h3>Revenue</h3>
-    <p class="value">$0.00</p>
-    <p class="hint">Connect backend to view analytics</p>
+<div class="admin-overview">
+  <div class="page-header">
+    <h2>{{ lang.t('admin.overview') }}</h2>
+    <p>{{ lang.t('admin.dashboardSubtitle') }}</p>
   </div>
-  <div class="card">
-    <h3>Orders</h3>
-    <p class="value">0</p>
-    <p class="hint">New orders will appear here</p>
-  </div>
-  <div class="card">
-    <h3>Products</h3>
-    <p class="value">0</p>
-    <p class="hint">Manage your catalog</p>
-  </div>
-</div>
 
-<div class="card" style="margin-top:1rem">
-  <h3>Quick Actions</h3>
-  <div class="actions">
-    <a routerLink="/admin/products" class="btn"><i class="fas fa-box"></i>Add Product</a>
-    <a routerLink="/admin/orders" class="btn"><i class="fas fa-shopping-bag"></i>View Orders</a>
-    <a routerLink="/admin/users" class="btn"><i class="fas fa-users"></i>Manage Users</a>
+  <div *ngIf="loading()" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    {{ lang.t('admin.loading') }}
+  </div>
+
+  <div *ngIf="!loading()" class="stats-grid">
+    <!-- Total Users -->
+    <div class="stat-card">
+      <div class="stat-icon users">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.totalUsers') }}</h3>
+        <p class="stat-value">{{ stats().totalUsers }}</p>
+        <a routerLink="/admin/users" class="stat-link">
+          {{ lang.t('admin.manageUsers') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Total Products -->
+    <div class="stat-card">
+      <div class="stat-icon products">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.totalProducts') }}</h3>
+        <p class="stat-value">{{ stats().totalProducts }}</p>
+        <a routerLink="/admin/products" class="stat-link">
+          {{ lang.t('admin.manageProducts') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Total Orders -->
+    <div class="stat-card">
+      <div class="stat-icon orders">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.totalOrders') }}</h3>
+        <p class="stat-value">{{ stats().totalOrders }}</p>
+        <a routerLink="/admin/orders" class="stat-link">
+          {{ lang.t('admin.manageOrders') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="stat-card">
+      <div class="stat-icon revenue">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.totalRevenue') }}</h3>
+        <p class="stat-value">${{ stats().totalRevenue | number:'1.0-0' }}</p>
+        <a routerLink="/admin/orders" class="stat-link">
+          {{ lang.t('admin.viewOrder') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pending Orders -->
+    <div class="stat-card highlight">
+      <div class="stat-icon pending">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.pendingOrders') }}</h3>
+        <p class="stat-value">{{ stats().pendingOrders }}</p>
+        <a routerLink="/admin/orders" class="stat-link">
+          {{ lang.t('admin.viewOrder') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Low Stock Products -->
+    <div class="stat-card highlight">
+      <div class="stat-icon warning">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ lang.t('admin.lowStockProducts') }}</h3>
+        <p class="stat-value">{{ stats().lowStockProducts }}</p>
+        <a routerLink="/admin/products" class="stat-link">
+          {{ lang.t('admin.manageProducts') }} <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading()" class="quick-actions">
+    <h3>{{ lang.t('admin.search') }}</h3>
+    <div class="actions-grid">
+      <a routerLink="/admin/users" class="action-card">
+        <i class="fas fa-users"></i>
+        <span>{{ lang.t('admin.manageUsers') }}</span>
+      </a>
+      <a routerLink="/admin/products" class="action-card">
+        <i class="fas fa-box"></i>
+        <span>{{ lang.t('admin.manageProducts') }}</span>
+      </a>
+      <a routerLink="/admin/categories" class="action-card">
+        <i class="fas fa-folder-tree"></i>
+        <span>{{ lang.t('admin.manageCategories') }}</span>
+      </a>
+      <a routerLink="/admin/orders" class="action-card">
+        <i class="fas fa-shopping-cart"></i>
+        <span>{{ lang.t('admin.manageOrders') }}</span>
+      </a>
+      <a routerLink="/admin/banners" class="action-card">
+        <i class="fas fa-image"></i>
+        <span>{{ lang.t('admin.manageBanners') }}</span>
+      </a>
+    </div>
   </div>
 </div>

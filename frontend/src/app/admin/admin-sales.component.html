@@ -1,0 +1,242 @@
+<div class="admin-sales">
+  <div class="page-header">
+    <div>
+      <h2>{{ lang.t('admin.salesLedger') }}</h2>
+      <p>{{ lang.t('admin.newSale') }}</p>
+    </div>
+    <button (click)="router.navigate(['/admin/sales-history'])" class="btn-secondary">
+      <i class="fas fa-history"></i>
+      {{ lang.t('admin.salesHistory') }}
+    </button>
+  </div>
+
+  <!-- New Sale Form -->
+  <div class="sale-form-container" [@slideIn]>
+    <!-- Customer Selection -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="fas fa-user"></i>
+        {{ lang.t('admin.customer') }}
+      </h3>
+      
+      <div class="customer-search">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="customerSearchQuery" 
+            [placeholder]="lang.t('admin.searchCustomer')"
+            (input)="searchCustomer()"
+            (keyup.enter)="createNewCustomer()"
+          />
+        </div>
+
+        <!-- Customer Suggestions -->
+        <div class="suggestions" *ngIf="customerSuggestions.length > 0" [@fadeIn]>
+          <div 
+            *ngFor="let customer of customerSuggestions" 
+            class="suggestion-item"
+            (click)="selectCustomer(customer)"
+          >
+            <div class="customer-info">
+              <span class="name">{{ customer.name }}</span>
+              <span class="phone" *ngIf="customer.phone">{{ customer.phone }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selected Customer -->
+        <div class="selected-customer" *ngIf="selectedCustomer" [@fadeIn]>
+          <div class="customer-card">
+            <div class="customer-details">
+              <h4>{{ selectedCustomer.name }}</h4>
+              <p *ngIf="selectedCustomer.phone"><i class="fas fa-phone"></i> {{ selectedCustomer.phone }}</p>
+              <p *ngIf="selectedCustomer.email"><i class="fas fa-envelope"></i> {{ selectedCustomer.email }}</p>
+            </div>
+            <button (click)="selectedCustomer = null; customerSearchQuery = ''" class="btn-remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- New Customer Button -->
+        <button 
+          *ngIf="!selectedCustomer && customerSearchQuery.trim()" 
+          (click)="createNewCustomer()" 
+          class="btn-new-customer"
+          [@fadeIn]
+        >
+          <i class="fas fa-plus-circle"></i>
+          {{ lang.t('admin.newCustomer') }}: "{{ customerSearchQuery }}"
+        </button>
+      </div>
+    </div>
+
+    <!-- Items Section -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="fas fa-shopping-cart"></i>
+        {{ lang.t('admin.saleItems') }}
+      </h3>
+
+      <!-- Add Item Form -->
+      <div class="item-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>{{ lang.t('admin.serialNumber') }}</label>
+            <input 
+              type="text" 
+              [(ngModel)]="currentItem.serialNumber"
+              [placeholder]="lang.t('admin.searchBySerial')"
+              (blur)="searchProductBySerial()"
+            />
+            <i class="fas fa-spinner fa-spin loading-icon" *ngIf="searchingProduct"></i>
+          </div>
+
+          <div class="form-group">
+            <label>{{ lang.t('admin.productName') }}</label>
+            <input 
+              type="text" 
+              [(ngModel)]="currentItem.productName"
+              [placeholder]="lang.t('admin.productName')"
+            />
+          </div>
+
+          <div class="form-group small">
+            <label>{{ lang.t('admin.quantity') }}</label>
+            <input 
+              type="number" 
+              [(ngModel)]="currentItem.quantity"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>{{ lang.t('admin.price') }}</label>
+            <input 
+              type="number" 
+              [(ngModel)]="currentItem.price"
+              min="0"
+              step="0.01"
+            />
+          </div>
+
+          <button (click)="addItem()" class="btn-add-item">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Items List -->
+      <div class="items-list" *ngIf="items.length > 0">
+        <div *ngFor="let item of items; let i = index" class="item-card" [@fadeIn]>
+          <div class="item-details">
+            <div class="serial-badge">{{ item.serialNumber }}</div>
+            <div class="item-info">
+              <h4>{{ item.productName }}</h4>
+              <p>{{ lang.t('admin.quantity') }}: {{ item.quantity }} × {{ item.price }} = {{ item.price * item.quantity }}</p>
+            </div>
+          </div>
+          <button (click)="removeItem(i)" class="btn-remove-item">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="no-items" *ngIf="items.length === 0">
+        <i class="fas fa-box-open"></i>
+        <p>{{ lang.t('admin.noData') }}</p>
+      </div>
+    </div>
+
+    <!-- Payments Section -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="fas fa-credit-card"></i>
+        {{ lang.t('admin.payments') }}
+      </h3>
+
+      <!-- Add Payment Form -->
+      <div class="payment-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>{{ lang.t('admin.paymentAmount') }}</label>
+            <input 
+              type="number" 
+              [(ngModel)]="currentPayment.amount"
+              min="0"
+              step="0.01"
+              [placeholder]="lang.t('admin.paymentAmount')"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>{{ lang.t('admin.paymentMethod') }}</label>
+            <select [(ngModel)]="currentPayment.method">
+              <option value="cash">{{ lang.t('admin.cash') }}</option>
+              <option value="card">{{ lang.t('admin.card') }}</option>
+              <option value="bank">{{ lang.t('admin.bank') }}</option>
+            </select>
+          </div>
+
+          <button (click)="addPayment()" class="btn-add-payment">
+            <i class="fas fa-plus"></i>
+            {{ lang.t('admin.addPayment') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Payments List -->
+      <div class="payments-list" *ngIf="payments.length > 0">
+        <div *ngFor="let payment of payments; let i = index" class="payment-card" [@fadeIn]>
+          <div class="payment-details">
+            <span class="amount">{{ payment.amount }}</span>
+            <span class="method">{{ payment.method }}</span>
+          </div>
+          <button (click)="removePayment(i)" class="btn-remove-payment">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="sale-summary">
+      <div class="summary-row">
+        <span>{{ lang.t('admin.totalAmount') }}:</span>
+        <span class="value">{{ totalAmount }}</span>
+      </div>
+      <div class="summary-row">
+        <span>{{ lang.t('admin.paidAmount') }}:</span>
+        <span class="value paid">{{ paidAmount }}</span>
+      </div>
+      <div class="summary-row total">
+        <span>{{ lang.t('admin.remainingAmount') }}:</span>
+        <span class="value" [class.warning]="remainingAmount > 0">{{ remainingAmount }}</span>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-section">
+      <label>{{ lang.t('admin.notes') }}</label>
+      <textarea 
+        [(ngModel)]="notes" 
+        [placeholder]="lang.t('admin.notes')"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button (click)="resetForm()" class="btn-cancel">
+        <i class="fas fa-times"></i>
+        {{ lang.t('admin.cancel') }}
+      </button>
+      <button (click)="saveSale()" class="btn-save" [disabled]="loading()">
+        <i class="fas fa-save" *ngIf="!loading()"></i>
+        <i class="fas fa-spinner fa-spin" *ngIf="loading()"></i>
+        {{ lang.t('admin.saveSale') }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
 import { Product, ProductFilters } from '../../models/product.model';
 import { PLATFORM_ID } from '@angular/core';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-products',
@@ -36,6 +37,36 @@ export class ProductsComponent implements OnInit {
   showFilters = false;
   priceRange = [0, 10000];
 
+  // Carousel
+  currentSlide = 0;
+  carouselInterval: any;
+  featuredSlides = [
+    {
+      image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=1200',
+      title: 'Advanced CCTV Systems',
+      titleAr: 'أنظمة كاميرات المراقبة المتطورة',
+      description: 'State-of-the-art surveillance solutions for complete security',
+      descriptionAr: 'حلول مراقبة متطورة لأمن شامل',
+      category: 'cctv'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1558002038-1055907df827?w=1200',
+      title: 'Smart Access Control',
+      titleAr: 'التحكم الذكي بالدخول',
+      description: 'Cutting-edge access management for modern facilities',
+      descriptionAr: 'إدارة وصول حديثة للمرافق العصرية',
+      category: 'access-control'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200',
+      title: 'Intelligent Alarm Systems',
+      titleAr: 'أنظمة إنذار ذكية',
+      description: 'Next-generation protection with instant alerts',
+      descriptionAr: 'حماية الجيل القادم مع تنبيهات فورية',
+      category: 'alarm'
+    }
+  ];
+
   categories = [
     { value: '', label: 'All Categories' },
     { value: 'cctv', label: 'CCTV Systems' },
@@ -60,7 +91,8 @@ export class ProductsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cart: CartService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public langService: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +105,7 @@ export class ProductsComponent implements OnInit {
       if (isPlatformBrowser(this.platformId)) {
         console.log('Loading products from browser...');
         this.loadProducts();
+        this.startCarousel();
       } else {
         console.log('SSR detected, skipping product load');
         this.isLoading = false;
@@ -144,6 +177,44 @@ export class ProductsComponent implements OnInit {
     this.priceRange = [0, 10000];
     this.currentPage = 1;
     this.updateQueryParams();
+  }
+
+  // Carousel methods
+  startCarousel(): void {
+    this.carouselInterval = setInterval(() => {
+      this.nextSlide();
+    }, 5000);
+  }
+
+  stopCarousel(): void {
+    if (this.carouselInterval) {
+      clearInterval(this.carouselInterval);
+    }
+  }
+
+  nextSlide(): void {
+    this.currentSlide = (this.currentSlide + 1) % this.featuredSlides.length;
+  }
+
+  previousSlide(): void {
+    this.currentSlide = this.currentSlide === 0 
+      ? this.featuredSlides.length - 1 
+      : this.currentSlide - 1;
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlide = index;
+    this.stopCarousel();
+    this.startCarousel();
+  }
+
+  navigateToCategory(category: string): void {
+    this.selectedCategory = category;
+    this.updateQueryParams();
+  }
+
+  ngOnDestroy(): void {
+    this.stopCarousel();
   }
 
   goToPage(page: number): void {

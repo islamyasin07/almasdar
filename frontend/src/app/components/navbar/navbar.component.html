@@ -19,36 +19,46 @@
           <input
             type="text"
             [(ngModel)]="searchQuery"
-            placeholder="Search security systems, cameras, alarms..."
+            [placeholder]="langService.t('nav.searchPlaceholder')"
             class="w-full px-6 py-3 rounded-full bg-slate-custom-800 dark:bg-slate-custom-900 border border-slate-custom-700 text-white placeholder-gray-400 focus:outline-none focus:border-hik-red focus:ring-2 focus:ring-hik-red/20 transition-all"
             (keyup.enter)="onSearch()"
           />
-          <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-hik-red hover:text-hik-red-dark transition-colors">
+          <button (click)="onSearch()" [class]="langService.isRTL() ? 'absolute left-3 top-1/2 -translate-y-1/2 text-hik-red hover:text-hik-red-dark transition-colors' : 'absolute right-3 top-1/2 -translate-y-1/2 text-hik-red hover:text-hik-red-dark transition-colors'">
             <i class="fas fa-search text-xl"></i>
           </button>
         </div>
       </div>
 
       <!-- Desktop Menu -->
-      <div class="hidden lg:flex items-center space-x-6">
+      <div class="hidden lg:flex items-center" [ngClass]="langService.isRTL() ? 'space-x-reverse space-x-6' : 'space-x-6'">
         <a routerLink="/products" routerLinkActive="text-hik-red" class="nav-link">
-          <i class="fas fa-boxes mr-2"></i>Products
+          <i class="fas fa-boxes" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.products') }}
         </a>
         <a routerLink="/categories" routerLinkActive="text-hik-red" class="nav-link">
-          <i class="fas fa-th-large mr-2"></i>Categories
+          <i class="fas fa-th-large" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.categories') }}
         </a>
         <a *ngIf="authService.isStaff" routerLink="/admin" routerLinkActive="text-hik-red" class="nav-link">
-          <i class="fas fa-tools mr-2"></i>Admin
+          <i class="fas fa-tools" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.admin') }}
         </a>
         <a *ngIf="authService.isAuthenticated && !authService.isStaff" routerLink="/account" routerLinkActive="text-hik-red" class="nav-link">
-          <i class="fas fa-user mr-2"></i>Account
+          <i class="fas fa-user" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.account') }}
         </a>
+        
+        <!-- Language Toggle -->
+        <button 
+          (click)="toggleLanguage()" 
+          class="nav-icon p-2 rounded-lg hover:bg-slate-custom-800 dark:hover:bg-slate-custom-900 transition-colors flex items-center gap-2"
+          [title]="langService.isArabic() ? 'Switch to English' : 'التبديل إلى العربية'"
+        >
+          <span class="text-sm font-semibold text-gray-300">{{ langService.isArabic() ? 'EN' : 'عربي' }}</span>
+          <i class="fas fa-language text-xl text-gray-300"></i>
+        </button>
         
         <!-- Dark Mode Toggle -->
         <button 
           (click)="toggleTheme()" 
           class="nav-icon p-2 rounded-lg hover:bg-slate-custom-800 dark:hover:bg-slate-custom-900 transition-colors"
-          title="Toggle deeper dark mode"
+          [title]="langService.isArabic() ? 'تبديل الوضع الداكن' : 'Toggle deeper dark mode'"
         >
           <i *ngIf="!themeService.isDark()" class="fas fa-adjust text-xl text-gray-300"></i>
           <i *ngIf="themeService.isDark()" class="fas fa-moon text-xl text-blue-400"></i>
@@ -105,7 +115,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-tachometer-alt mr-3 text-hik-red"></i>Dashboard
+                <i class="fas fa-tachometer-alt text-hik-red" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.dashboard') }}
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -113,7 +123,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-box mr-3 text-hik-red"></i>My Orders
+                <i class="fas fa-box text-hik-red" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.myOrders') }}
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -121,7 +131,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-user-edit mr-3 text-hik-red"></i>Profile Settings
+                <i class="fas fa-user-edit text-hik-red" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.profile') }}
               </a>
               <a 
                 *ngIf="!authService.isStaff"
@@ -129,7 +139,7 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item"
               >
-                <i class="fas fa-map-marker-alt mr-3 text-hik-red"></i>Addresses
+                <i class="fas fa-map-marker-alt text-hik-red" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.addresses') }}
               </a>
               <a 
                 *ngIf="authService.isStaff" 
@@ -137,14 +147,14 @@
                 (click)="closeProfileDropdown()" 
                 class="dropdown-item text-hik-red"
               >
-                <i class="fas fa-crown mr-3"></i>Admin Panel
+                <i class="fas fa-crown" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.adminPanel') }}
               </a>
               <hr class="my-2 border-gray-700">
               <button 
                 (click)="logout()" 
                 class="dropdown-item text-red-400 hover:bg-red-900/20 w-full text-left"
               >
-                <i class="fas fa-sign-out-alt mr-3"></i>Logout
+                <i class="fas fa-sign-out-alt" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.logout') }}
               </button>
             </div>
           </div>
@@ -152,7 +162,7 @@
 
         <ng-template #loginBtn>
           <a routerLink="/login" class="btn-gradient px-6 py-2 rounded-full font-semibold">
-            <i class="fas fa-sign-in-alt mr-2"></i>Login
+            <i class="fas fa-sign-in-alt" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.login') }}
           </a>
         </ng-template>
       </div>
@@ -169,11 +179,11 @@
         <input
           type="text"
           [(ngModel)]="searchQuery"
-          placeholder="Search..."
+          [placeholder]="langService.t('nav.searchPlaceholder')"
           class="w-full px-4 py-2 rounded-full bg-slate-custom-800 dark:bg-slate-custom-900 border border-slate-custom-700 text-white placeholder-gray-400 focus:outline-none focus:border-hik-red focus:ring-2 focus:ring-hik-red/20"
           (keyup.enter)="onSearch()"
         />
-        <button (click)="onSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-hik-red">
+        <button (click)="onSearch()" [class]="langService.isRTL() ? 'absolute left-3 top-1/2 -translate-y-1/2 text-hik-red' : 'absolute right-3 top-1/2 -translate-y-1/2 text-hik-red'">
           <i class="fas fa-search"></i>
         </button>
       </div>
@@ -188,53 +198,60 @@
   >
     <div class="container mx-auto px-4 py-4 space-y-3">
       <a routerLink="/products" (click)="toggleMenu()" class="mobile-menu-item">
-        <i class="fas fa-boxes mr-3"></i>Products
+        <i class="fas fa-boxes" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.products') }}
       </a>
       <a routerLink="/categories" (click)="toggleMenu()" class="mobile-menu-item">
-        <i class="fas fa-th-large mr-3"></i>Categories
+        <i class="fas fa-th-large" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.categories') }}
       </a>
+      
+      <!-- Language Toggle (Mobile) -->
+      <button (click)="toggleLanguage()" class="mobile-menu-item w-full text-left">
+        <i class="fas fa-language text-hik-red" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>
+        <span *ngIf="langService.isArabic()">English</span>
+        <span *ngIf="!langService.isArabic()">العربية</span>
+      </button>
       
       <!-- Dark Mode Toggle (Mobile) -->
       <button (click)="toggleTheme()" class="mobile-menu-item w-full text-left">
-        <i *ngIf="!themeService.isDark()" class="fas fa-moon mr-3"></i>
-        <i *ngIf="themeService.isDark()" class="fas fa-sun mr-3 text-yellow-500"></i>
+        <i *ngIf="!themeService.isDark()" class="fas fa-moon" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>
+        <i *ngIf="themeService.isDark()" class="fas fa-sun text-yellow-500" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>
         <span *ngIf="!themeService.isDark()">Dark Mode</span>
         <span *ngIf="themeService.isDark()">Light Mode</span>
       </button>
       
       <div *ngIf="authService.isAuthenticated" class="pt-2 border-t border-slate-custom-700 space-y-3">
         <a routerLink="/wishlist" (click)="toggleMenu()" class="mobile-menu-item">
-          <i class="fas fa-heart mr-3"></i>Wishlist
-          <span *ngIf="wishlistCount > 0" class="ml-auto bg-hik-red text-white px-2 py-1 rounded-full text-xs">
+          <i class="fas fa-heart" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.wishlist') }}
+          <span *ngIf="wishlistCount > 0" [ngClass]="langService.isRTL() ? 'mr-auto' : 'ml-auto'" class="bg-hik-red text-white px-2 py-1 rounded-full text-xs">
             {{ wishlistCount }}
           </span>
         </a>
         <a href="#" (click)="$event.preventDefault(); openCart(); toggleMenu();" class="mobile-menu-item">
-          <i class="fas fa-shopping-cart mr-3"></i>Cart
-          <span *ngIf="cartItemCount > 0" class="ml-auto bg-hik-red text-white px-2 py-1 rounded-full text-xs">
+          <i class="fas fa-shopping-cart" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.cart') }}
+          <span *ngIf="cartItemCount > 0" [ngClass]="langService.isRTL() ? 'mr-auto' : 'ml-auto'" class="bg-hik-red text-white px-2 py-1 rounded-full text-xs">
             {{ cartItemCount }}
           </span>
         </a>
         <a routerLink="/account" (click)="toggleMenu()" class="mobile-menu-item">
-          <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+          <i class="fas fa-tachometer-alt" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.dashboard') }}
         </a>
         <a routerLink="/account/orders" (click)="toggleMenu()" class="mobile-menu-item">
-          <i class="fas fa-box mr-3"></i>My Orders
+          <i class="fas fa-box" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.myOrders') }}
         </a>
         <a routerLink="/account/profile" (click)="toggleMenu()" class="mobile-menu-item">
-          <i class="fas fa-user-cog mr-3"></i>Profile
+          <i class="fas fa-user-cog" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.profile') }}
         </a>
         <a *ngIf="authService.isStaff" routerLink="/admin" (click)="toggleMenu()" class="mobile-menu-item text-hik-red font-semibold">
-          <i class="fas fa-crown mr-3"></i>Admin Panel
+          <i class="fas fa-crown" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.adminPanel') }}
         </a>
         <button (click)="logout()" class="mobile-menu-item text-red-600 dark:text-red-400 w-full text-left">
-          <i class="fas fa-sign-out-alt mr-3"></i>Logout
+          <i class="fas fa-sign-out-alt" [ngClass]="langService.isRTL() ? 'ml-3' : 'mr-3'"></i>{{ langService.t('nav.logout') }}
         </button>
       </div>
 
       <div *ngIf="!authService.isAuthenticated" class="pt-2 border-t border-slate-custom-700">
         <a routerLink="/login" (click)="toggleMenu()" class="btn-gradient block text-center px-6 py-3 rounded-full font-semibold">
-          <i class="fas fa-sign-in-alt mr-2"></i>Login
+          <i class="fas fa-sign-in-alt" [ngClass]="langService.isRTL() ? 'ml-2' : 'mr-2'"></i>{{ langService.t('nav.login') }}
         </a>
       </div>
     </div>

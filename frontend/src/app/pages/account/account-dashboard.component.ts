@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-account-dashboard',
@@ -24,7 +25,8 @@ export class AccountDashboardComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    public authService: AuthService
+    public authService: AuthService,
+    public lang: LanguageService
   ) {}
 
   ngOnInit(): void {

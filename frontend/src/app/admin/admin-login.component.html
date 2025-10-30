@@ -1,0 +1,24 @@
+<div class="admin-login-page">
+  <form [formGroup]="form" (ngSubmit)="login()" class="glass-form">
+    <h2>{{ lang.t('admin.loginTitle') }}</h2>
+    <div class="form-group">
+      <label>{{ lang.t('common.email') }}</label>
+      <input formControlName="email" type="email" [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched" />
+      <div class="error-message" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        {{ lang.t('common.required') }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{ lang.t('common.password') }}</label>
+      <input formControlName="password" type="password" [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched" />
+      <div class="error-message" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+        {{ lang.t('common.required') }}
+      </div>
+    </div>
+    <button class="btn-primary" [disabled]="loading">
+      <span *ngIf="!loading">{{ lang.t('admin.loginButton') }}</span>
+      <span *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> {{ lang.t('common.loading') }}</span>
+    </button>
+    <div class="error-message" *ngIf="error">{{ error }}</div>
+  </form>
+</div>

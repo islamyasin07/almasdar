@@ -1,0 +1,109 @@
+<div class="admin-users">
+  <div class="page-header">
+    <div>
+      <h2>{{ lang.t('admin.users') }}</h2>
+      <p>{{ lang.t('admin.manageUsers') }}</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="q" 
+        [placeholder]="lang.t('admin.searchUsers')"
+        (keyup.enter)="load()"
+      />
+    </div>
+
+    <select [(ngModel)]="role" class="filter-select">
+      <option value="">{{ lang.t('admin.allRoles') }}</option>
+      <option value="admin">{{ lang.t('admin.admin') }}</option>
+      <option value="staff">{{ lang.t('admin.staff') }}</option>
+      <option value="customer">{{ lang.t('admin.customerRole') }}</option>
+    </select>
+
+    <select [(ngModel)]="active" class="filter-select">
+      <option value="">{{ lang.t('admin.anyStatus') }}</option>
+      <option value="true">{{ lang.t('admin.active') }}</option>
+      <option value="false">{{ lang.t('admin.inactive') }}</option>
+    </select>
+
+    <button (click)="load()" class="filter-btn">
+      <i class="fas fa-filter"></i>
+      {{ lang.t('admin.filter') }}
+    </button>
+  </div>
+
+  <div *ngIf="loading()" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    {{ lang.t('admin.loading') }}
+  </div>
+
+  <div *ngIf="!loading() && users().length === 0" class="no-data">
+    <i class="fas fa-users"></i>
+    <p>{{ lang.t('admin.noData') }}</p>
+  </div>
+
+  <div *ngIf="!loading() && users().length > 0" class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>{{ lang.t('admin.email') }}</th>
+          <th>{{ lang.t('admin.name') }}</th>
+          <th>{{ lang.t('admin.role') }}</th>
+          <th>{{ lang.t('admin.status') }}</th>
+          <th>{{ lang.t('admin.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users()" [@fadeIn]>
+          <td>
+            <div class="user-email">
+              <i class="fas fa-envelope"></i>
+              {{ u.email }}
+            </div>
+          </td>
+          <td>
+            <div class="user-name">
+              {{ u.profile?.firstName }} {{ u.profile?.lastName }}
+            </div>
+          </td>
+          <td>
+            <select 
+              [ngModel]="u.role" 
+              (ngModelChange)="setRole(u, $event)"
+              class="role-select"
+              [class.admin]="u.role === 'admin'"
+              [class.staff]="u.role === 'staff'"
+            >
+              <option value="admin">{{ lang.t('admin.admin') }}</option>
+              <option value="staff">{{ lang.t('admin.staff') }}</option>
+              <option value="customer">{{ lang.t('admin.customerRole') }}</option>
+            </select>
+          </td>
+          <td>
+            <label class="status-toggle">
+              <input 
+                type="checkbox" 
+                [checked]="u.isActive" 
+                (change)="onActiveChange(u, $event)"
+              />
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">
+                {{ u.isActive ? lang.t('admin.active') : lang.t('admin.inactive') }}
+              </span>
+            </label>
+          </td>
+          <td>
+            <button (click)="deleteUser(u)" class="btn-delete">
+              <i class="fas fa-trash"></i>
+              {{ lang.t('admin.delete') }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

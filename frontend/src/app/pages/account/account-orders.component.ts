@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Order } from '../../models/order.model';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-account-orders',
@@ -28,7 +29,7 @@ export class AccountOrdersComponent implements OnInit {
   dateFilter: string = 'all'; // all, last30days, last90days, thisYear
   searchQuery: string = '';
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, public lang: LanguageService) {}
 
   ngOnInit(): void {
     this.loadOrders();

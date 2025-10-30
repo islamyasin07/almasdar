@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-footer',
@@ -12,6 +13,8 @@ import { RouterModule } from '@angular/router';
 export class FooterComponent {
   currentYear = new Date().getFullYear();
   
+  constructor(public langService: LanguageService) {}
+  
   socialLinks = [
     { icon: 'fab fa-facebook', url: '#', label: 'Facebook' },
     { icon: 'fab fa-twitter', url: '#', label: 'Twitter' },
@@ -21,22 +24,22 @@ export class FooterComponent {
 
   footerLinks = {
     company: [
-      { label: 'About Us', route: '/about' },
-      { label: 'Contact', route: '/contact' },
-      { label: 'Careers', route: '/careers' },
-      { label: 'Blog', route: '/blog' }
+      { labelKey: 'footer.aboutUs', route: '/about' },
+      { labelKey: 'footer.careers', route: '/careers' },
+      { labelKey: 'footer.blog', route: '/blog' },
+      { labelKey: 'footer.pressKit', route: '/press' }
     ],
     support: [
-      { label: 'Help Center', route: '/help' },
-      { label: 'Installation Guide', route: '/installation' },
-      { label: 'Shipping Info', route: '/shipping' },
-      { label: 'Returns', route: '/returns' }
+      { labelKey: 'footer.helpCenter', route: '/help' },
+      { labelKey: 'footer.contactUs', route: '/contact' },
+      { labelKey: 'footer.faq', route: '/faq' },
+      { labelKey: 'footer.shipping', route: '/shipping' },
+      { labelKey: 'footer.returns', route: '/returns' }
     ],
     legal: [
-      { label: 'Privacy Policy', route: '/privacy' },
-      { label: 'Terms of Service', route: '/terms' },
-      { label: 'Cookie Policy', route: '/cookies' },
-      { label: 'GDPR', route: '/gdpr' }
+      { labelKey: 'footer.privacyPolicy', route: '/privacy' },
+      { labelKey: 'footer.termsOfService', route: '/terms' },
+      { labelKey: 'footer.cookiePolicy', route: '/cookies' }
     ]
   };
 }

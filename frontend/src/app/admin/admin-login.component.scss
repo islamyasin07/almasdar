@@ -1,0 +1,98 @@
+@import '../styles/theme-glass.scss';
+
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #070a12 0%, #0b0f14 60%, #0b0f14 100%);
+  position: relative;
+  overflow: hidden;
+}
+.admin-login-page::before,
+.admin-login-page::after {
+  content: '';
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(34,211,238,.16), rgba(168,85,247,.08), transparent 60%);
+  filter: blur(60px);
+  z-index: 0;
+}
+.admin-login-page::before { top: -180px; left: -140px; }
+.admin-login-page::after { bottom: -220px; right: -140px; }
+
+.glass-form {
+  background: rgba(11,15,20,.6);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 40px rgba(34,211,238,.12);
+  backdrop-filter: blur(14px);
+  padding: 2.5rem 2rem;
+  min-width: 320px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 1;
+}
+.glass-form h2 {
+  text-align: center;
+  color: #e5e7eb;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+label {
+  color: #9ca3af;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+input {
+  background: #1a1f2e;
+  border: 1px solid #1f2937;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: #e5e7eb;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+input.invalid {
+  border-color: #ef4444;
+}
+.error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: -0.25rem;
+  text-align: center;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #22d3ee, #f59e0b);
+  color: #0b0f14;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(34,211,238,.2);
+  transition: transform .2s, box-shadow .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(34,211,238,.28);
+}
