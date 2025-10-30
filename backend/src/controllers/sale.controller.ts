@@ -131,16 +131,35 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'customerId is required' });
     }
 
-    const customer = await Customer.findById(customerId).lean();
-    if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
-    }
-
+    // Fetch customer from Customer collection
+    let customer: any = await Customer.findById(customerId).lean();
+    
+    // Fetch all sales for this customer
     const sales = await Sale.find({ customerId })
       .populate('items.productId', 'name serialNumber')
       .populate('createdBy', 'email')
       .sort({ saleDate: -1 })
       .lean();
+
+    if (!sales || sales.length === 0) {
+      return res.status(404).json({ message: 'No sales found for this customer' });
+    }
+
+    // If customer not found in Customer collection, extract from first sale
+    if (!customer) {
+      const firstSale: any = sales[0];
+      customer = {
+        _id: customerId,
+        name: firstSale.customerName || 'Unknown',
+        phone: firstSale.customerPhone || '',
+        email: ''
+      };
+    }
+
+    // Ensure customer has name/phone even if DB record is incomplete
+    const customerName = customer.name || sales[0]?.customerName || 'Unknown Customer';
+    const customerPhone = customer.phone || sales[0]?.customerPhone || '';
+    const customerEmail = customer.email || '';
 
     // Aggregate totals
     const totals = sales.reduce(
@@ -153,17 +172,17 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
       { totalSales: 0, totalPaid: 0, totalRemaining: 0 }
     );
 
-  const workbook = new ExcelJS.Workbook();
+    const workbook = new ExcelJS.Workbook();
     workbook.creator = 'AlMasdar';
-  const summary = workbook.addWorksheet('Summary');
-  const wsItems = workbook.addWorksheet('Items');
-  const wsSales = workbook.addWorksheet('Sales');
-  const wsPayments = workbook.addWorksheet('Payments');
+    const summary = workbook.addWorksheet('Summary');
+    const wsItems = workbook.addWorksheet('Items');
+    const wsSales = workbook.addWorksheet('Sales');
+    const wsPayments = workbook.addWorksheet('Payments');
 
     // Summary sheet
-    summary.addRow(['Customer Name', customer.name || '']);
-    summary.addRow(['Phone', customer.phone || '']);
-    summary.addRow(['Email', (customer as any).email || '']);
+    summary.addRow(['Customer Name', customerName]);
+    summary.addRow(['Phone', customerPhone]);
+    summary.addRow(['Email', customerEmail]);
     summary.addRow([]);
     summary.addRow(['Total Sales', totals.totalSales]);
     summary.addRow(['Total Paid', totals.totalPaid]);
@@ -196,8 +215,8 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
 
     sales.forEach((s: any) => {
       const date = new Date(s.saleDate || s.createdAt).toISOString().slice(0, 19).replace('T', ' ');
-      const customerName = s.customerName || (customer.name || '');
-      const customerPhone = customer.phone || '';
+      const saleCustomerName = s.customerName || customerName;
+      const saleCustomerPhone = s.customerPhone || customerPhone;
       (s.items || []).forEach((it: any) => {
         const productName = it.productName || it?.productId?.name || '';
         const serial = it.serialNumber || it?.productId?.serialNumber || '';
@@ -205,8 +224,8 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
           saleId: s._id?.toString?.() || '',
           date,
           status: s.status || '',
-          customerName,
-          customerPhone,
+          customerName: saleCustomerName,
+          customerPhone: saleCustomerPhone,
           serial,
           product: productName,
           qty: it.quantity,
@@ -262,7 +281,7 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     });
 
     // Prepare response
-    const fileName = `${(customer.name || 'customer').replace(/[^a-zA-Z0-9-_ ]/g, '')}_sales.xlsx`;
+    const fileName = `${customerName.replace(/[^a-zA-Z0-9-_ ]/g, '')}_sales.xlsx`;
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
@@ -273,9 +292,7 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     console.error('Export Excel error', error);
     res.status(500).json({ message: error.message });
   }
-};
-
-// Get sale by ID
+};// Get sale by ID
 export const getSale = async (req: Request, res: Response) => {
   try {
     const sale = await Sale.findById(req.params.id)
