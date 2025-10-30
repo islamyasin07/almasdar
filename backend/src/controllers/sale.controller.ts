@@ -137,6 +137,8 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     }
 
     const sales = await Sale.find({ customerId })
+      .populate('items.productId', 'name serialNumber')
+      .populate('createdBy', 'email')
       .sort({ saleDate: -1 })
       .lean();
 
@@ -151,11 +153,12 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
       { totalSales: 0, totalPaid: 0, totalRemaining: 0 }
     );
 
-    const workbook = new ExcelJS.Workbook();
+  const workbook = new ExcelJS.Workbook();
     workbook.creator = 'AlMasdar';
-    const summary = workbook.addWorksheet('Summary');
-    const wsSales = workbook.addWorksheet('Sales');
-    const wsPayments = workbook.addWorksheet('Payments');
+  const summary = workbook.addWorksheet('Summary');
+  const wsItems = workbook.addWorksheet('Items');
+  const wsSales = workbook.addWorksheet('Sales');
+  const wsPayments = workbook.addWorksheet('Payments');
 
     // Summary sheet
     summary.addRow(['Customer Name', customer.name || '']);
@@ -175,25 +178,37 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
       });
     });
 
-    // Sales sheet
-    wsSales.columns = [
+    // Items sheet (per line item)
+    wsItems.columns = [
+      { header: 'Sale ID', key: 'saleId', width: 26 },
       { header: 'Date', key: 'date', width: 20 },
+      { header: 'Status', key: 'status', width: 12 },
+      { header: 'Customer Name', key: 'customerName', width: 28 },
+      { header: 'Customer Phone', key: 'customerPhone', width: 18 },
       { header: 'Serial', key: 'serial', width: 22 },
       { header: 'Product', key: 'product', width: 38 },
       { header: 'Qty', key: 'qty', width: 8 },
-      { header: 'Price', key: 'price', width: 12 },
-      { header: 'Total', key: 'total', width: 14 },
+      { header: 'Unit Price', key: 'price', width: 12 },
+      { header: 'Line Total', key: 'total', width: 14 },
       { header: 'Returned', key: 'returned', width: 12 },
       { header: 'Return Reason', key: 'reason', width: 40 }
     ];
 
     sales.forEach((s: any) => {
       const date = new Date(s.saleDate || s.createdAt).toISOString().slice(0, 19).replace('T', ' ');
+      const customerName = s.customerName || (customer.name || '');
+      const customerPhone = customer.phone || '';
       (s.items || []).forEach((it: any) => {
-        wsSales.addRow({
+        const productName = it.productName || it?.productId?.name || '';
+        const serial = it.serialNumber || it?.productId?.serialNumber || '';
+        wsItems.addRow({
+          saleId: s._id?.toString?.() || '',
           date,
-          serial: it.serialNumber,
-          product: it.productName,
+          status: s.status || '',
+          customerName,
+          customerPhone,
+          serial,
+          product: productName,
           qty: it.quantity,
           price: it.price,
           total: (it.price || 0) * (it.quantity || 1),
@@ -203,8 +218,38 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
       });
     });
 
+    // Sales sheet (per sale summary)
+    wsSales.columns = [
+      { header: 'Sale ID', key: 'saleId', width: 26 },
+      { header: 'Date', key: 'date', width: 20 },
+      { header: 'Items', key: 'items', width: 8 },
+      { header: 'Total Amount', key: 'totalAmount', width: 16 },
+      { header: 'Paid Amount', key: 'paidAmount', width: 16 },
+      { header: 'Remaining', key: 'remaining', width: 14 },
+      { header: 'Status', key: 'status', width: 12 },
+      { header: 'Notes', key: 'notes', width: 40 },
+      { header: 'Created By', key: 'createdBy', width: 24 }
+    ];
+    sales.forEach((s: any) => {
+      const date = new Date(s.saleDate || s.createdAt).toISOString().slice(0, 19).replace('T', ' ');
+      const paid = Array.isArray(s.payments) ? s.payments.reduce((a: number, p: any) => a + (p.amount || 0), 0) : (s.paidAmount || 0);
+      const remaining = (s.totalAmount || 0) - paid;
+      wsSales.addRow({
+        saleId: s._id?.toString?.() || '',
+        date,
+        items: (s.items || []).length,
+        totalAmount: s.totalAmount || 0,
+        paidAmount: paid,
+        remaining,
+        status: s.status || (remaining <= 0 ? 'paid' : paid > 0 ? 'partial' : 'pending'),
+        notes: s.notes || '',
+        createdBy: s?.createdBy?.email || ''
+      });
+    });
+
     // Payments sheet
     wsPayments.columns = [
+      { header: 'Sale ID', key: 'saleId', width: 26 },
       { header: 'Date', key: 'date', width: 22 },
       { header: 'Method', key: 'method', width: 18 },
       { header: 'Amount', key: 'amount', width: 14 }
@@ -212,7 +257,7 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     sales.forEach((s: any) => {
       (s.payments || []).forEach((p: any) => {
         const d = new Date(p.date).toISOString().slice(0, 19).replace('T', ' ');
-        wsPayments.addRow({ date: d, method: p.method, amount: p.amount });
+        wsPayments.addRow({ saleId: s._id?.toString?.() || '', date: d, method: p.method, amount: p.amount });
       });
     });
 
