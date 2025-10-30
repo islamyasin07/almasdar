@@ -139,6 +139,14 @@ export class AdminApiService {
     return this.http.delete(`${this.apiUrl}/customers/${id}`);
   }
 
+  // Export: Download Excel for a customer's sales
+  exportCustomerSalesExcel(customerId: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/sales/export-excel`, {
+      params: new HttpParams().set('customerId', customerId),
+      responseType: 'blob' as 'json'
+    }) as unknown as Observable<Blob>;
+  }
+
   // Database Health & Statistics
   getDatabaseHealth(): Observable<any> {
     return this.http.get(`${this.apiUrl}/database/health`);

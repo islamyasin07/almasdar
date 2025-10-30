@@ -282,6 +282,7 @@ export class LanguageService {
         paymentFailed: 'فشل إضافة الدفعة',
         returnFailed: 'فشل إرجاع المنتج',
         bankTransfer: 'تحويل بنكي',
+  exportExcel: 'تصدير إكسل',
         // Common
         search: 'بحث',
         add: 'إضافة',
@@ -853,6 +854,7 @@ export class LanguageService {
         paymentFailed: 'Failed to add payment',
         returnFailed: 'Failed to return item',
         bankTransfer: 'Bank Transfer',
+  exportExcel: 'Export Excel',
         // Common
         search: 'Search',
         add: 'Add',

@@ -173,6 +173,12 @@
           <i class="fas fa-user"></i>
           {{ lang.t('admin.customerInfo') }}
         </h4>
+        <div class="mb-3 flex justify-end">
+          <button class="btn-confirm" (click)="exportCustomerExcel(sale.customer._id)">
+            <i class="fas fa-file-excel"></i>
+            {{ lang.t('admin.exportExcel') }}
+          </button>
+        </div>
         <div class="info-grid">
           <div class="info-item">
             <span class="label">{{ lang.t('admin.customerName') }}:</span>

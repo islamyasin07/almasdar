@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Sale } from '../models/sale.model.js';
 import { Customer } from '../models/customer.model.js';
 import { Product } from '../models/product.model.js';
+import ExcelJS from 'exceljs';
 
 // Create new sale
 export const createSale = async (req: Request, res: Response) => {
@@ -118,6 +119,112 @@ export const getSales = async (req: Request, res: Response) => {
       pages: Math.ceil(total / Number(limit))
     });
   } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Export a customer's sales to Excel
+export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
+  try {
+    const { customerId } = req.query as { customerId?: string };
+    if (!customerId) {
+      return res.status(400).json({ message: 'customerId is required' });
+    }
+
+    const customer = await Customer.findById(customerId).lean();
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    const sales = await Sale.find({ customerId })
+      .sort({ saleDate: -1 })
+      .lean();
+
+    // Aggregate totals
+    const totals = sales.reduce(
+      (acc: any, s: any) => {
+        acc.totalSales += s.totalAmount || 0;
+        acc.totalPaid += s.paidAmount || 0;
+        acc.totalRemaining += s.remainingAmount || 0;
+        return acc;
+      },
+      { totalSales: 0, totalPaid: 0, totalRemaining: 0 }
+    );
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'AlMasdar';
+    const summary = workbook.addWorksheet('Summary');
+    const wsSales = workbook.addWorksheet('Sales');
+    const wsPayments = workbook.addWorksheet('Payments');
+
+    // Summary sheet
+    summary.addRow(['Customer Name', customer.name || '']);
+    summary.addRow(['Phone', customer.phone || '']);
+    summary.addRow(['Email', (customer as any).email || '']);
+    summary.addRow([]);
+    summary.addRow(['Total Sales', totals.totalSales]);
+    summary.addRow(['Total Paid', totals.totalPaid]);
+    summary.addRow(['Total Remaining', totals.totalRemaining]);
+    summary.columns = [
+      { header: 'Field', key: 'field', width: 25 },
+      { header: 'Value', key: 'value', width: 40 }
+    ];
+    summary.eachRow((row) => {
+      row.eachCell((cell) => {
+        cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      });
+    });
+
+    // Sales sheet
+    wsSales.columns = [
+      { header: 'Date', key: 'date', width: 20 },
+      { header: 'Serial', key: 'serial', width: 22 },
+      { header: 'Product', key: 'product', width: 38 },
+      { header: 'Qty', key: 'qty', width: 8 },
+      { header: 'Price', key: 'price', width: 12 },
+      { header: 'Total', key: 'total', width: 14 },
+      { header: 'Returned', key: 'returned', width: 12 },
+      { header: 'Return Reason', key: 'reason', width: 40 }
+    ];
+
+    sales.forEach((s: any) => {
+      const date = new Date(s.saleDate || s.createdAt).toISOString().slice(0, 19).replace('T', ' ');
+      (s.items || []).forEach((it: any) => {
+        wsSales.addRow({
+          date,
+          serial: it.serialNumber,
+          product: it.productName,
+          qty: it.quantity,
+          price: it.price,
+          total: (it.price || 0) * (it.quantity || 1),
+          returned: it.isReturned ? 'Yes' : 'No',
+          reason: it.returnReason || ''
+        });
+      });
+    });
+
+    // Payments sheet
+    wsPayments.columns = [
+      { header: 'Date', key: 'date', width: 22 },
+      { header: 'Method', key: 'method', width: 18 },
+      { header: 'Amount', key: 'amount', width: 14 }
+    ];
+    sales.forEach((s: any) => {
+      (s.payments || []).forEach((p: any) => {
+        const d = new Date(p.date).toISOString().slice(0, 19).replace('T', ' ');
+        wsPayments.addRow({ date: d, method: p.method, amount: p.amount });
+      });
+    });
+
+    // Prepare response
+    const fileName = `${(customer.name || 'customer').replace(/[^a-zA-Z0-9-_ ]/g, '')}_sales.xlsx`;
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    return res.status(200).end(Buffer.from(buffer));
+  } catch (error: any) {
+    console.error('Export Excel error', error);
     res.status(500).json({ message: error.message });
   }
 };

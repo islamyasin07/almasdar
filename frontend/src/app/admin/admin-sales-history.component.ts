@@ -239,4 +239,21 @@ export class AdminSalesHistoryComponent implements OnInit {
   goToNewSale() {
     this.router.navigate(['/admin/sales/new']);
   }
+
+  async exportCustomerExcel(customerId: string) {
+    try {
+      const blob = await lastValueFrom(this.adminApi.exportCustomerSalesExcel(customerId));
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'customer_sales.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Export failed', err);
+      alert(this.lang.t('admin.error'));
+    }
+  }
 }
