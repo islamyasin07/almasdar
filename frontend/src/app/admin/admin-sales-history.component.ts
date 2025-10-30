@@ -240,13 +240,19 @@ export class AdminSalesHistoryComponent implements OnInit {
     this.router.navigate(['/admin/sales/new']);
   }
 
-  async exportCustomerExcel(customerId: string) {
+  async exportCustomerExcelBySale(sale: Sale) {
     try {
+      const customerId = (sale as any)?.customer?._id || (sale as any)?.customerId || (typeof (sale as any)?.customer === 'string' ? (sale as any).customer : '');
+      if (!customerId) {
+        alert('Customer not found for export');
+        return;
+      }
       const blob = await lastValueFrom(this.adminApi.exportCustomerSalesExcel(customerId));
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'customer_sales.xlsx';
+      const safeName = (sale as any)?.customer?.name || 'customer';
+      a.download = `${safeName.replace(/[^\w\- ]/g, '')}_sales.xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();

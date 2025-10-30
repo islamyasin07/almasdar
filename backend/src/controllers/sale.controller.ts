@@ -221,8 +221,9 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
-    const buffer = await workbook.xlsx.writeBuffer();
-    return res.status(200).end(Buffer.from(buffer));
+    // Stream workbook to response to avoid memory issues and ensure correct headers
+    await workbook.xlsx.write(res as any);
+    return res.end();
   } catch (error: any) {
     console.error('Export Excel error', error);
     res.status(500).json({ message: error.message });
