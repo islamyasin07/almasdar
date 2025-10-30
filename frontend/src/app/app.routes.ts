@@ -10,6 +10,7 @@ import { AdminLayoutComponent } from './pages/admin/admin-layout.component';
 import { AdminOverviewComponent } from './pages/admin/admin-overview.component';
 import { roleGuard } from './guards/role.guard';
 import { authGuard } from './guards/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 import { AccountLayoutComponent } from './pages/account/account-layout.component';
 import { AccountDashboardComponent } from './pages/account/account-dashboard.component';
 import { AccountOrdersComponent } from './pages/account/account-orders.component';
@@ -19,8 +20,8 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
   { path: 'categories', component: CategoriesComponent },
