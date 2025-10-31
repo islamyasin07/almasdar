@@ -26,6 +26,44 @@
       margin: 0;
     }
 
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-scanner {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(20px);
+
+      &:hover {
+        background: rgba(220, 38, 38, 0.25);
+        border-color: rgba(220, 38, 38, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+      }
+
+      &.active {
+        background: rgba(220, 38, 38, 0.3);
+        border-color: #dc2626;
+        box-shadow: 0 0 30px rgba(220, 38, 38, 0.4), inset 0 0 20px rgba(220, 38, 38, 0.2);
+
+        i {
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+      }
+    }
+
     .btn-secondary {
       display: flex;
       align-items: center;
@@ -46,6 +84,95 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
       }
+    }
+  }
+
+  // Scanner Input Section
+  .scanner-input-container {
+    margin-bottom: 2rem;
+    animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .scanner-input-box {
+      position: relative;
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(220, 38, 38, 0.05));
+      border: 2px solid rgba(220, 38, 38, 0.5);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(220, 38, 38, 0.2), inset 0 0 40px rgba(220, 38, 38, 0.1);
+
+      .scanner-icon {
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #dc2626;
+        font-size: 1.5rem;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .scanner-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 4rem;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:focus {
+          outline: none;
+          border-color: #dc2626;
+          box-shadow: 0 0 30px rgba(220, 38, 38, 0.4), inset 0 0 20px rgba(220, 38, 38, 0.1);
+          background: rgba(0, 0, 0, 0.6);
+        }
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .fa-spinner {
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #dc2626;
+        font-size: 1.2rem;
+      }
+
+      .scanner-hint {
+        display: block;
+        margin-top: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.875rem;
+        text-align: center;
+      }
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
     }
   }
 

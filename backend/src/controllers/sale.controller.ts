@@ -157,8 +157,8 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
     }
 
     // Ensure customer has name/phone even if DB record is incomplete
-    const customerName = customer.name || sales[0]?.customerName || 'Unknown Customer';
-    const customerPhone = customer.phone || sales[0]?.customerPhone || '';
+  const customerName = customer.name || sales[0]?.customerName || 'Unknown Customer';
+  const customerPhone = customer.phone || '';
     const customerEmail = customer.email || '';
 
     // Aggregate totals
@@ -215,8 +215,8 @@ export const exportCustomerSalesExcel = async (req: Request, res: Response) => {
 
     sales.forEach((s: any) => {
       const date = new Date(s.saleDate || s.createdAt).toISOString().slice(0, 19).replace('T', ' ');
-      const saleCustomerName = s.customerName || customerName;
-      const saleCustomerPhone = s.customerPhone || customerPhone;
+  const saleCustomerName = s.customerName || customerName;
+  const saleCustomerPhone = customerPhone;
       (s.items || []).forEach((it: any) => {
         const productName = it.productName || it?.productId?.name || '';
         const serial = it.serialNumber || it?.productId?.serialNumber || '';

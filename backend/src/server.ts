@@ -4,11 +4,14 @@ import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
 import { logger } from './utils/logger.js';
 import { ensureDefaultAdmin } from './utils/seed.js';
+import fs from 'fs';
 
 
 async function bootstrap() {
 await connectDB();
 await ensureDefaultAdmin();
+// Ensure upload directory exists
+try { fs.mkdirSync(env.uploadDir, { recursive: true }); } catch {}
 const server = http.createServer(app);
 server.listen(env.port, () => {
 logger.info(`🚀 Backend listening on http://0.0.0.0:${env.port}`);

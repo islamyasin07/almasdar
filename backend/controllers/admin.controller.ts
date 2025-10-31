@@ -2,7 +2,7 @@ import Admin, { IAdmin } from '../models/admin.model';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { env } from '../config/env';
+import { env } from '.././src/config/env.js';
 
 // Register a new admin
 export async function registerAdmin(req: Request, res: Response) {

@@ -194,12 +194,12 @@ export class AdminSalesHistoryComponent implements OnInit {
     }
   }
 
-  async returnItem(saleId: string, itemIndex: number) {
+  async returnItem(saleId: string, itemSerialNumber: string) {
     const reason = prompt(this.lang.t('admin.returnReason'));
     if (!reason) return;
 
     try {
-      const updatedSale = await lastValueFrom(this.adminApi.returnItem(saleId, itemIndex.toString(), reason));
+      const updatedSale = await lastValueFrom(this.adminApi.returnItem(saleId, itemSerialNumber, reason));
 
       // Update the sale in the list
       const index = this.sales().findIndex(s => s._id === saleId);

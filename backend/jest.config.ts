@@ -13,13 +13,15 @@ const config: Config = {
 				'^\./routes/(.*)\.js$': '<rootDir>/src/routes/$1.ts',
 				'^\./middleware/(.*)\.js$': '<rootDir>/src/middleware/$1.ts',
 					'^\./utils/(.*)\.js$': '<rootDir>/src/utils/$1.ts',
+					'^\./controllers/(.*)\.js$': '<rootDir>/src/controllers/$1.ts',
 					// Parent-relative imports from within subfolders
 					'^\.\./config/(.*)\.js$': '<rootDir>/src/config/$1.ts',
 					'^\.\./routes/(.*)\.js$': '<rootDir>/src/routes/$1.ts',
 					'^\.\./middleware/(.*)\.js$': '<rootDir>/src/middleware/$1.ts',
 					'^\.\./utils/(.*)\.js$': '<rootDir>/src/utils/$1.ts',
 					'^\.\./services/(.*)\.js$': '<rootDir>/src/services/$1.ts',
-					'^\.\./models/(.*)\.js$': '<rootDir>/src/models/$1.ts'
+					'^\.\./models/(.*)\.js$': '<rootDir>/src/models/$1.ts',
+					'^\.\./controllers/(.*)\.js$': '<rootDir>/src/controllers/$1.ts'
 			},
 	clearMocks: true,
 	transform: {

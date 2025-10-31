@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  mongodb:
+  mongo:
     image: mongo:7.0
     container_name: almasdar-mongodb
     restart: unless-stopped
@@ -13,7 +13,36 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  # (backend/frontend can stay as-is; we’ll start Mongo alone first)
+  api:
+    build:
+      context: ./backend
+    image: almasdar-api:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      MONGO_URI: ${MONGO_URI:-mongodb://root:rootpass@mongo:27017/almasdar?authSource=admin}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      UPLOAD_DIR: /app/uploads
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    volumes:
+      - uploads-data:/app/uploads
+
+  web:
+    build:
+      context: ./frontend
+    image: almasdar-web:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
 
 volumes:
   mongo-data:
+  uploads-data:

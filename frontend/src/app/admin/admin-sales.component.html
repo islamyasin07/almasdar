@@ -4,10 +4,38 @@
       <h2>{{ lang.t('admin.salesLedger') }}</h2>
       <p>{{ lang.t('admin.newSale') }}</p>
     </div>
-    <button (click)="router.navigate(['/admin/sales-history'])" class="btn-secondary">
-      <i class="fas fa-history"></i>
-      {{ lang.t('admin.salesHistory') }}
-    </button>
+    <div class="header-actions">
+      <button 
+        (click)="toggleScannerMode()" 
+        class="btn-scanner"
+        [class.active]="scannerMode()"
+      >
+        <i class="fas fa-barcode"></i>
+        {{ scannerMode() ? lang.t('admin.scannerOn') : lang.t('admin.scannerOff') }}
+      </button>
+      <button (click)="router.navigate(['/admin/sales-history'])" class="btn-secondary">
+        <i class="fas fa-history"></i>
+        {{ lang.t('admin.salesHistory') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Scanner Input (visible when scanner mode is ON) -->
+  <div class="scanner-input-container" *ngIf="scannerMode()" [@fadeIn]>
+    <div class="scanner-input-box">
+      <i class="fas fa-barcode scanner-icon"></i>
+      <input 
+        type="text"
+        #scannerInputField
+        [(ngModel)]="scannerInput"
+        (keyup.enter)="onScanned(scannerInput)"
+        [placeholder]="lang.t('admin.scanBarcode')"
+        class="scanner-input"
+        autofocus
+      />
+      <i class="fas fa-spinner fa-spin" *ngIf="searchingProduct"></i>
+      <span class="scanner-hint">{{ lang.t('admin.scannerHint') }}</span>
+    </div>
   </div>
 
   <!-- New Sale Form -->

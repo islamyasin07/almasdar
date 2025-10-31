@@ -17,5 +17,7 @@ ENV NODE_ENV=production
 COPY --from=builder /app/dist ./dist
 COPY package*.json ./
 RUN npm ci --omit=dev
+# Ensure uploads directory exists at runtime
+RUN mkdir -p uploads
 EXPOSE 8080
 CMD ["node", "dist/server.js"]

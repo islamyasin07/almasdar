@@ -29,7 +29,7 @@ export class AdminUsersComponent implements OnInit {
   active: 'true' | 'false' | '' = '' as any;
   loading = signal(false);
   users = signal<any[]>([]);
-  page = 1; limit = 20; total = 0;
+  page = 1; limit = 20; total = 0; pages = 1;
 
   ngOnInit(): void {
     this.load();
@@ -42,6 +42,7 @@ export class AdminUsersComponent implements OnInit {
         next: (res) => { 
           this.users.set(res.users || []); 
           this.total = res.total || 0; 
+          this.pages = res.pages || Math.max(1, Math.ceil((this.total || 0) / (this.limit || 1)));
           this.loading.set(false); 
         },
         error: (err) => { 
@@ -50,6 +51,14 @@ export class AdminUsersComponent implements OnInit {
           this.loading.set(false); 
         }
       });
+  }
+
+  prevPage(): void {
+    if (this.page > 1) { this.page--; this.load(); }
+  }
+
+  nextPage(): void {
+    if (this.page < this.pages) { this.page++; this.load(); }
   }
 
   setRole(user: any, role: 'admin' | 'staff' | 'customer'): void {

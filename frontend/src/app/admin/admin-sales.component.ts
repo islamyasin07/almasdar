@@ -45,6 +45,11 @@ export class AdminSalesComponent implements OnInit {
   loading = signal(false);
   showNewSaleForm = false;
 
+  // Scanner mode
+  scannerMode = signal(false);
+  scannerInput = '';
+  lastScannedSerial = '';
+
   // Customer
   customerSearchQuery = '';
   selectedCustomer: any = null;
@@ -130,6 +135,72 @@ export class AdminSalesComponent implements OnInit {
         this.searchingProduct = false;
       }
     });
+  }
+
+  // Scanner mode handler
+  toggleScannerMode() {
+    this.scannerMode.set(!this.scannerMode());
+    if (this.scannerMode()) {
+      // Focus will be handled by template autofocus
+      this.scannerInput = '';
+    }
+  }
+
+  onScanned(serial: string) {
+    const trimmedSerial = serial.trim();
+    if (!trimmedSerial) return;
+
+    // Avoid duplicate scans (some scanners send multiple times)
+    if (this.lastScannedSerial === trimmedSerial) {
+      this.scannerInput = '';
+      return;
+    }
+    this.lastScannedSerial = trimmedSerial;
+
+    // Search for product by serial
+    this.searchingProduct = true;
+    this.api.searchProductBySerial(trimmedSerial).subscribe({
+      next: (res: any) => {
+        this.searchingProduct = false;
+        if (res.found && res.product) {
+          // Auto-add product to items
+          this.items.push({
+            serialNumber: res.product.serialNumber || trimmedSerial,
+            productName: res.product.name,
+            quantity: 1,
+            price: res.product.price,
+            productId: res.product._id
+          });
+          
+          // Visual feedback
+          this.showScanSuccess();
+        } else {
+          // Product not found - show error and optionally open create dialog
+          alert(this.lang.t('admin.productNotFound') + ': ' + trimmedSerial);
+        }
+        
+        // Reset scanner input for next scan
+        this.scannerInput = '';
+        
+        // Reset duplicate check after 1 second
+        setTimeout(() => {
+          this.lastScannedSerial = '';
+        }, 1000);
+      },
+      error: (err) => {
+        console.error('Error searching product:', err);
+        this.searchingProduct = false;
+        this.scannerInput = '';
+      }
+    });
+  }
+
+  showScanSuccess() {
+    // Simple visual feedback (you can enhance with toast/notification)
+    const sound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGm98OSlTw4OS6Lh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBSl+zPLajzsKE2Cy6OysWBYLTqXh8bllHAU2jdXzzn0vBQ==');
+    try {
+      sound.play().catch(() => {});
+    } catch {}
   }
 
   addItem() {
